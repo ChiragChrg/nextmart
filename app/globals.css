@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary: #007BFF;
+    --secondary: #cce5ff;
+    --background: #fafafa;
+    --text: #050505;
+}
+
+@media(prefers-color-scheme: dark) {
+    .dark {
+        --primary: #007BFF;
+        --secondary: #011932;
+        --background: #050505;
+        --text: #fafafa;
+    }
+}
