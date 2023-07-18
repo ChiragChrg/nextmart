@@ -8,12 +8,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: 'var(--primary)',
-        secondary: 'var(--secondary)',
-        text: 'var(--text)',
-        base: 'var(--background)',
+        baseClr: 'var(--background)',
+        primaryClr: 'var(--primary)',
+        secondaryClr: 'var(--secondary)',
+        textClr: 'var(--text)',
+        textLiteClr: 'var(--textLite)',
       }
     },
   },
+  darkMode: '[data-theme="dark"]',
   plugins: [],
 }
