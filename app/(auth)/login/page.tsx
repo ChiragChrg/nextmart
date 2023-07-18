@@ -29,7 +29,7 @@ const page = () => {
             LOGIN
             <Link href="/">BACK</Link>
 
-            {Object.keys(provider)?.map((obj: any) => {
+            {provider && Object.keys(provider)?.map((obj: any) => {
                 return <button key={provider[obj].id} onClick={() => signIn(provider[obj].id)}>
                     {provider[obj].name}
                 </button>
