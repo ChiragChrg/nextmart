@@ -1,9 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { Header } from "@components"
-
-const inter = Inter({ subsets: ['latin'] })
+import Provider from './Provider'
 
 export const metadata: Metadata = {
   title: 'NextMart | Next Generation Ecommerce Market',
@@ -17,12 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-base">
-        <Header />
-
-        <main>{children}</main>
-
-        {/* Footer */}
+      <body className="bg-baseClr text-textClr">
+        <Provider>
+          {children}
+        </Provider>
       </body>
     </html>
   )

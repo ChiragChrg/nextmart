@@ -4,16 +4,35 @@
 
 :root {
     --primary: #007BFF;
-    --secondary: #cce5ff;
+    --secondary: hsla(211, 100%, 50%, 0.15);
     --background: #fafafa;
     --text: #050505;
+    --textLite: rgb(55, 65, 81);
 }
 
-@media(prefers-color-scheme: dark) {
-    .dark {
-        --primary: #007BFF;
-        --secondary: #011932;
-        --background: #050505;
-        --text: #fafafa;
-    }
+[data-theme="dark"] {
+    --primary: #007BFF;
+    --secondary: hsla(211, 100%, 50%, 0.15);
+    /* --secondary: #011932; */
+    --background: #050505;
+    --text: #fafafa;
+    --textLite: rgb(121, 141, 175);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.flex_center {
+    @apply flex justify-center items-center
+}
+
+.smooth_transition {
+    @apply transition ease-in-out duration-300
+}
+
+.header_btn {
+    @apply flex_center hover:bg-secondaryClr smooth_transition p-2 rounded-full cursor-pointer
 }
