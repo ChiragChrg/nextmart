@@ -1,6 +1,7 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
-import FacebookProvider from "next-auth/providers/facebook"
+import GitHubProvider from "next-auth/providers/github";
+// import FacebookProvider from "next-auth/providers/facebook"
 
 import { connectDB } from "@utils/database"
 import User from "@models/UserModal"
@@ -24,7 +25,7 @@ const handler = NextAuth({
     providers:[
         GoogleProvider({
             clientId: process.env.GOOGLE_ID as string,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+            clientSecret: process.env.GOOGLE_SECRET as string,
             authorization: {
                 params: {
                   prompt: "consent",
@@ -33,22 +34,26 @@ const handler = NextAuth({
                 }
             }
         }),
-        FacebookProvider({
-            clientId: process.env.FACEBOOK_ID as string,
-            clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
+        GitHubProvider({
+            clientId: process.env.GITHUB_ID as string,
+            clientSecret: process.env.GITHUB_SECRET as string,
         })
+        // FacebookProvider({
+        //     clientId: process.env.FACEBOOK_ID as string,
+        //     clientSecret: process.env.FACEBOOK_SECRET as string,
+        // })
     ],
     callbacks:{
         async session({session}){
             const sessionUser = await User.findOne({email: session.user?.email})
-            console.log("sessionUser",sessionUser)
+            // console.log("sessionUser",sessionUser)
 
             session.user.uid = sessionUser._id.toString()
             return session
         },
         
         async signIn({profile}){
-            console.log("profile",profile)
+            // console.log("profile",profile)
             try {
                 await connectDB()
     
