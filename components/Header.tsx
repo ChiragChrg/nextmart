@@ -7,7 +7,7 @@ import UserAvatar from "./UserAvatar"
 
 const Header = () => {
     return (
-        <header className="bg-baseClr border border-textClr w-full flex justify-between items-center p-3 px-6">
+        <header className="bg-baseClr w-full flex justify-between items-center p-3 px-6">
             {/* Site Logo */}
             <Link href="/" className="flex_center text-[1.3em] font-bold text-primaryClr">
                 {/* <Image src={Logo} alt="Next_Mart_Logo" /> */}
