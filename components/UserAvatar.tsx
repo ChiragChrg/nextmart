@@ -27,7 +27,7 @@ const UserAvatar = () => {
                     </svg>
                 </div>
                 :
-                <Link href="/login" className="bg-primaryClr flex_center gap-2 text-white p-2 rounded cursor-pointer">
+                <Link href="/auth/signin" className="bg-primaryClr flex_center gap-2 text-white p-2 rounded cursor-pointer">
                     {/* <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="46"

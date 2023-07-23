@@ -4,7 +4,7 @@ import Provider from "../../Provider"
 import { ThemeButton } from '@components/Buttons'
 
 export const metadata: Metadata = {
-    title: 'Login | NextMart'
+    title: 'SignIn | NextMart'
 }
 
 const layout = ({ children }: { children: React.ReactNode }) => {

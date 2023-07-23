@@ -5,7 +5,7 @@ import { signIn, getProviders, useSession } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 import ShoppingSVG from '@components/SVGs/ShoppingSVG'
 
-const Login = () => {
+const SignIn = () => {
     const [provider, setProvider] = useState<any | null>({})
     const { status } = useSession()
     const router = useRouter()
@@ -86,4 +86,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default SignIn

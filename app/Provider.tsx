@@ -7,7 +7,6 @@ interface propTypes {
     session?: object | any
 }
 
-
 const Provider = ({ children, session }: propTypes) => {
     return (
         <SessionProvider session={session}>

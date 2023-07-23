@@ -37,6 +37,13 @@ const handler = NextAuth({
         GitHubProvider({
             clientId: process.env.GITHUB_ID as string,
             clientSecret: process.env.GITHUB_SECRET as string,
+            authorization:{
+                params: {
+                    prompt: "consent",
+                    access_type: "offline",
+                    response_type: "code"
+                }
+            }
         })
         // FacebookProvider({
         //     clientId: process.env.FACEBOOK_ID as string,
@@ -71,6 +78,12 @@ const handler = NextAuth({
                 return false
             }
         },
+    },
+    pages:{
+        signIn: "/auth/signin"
+    },
+    session:{
+        strategy: "jwt"
     }
 })
 
