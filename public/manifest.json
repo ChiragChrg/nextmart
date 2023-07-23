@@ -4,11 +4,10 @@
     "description": "Discover an unparalleled shopping experience with Next Mart, an exceptional web app developed by ChiragChrg. Unleash the power of online shopping with a vast array of products at your fingertips",
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
-    "start_url": "/",
+    "start_url": ".",
     "display": "standalone",
     "orientation": "portrait",
     "dir": "ltr",
-    "scope": "/",
     "lang": "en",
     "display_override": [
         "standalone",

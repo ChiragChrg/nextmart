@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'Discover an unparalleled shopping experience with Next Mart, an exceptional web app developed by ChiragChrg. Unleash the power of online shopping with a vast array of products at your fingertips',
   creator: "ChiragChrg",
   authors: [{ name: 'ChiragChrg', url: 'https://chiragchrg.netlify.app/' }],
-  verification: { google: "YRAUUyc8TP4QJ1s53KAdLxcON9xifQf33BnLeP-F_5Y" },
+  verification: { google: "TSsuy8j81zZ0Ge0aestKiwZUPydASWd9aANj-ITDack" },
   applicationName: "Next Mart",
   manifest: "/manifest.json",
   keywords: ['Next Mart', 'next-mart', 'nextmart', 'chiragchrg', 'ChiragChrg', 'chiruchirag2001', 'ecommerce', 'shopping', 'next.js'],
