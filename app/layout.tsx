@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import Provider from './Provider'
 
 export const metadata: Metadata = {
-  title: 'NextMart | Next Generation Ecommerce Market',
-  description: 'NextMart is an Ecommerce website',
+  title: 'NextMart | Your Ultimate Shopping Destination!',
+  description: 'Discover an unparalleled shopping experience with Next Mart, an exceptional web app developed by ChiragChrg. Unleash the power of online shopping with a vast array of products at your fingertips',
   creator: "ChiragChrg",
   authors: [{ name: 'ChiragChrg', url: 'https://chiragchrg.netlify.app/' }],
   verification: { google: "YRAUUyc8TP4QJ1s53KAdLxcON9xifQf33BnLeP-F_5Y" },

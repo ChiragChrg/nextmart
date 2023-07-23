@@ -1,11 +1,23 @@
 {
     "name": "NextMart",
     "short_name": "NextMart",
-    "theme_color": "#fafafa",
-    "background_color": "#fafafa",
+    "description": "Discover an unparalleled shopping experience with Next Mart, an exceptional web app developed by ChiragChrg. Unleash the power of online shopping with a vast array of products at your fingertips",
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
     "start_url": "/",
     "display": "standalone",
     "orientation": "portrait",
+    "dir": "ltr",
+    "scope": "/",
+    "lang": "en",
+    "display_override": [
+        "standalone",
+        "fullscreen",
+        "window-controls-overlay"
+    ],
+    "categories": [
+        "shopping"
+    ],
     "icons": [
         {
             "src": "./icons/144.png",
