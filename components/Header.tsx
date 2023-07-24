@@ -15,26 +15,28 @@ const Header = () => {
 
     if (isMobile)
         return (
-            <header className="bg-baseClr w-full flex_center flex-col gap-2 py-3 px-4">
-                <div className="w-full flex justify-between">
+            <>
+                <header className="bg-baseClr w-full flex justify-between items-center px-4 py-3 pb-1">
                     <IconSVG width="35px" />
                     <UserAvatar />
-                </div>
+                </header>
 
-                <Search hideSearchBtn />
-            </header>
+                <div className="sticky top-0 z-10 w-full flex_center px-4 py-2 bg-gradient-to-b from-baseClr backdrop-blur-[1px]">
+                    <Search hideSearchBtn />
+                </div>
+            </>
         )
     else
         return (
-            <header className="bg-baseClr w-full flex justify-between items-center p-3 px-6">
+            <header className="bg-baseClr sticky top-0 z-10 w-full flex justify-between items-center p-3 px-6">
                 <LogoSVG width="200px" />
 
                 <Search />
 
                 <div className="flex gap-3 items-center">
-                    <ThemeButton />
-                    <OrdersButton />
-                    <CartButton />
+                    <ThemeButton className='header_btn' width="25px" height="25px" />
+                    <OrdersButton className='header_btn' width="25px" height="25px" />
+                    <CartButton className='header_btn' width="25px" height="25px" />
                     <UserAvatar />
                 </div>
             </header>
