@@ -6,6 +6,7 @@
     --primary: #007BFF;
     --secondary: hsla(211, 100%, 50%, 0.15);
     --background: #fafafa;
+    --backgroundLite: rgba(250, 250, 250, 0.2);
     --text: #050505;
     --textLite: rgb(55, 65, 81);
 }
@@ -15,6 +16,7 @@
     --secondary: hsla(211, 100%, 50%, 0.15);
     /* --secondary: #011932; */
     --background: #050505;
+    --backgroundLite: rgba(5, 5, 5, 0.2);
     --text: #fafafa;
     --textLite: rgb(121, 141, 175);
 }
@@ -34,5 +36,5 @@
 }
 
 .header_btn {
-    @apply flex_center hover:bg-secondaryClr smooth_transition p-2 rounded-full cursor-pointer
+    @apply flex_center hover:bg-secondaryClr smooth_transition p-2 rounded-full
 }
