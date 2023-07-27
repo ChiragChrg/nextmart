@@ -3,11 +3,11 @@ import Link from 'next/link'
 type PropTypes = {
     href: string,
     text: string,
-    ClassName?: string,
+    className?: string,
 }
 
-const TextButton = ({ href, text, ClassName }: PropTypes) => {
-    let classList = ClassName ? `${ClassName} text-textClr uppercase` : "text-textClr uppercase"
+const TextButton = ({ href, text, className }: PropTypes) => {
+    let classList = className ? `${className} text-textClr uppercase` : "text-textClr uppercase"
 
     return (
         <Link href={href} className={classList}>

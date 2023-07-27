@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useRef, FormEvent } from "react"
 
 type SugestList = {
@@ -93,11 +92,12 @@ const Search = ({ hideSearchBtn = false }: SearchProps) => {
             </div>
 
             {/* Search Input */}
-            <form className="relative flex flex-grow flex-col bg-black" onSubmit={HandleSearch}>
+            <form className="relative flex flex-grow flex-col" onSubmit={HandleSearch}>
                 <input
                     type="text"
                     className="w-full sm:min-w-[300px] bg-baseClr p-1 px-2 outline-none"
                     onChange={(e) => GetSuggestions(e.currentTarget.value)}
+                    onBlur={() => setSuggestionList(null)}
                     ref={SeachInputRef}
                     placeholder="Search for Products" />
 
