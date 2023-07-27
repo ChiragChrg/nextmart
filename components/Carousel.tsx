@@ -65,8 +65,8 @@ const Carousel = () => {
 
 
     return (
-        <div className="px-10 py-2 flex gap-10 w-full">
-            <div className="w-full h-[400px] bg-red-500 flex justify-evenly items-center rounded-xl relative overflow-hidden">
+        <div className="px-4 sm:px-[8em] py-2 flex justify-center flex-col sm:flex-row gap-2 sm:gap-10 w-full">
+            <div className="w-full h-[400px] bg-red-500 flex justify-evenly items-center flex-col-reverse sm:flex-row rounded-xl relative overflow-hidden">
                 <span className='text-[3em] font-bold w-full p-2'>{carousel[currentSlide]?.textA} <br /> {carousel[currentSlide]?.textB}</span>
                 <Image
                     loader={() => carousel[currentSlide]?.poster!}
@@ -78,13 +78,14 @@ const Carousel = () => {
                     className='!relative' />
             </div>
 
-            <div className="flex justify-between w-1/8 flex-col gap-2">
+            <div className="flex justify-between sm:w-1/8 sm:flex-col gap-2 px-[5em] sm:px-0">
                 {mockCarousel?.map((obj: carouselType, index: number) => {
                     return <div
                         style={index === currentSlide ? { backgroundColor: "var(--primary)", color: "#fff" } : {}}
-                        className="bg-secondaryClr w-[150px] h-full flex_center rounded-md"
+                        className="bg-secondaryClr w-[10px] h-[10px] sm:w-[150px] sm:h-full flex_center rounded-full sm:rounded-md cursor-pointer"
+                        onClick={() => setCurrentSlide(index)}
                         key={index}>
-                        <span className='text-[1em] font-bold'>{obj?.title}</span>
+                        <span className='hidden sm:block text-[1em] font-bold'>{obj?.title}</span>
                     </div>
                 })}
             </div>
