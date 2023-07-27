@@ -66,8 +66,8 @@ const Carousel = () => {
 
     return (
         <div className="px-4 sm:px-[8em] py-2 flex justify-center flex-col sm:flex-row gap-2 sm:gap-10 w-full">
-            <div className="w-full h-[400px] bg-red-500 flex justify-evenly items-center flex-col-reverse sm:flex-row rounded-xl relative overflow-hidden">
-                <span className='text-[3em] font-bold w-full p-2'>{carousel[currentSlide]?.textA} <br /> {carousel[currentSlide]?.textB}</span>
+            <div className="w-full h-[250px] sm:h-[400px] bg-red-500 flex justify-evenly items-center flex-col-reverse sm:flex-row rounded-xl relative overflow-hidden">
+                <span className='text-[1.5em] sm:text-[3em] font-bold w-full p-2'>{carousel[currentSlide]?.textA} <br /> {carousel[currentSlide]?.textB}</span>
                 <Image
                     loader={() => carousel[currentSlide]?.poster!}
                     unoptimized
