@@ -4,12 +4,11 @@ import { SessionProvider } from "next-auth/react"
 
 interface propTypes {
     children: React.ReactNode,
-    session?: object | any
 }
 
-const Provider = ({ children, session }: propTypes) => {
+const Provider = ({ children }: propTypes) => {
     return (
-        <SessionProvider session={session}>
+        <SessionProvider>
             {children}
         </SessionProvider>
     )

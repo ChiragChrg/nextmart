@@ -1,14 +1,18 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import { signIn, getProviders, useSession } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 import ShoppingSVG from '@components/SVGs/ShoppingSVG'
+import { TextButton } from '@components/Buttons'
+import Input from '@components/Form/Input'
 
-const SignIn = () => {
+const Login = () => {
     const [provider, setProvider] = useState<any | null>({})
-    const { status } = useSession()
-    const router = useRouter()
+    const [email, setEmail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    // const { status } = useSession()
+    // const router = useRouter()
 
     useEffect(() => {
         const FetchProviders = async () => {
@@ -18,29 +22,65 @@ const SignIn = () => {
         FetchProviders()
     }, [])
 
-    useEffect(() => {
-        if (status === "authenticated") {
-            router.push("/")
-            // console.log("sessionLogin", session)
-        }
-    }, [status])
+    // useEffect(() => {
+    // if (status === "authenticated") {
+    //     router.push("/")
+    // }
+    // }, [status])
+
+    const HandleLogin = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        signIn("credentials", {
+            email: email,
+            password: password,
+            redirect: true,
+            callbackUrl: "/"
+        })
+    }
 
     return (
-        <section className='flex px-16 py-8 w-full'>
-            <ShoppingSVG width='50%' className='px-[6em] py-[4em]' />
-            <div className="flex justify-around items-center flex-col gap-2 bg-secondaryClr w-1/2 p-8 mx-8 rounded-xl">
+        <section className='flex px-4 sm:px-16 pt-6 w-full h-full my-auto'>
+            <ShoppingSVG width='50%' className='hidden sm:block px-[6em] py-[4em]' />
+            <div className="flex justify-around items-center flex-col gap-2 sm:bg-secondaryClr w-full sm:w-1/2 sm:px-8 py-4 sm:mx-8 rounded-xl">
                 <h1 className='text-[1.8em] font-medium'>
                     Welcome to
                     <span className='text-primaryClr font-bold ml-2'>Next Mart</span>
                 </h1>
 
-                <h2 className='text-textLiteClr font-medium'>Sign In / Sign Up to Next Mart easily!</h2>
+                <form onSubmit={HandleLogin} className='bg-baseClr py-4 sm:p-4 sm:pt-8 rounded-lg flex flex-col gap-8 sm:gap-4 w-full'>
+                    <Input type='email' label='Email' placeholder='example@email.com' setValue={setEmail} />
 
-                <div className="flex_center flex-col gap-4 w-full px-4">
+                    <div className="flex flex-col gap-2">
+                        <Input type='password' label='Password' placeholder='Enter Password' isPassword setValue={setPassword} />
+                        <div className="text-primaryClr text-[0.9em] sm:text-[0.8em] w-full flex justify-end">Forgot Password?</div>
+                    </div>
+
+                    {/* <button type='submit'>Sign In</button> */}
+                    <button className='bg-primaryClr p-2 rounded text-white text-bold' type='submit'>
+                        Login
+                    </button>
+
+                    <div className="w-full flex gap-2 justify-center">
+                        New to NextMart?
+                        <TextButton href='/register' text='Sign Up' className='!text-primaryClr font-bold' />
+                    </div>
+                </form>
+
+                <div className=" w-full flex_center gap-2 text-primaryClr font-medium">
+                    <span className='flex w-[15em] h-[2px] bg-secondaryDarkClr'></span>
+                    <span>OR</span>
+                    <span className='flex w-[15em] h-[2px] bg-secondaryDarkClr'></span>
+                </div>
+
+                <div className="flex_center flex-col gap-4 w-full ">
                     {/* Google Login Button */}
                     <button
-                        className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded'
-                        onClick={() => signIn(provider["google"].id)}>
+                        className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr sm:border-none'
+                        onClick={() => signIn(provider["google"]?.id, {
+                            redirect: true,
+                            callbackUrl: "/"
+                        }
+                        )}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             preserveAspectRatio="xMidYMid"
@@ -69,8 +109,11 @@ const SignIn = () => {
 
                     {/* GitHUb Login Button */}
                     <button
-                        className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded'
-                        onClick={() => signIn(provider["github"].id)}>
+                        className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr sm:border-none'
+                        onClick={() => signIn(provider["github"]?.id, {
+                            redirect: true,
+                            callbackUrl: "/"
+                        })}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className='w-9 h-9'>
                             <path
                                 fill="currentColor"
@@ -86,4 +129,4 @@ const SignIn = () => {
     )
 }
 
-export default SignIn
+export default Login
