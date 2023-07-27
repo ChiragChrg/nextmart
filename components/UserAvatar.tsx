@@ -1,13 +1,25 @@
 "use client"
-import { useState } from "react"
-import { useSession } from "next-auth/react"
+import { useEffect, useRef, useState } from "react"
+import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import Image from "next/image"
-
 
 const UserAvatar = () => {
     const { data: session } = useSession()
     const [showDropMenu, setShowDropMenu] = useState<boolean>(false)
+    const DropdownRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const handleDropdownBlur = (event: MouseEvent) => {
+            if (DropdownRef.current && !DropdownRef.current.contains(event?.target as Node)) {
+                setShowDropMenu(false);
+            }
+        }
+
+        //Hide Dropdown when user clicks anything other than Dropdown
+        document.addEventListener("click", handleDropdownBlur)
+        return () => document.removeEventListener("click", handleDropdownBlur)
+    })
 
     return (
         <>
@@ -60,9 +72,17 @@ const UserAvatar = () => {
             }
 
             {/* Profile Menu Dropdown */}
-            {showDropMenu && <div className="bg-baseClr p-2 rounded-md absolute top-16 right-10 !w-[200px] flex flex-col gap-2 border border-secondaryClr">
-                <h1>My Profile</h1>
-                <button className="flex_center gap-2 bg-red-600 text-white p-2 rounded">
+            {showDropMenu && <div
+                ref={DropdownRef}
+                className="bg-baseClr p-2 rounded-md absolute top-16 right-10 !w-[200px] flex flex-col gap-2 border border-secondaryClr">
+
+                <Link href="/profile">
+                    My Profile
+                </Link>
+
+                <button
+                    onClick={() => signOut()}
+                    className="flex_center gap-2 bg-red-600 text-white p-2 rounded">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="32"

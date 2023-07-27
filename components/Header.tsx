@@ -28,7 +28,7 @@ const Header = () => {
         )
     else
         return (
-            <header className="bg-baseClr sticky top-0 z-10 w-full flex justify-between items-center p-3 px-10">
+            <header className="bg-baseClr sticky top-0 z-10 w-full flex justify-between items-center p-3 px-4">
                 <LogoSVG width="200px" />
 
                 <Search />
