@@ -35,7 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-baseClr text-textClr">
+      <body className="bg-baseClr text-textClr min-h-screen">
         <Provider>
           {children}
         </Provider>
