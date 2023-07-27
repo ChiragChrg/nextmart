@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         primaryClr: 'var(--primary)',
         secondaryClr: 'var(--secondary)',
+        secondaryDarkClr: 'var(--secondaryDark)',
         baseClr: 'var(--background)',
         baseLiteClr: 'var(--backgroundLite)',
         textClr: 'var(--text)',
