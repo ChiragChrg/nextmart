@@ -40,3 +40,15 @@
 .header_btn {
     @apply flex_center hover:bg-secondaryClr smooth_transition p-2 rounded-full
 }
+
+@layer utilities {
+    /* Hide white backgound color on form autofills */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        background-color: var(--background) !important;
+        color: var(--text) !important;
+        transition: background-color 999999s ease-in-out 0s;
+  }
+}
