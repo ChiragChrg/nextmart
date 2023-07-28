@@ -1,6 +1,8 @@
 "use client"
 
 import { SessionProvider } from "next-auth/react"
+import { Provider as ReduxProvider } from "react-redux"
+import store from "@redux/store"
 
 interface propTypes {
     children: React.ReactNode,
@@ -9,7 +11,9 @@ interface propTypes {
 const Provider = ({ children }: propTypes) => {
     return (
         <SessionProvider>
-            {children}
+            <ReduxProvider store={store}>
+                {children}
+            </ReduxProvider>
         </SessionProvider>
     )
 }

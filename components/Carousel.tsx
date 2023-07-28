@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
+import { useAppSelector } from "@redux/features/hooks"
 
 type carouselType = {
     title: string,
@@ -52,6 +53,11 @@ const mockCarousel: Array<carouselType> = [
 const Carousel = () => {
     const [carousel, setCarousel] = useState<Array<carouselType>>(mockCarousel)
     const [currentSlide, setCurrentSlide] = useState<number>(0)
+
+    const userX = useAppSelector((state) => state.account)
+    useEffect(() => {
+        console.log("userX", userX)
+    }, [userX])
 
     useEffect(() => {
         const interval = setInterval(() => {

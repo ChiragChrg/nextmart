@@ -7,7 +7,6 @@ import GitHubProvider from "next-auth/providers/github";
 import { connectDB } from "@utils/database"
 import User from "@models/UserModal"
 import Account from "@models/AccountModal";
-// import { useReducer } from "react";
 import { SignToken } from "@utils/jwt";
 import axios from "axios";
 
@@ -35,7 +34,7 @@ const handler = NextAuth({
                 //     })
                 // })
 
-                const res = await axios.post(`http://localhost:3000/api/login`, {
+                const res = await axios.post(`${process.env.NEXTAUTH_URL}/api/login`, {
                     email: credentials?.email,
                     password: credentials?.password,
                 })

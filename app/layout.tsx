@@ -1,6 +1,13 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import Provider from './Provider'
+import { Noto_Sans } from "next/font/google"
+import Provider from '@Providers/Provider'
+
+export const NotoSans = Noto_Sans({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'NextMart | Your Ultimate Shopping Destination!',

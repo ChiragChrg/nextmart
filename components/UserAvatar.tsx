@@ -4,10 +4,15 @@ import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import Image from "next/image"
 
+import { LogIn, LogOut } from "@redux/features/userSlice"
+import { useAppDispatch } from "@redux/features/hooks"
+
 const UserAvatar = () => {
     const { data: session } = useSession()
     const [showDropMenu, setShowDropMenu] = useState<boolean>(false)
     const DropdownRef = useRef<HTMLDivElement>(null)
+
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         const handleDropdownBlur = (event: MouseEvent) => {
@@ -19,7 +24,14 @@ const UserAvatar = () => {
         //Hide Dropdown when user clicks anything other than Dropdown
         document.addEventListener("click", handleDropdownBlur)
         return () => document.removeEventListener("click", handleDropdownBlur)
-    })
+    }, [])
+
+    useEffect(() => {
+        if (session) {
+            console.count("Dispatched")
+            dispatch(LogIn(session))
+        }
+    }, [session])
 
     return (
         <>
@@ -49,7 +61,7 @@ const UserAvatar = () => {
                     </svg>
                 </div>
                 :
-                <Link href="/login" className="bg-primaryClr flex_center gap-2 text-white px-2 py-3 rounded cursor-pointer">
+                <Link href="/login" className="bg-primaryClr flex_center gap-2 text-white px-2 py-1 rounded cursor-pointer">
 
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
