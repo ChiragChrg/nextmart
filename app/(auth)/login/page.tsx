@@ -1,18 +1,17 @@
 "use client"
 
 import { useState, useEffect, FormEvent } from 'react'
-import { signIn, getProviders, useSession } from "next-auth/react"
-import { useRouter } from 'next/navigation'
-import ShoppingSVG from '@components/SVGs/ShoppingSVG'
+import { signIn, getProviders } from "next-auth/react"
 import { TextButton } from '@components/Buttons'
 import Input from '@components/Form/Input'
+import ShoppingSVG from '@components/SVGs/ShoppingSVG'
+import DeliverySVG from '@components/SVGs/DeliverySVG'
+import LogoSVG from '@components/SVGs/LogoSVG'
 
 const Login = () => {
     const [provider, setProvider] = useState<any | null>({})
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    // const { status } = useSession()
-    // const router = useRouter()
 
     useEffect(() => {
         const FetchProviders = async () => {
@@ -21,12 +20,6 @@ const Login = () => {
         }
         FetchProviders()
     }, [])
-
-    // useEffect(() => {
-    // if (status === "authenticated") {
-    //     router.push("/")
-    // }
-    // }, [status])
 
     const HandleLogin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -39,15 +32,16 @@ const Login = () => {
     }
 
     return (
-        <section className='flex px-4 sm:px-16 pt-6 w-full h-full my-auto'>
-            <ShoppingSVG width='50%' className='hidden sm:block px-[6em] py-[4em]' />
-            <div className="flex justify-around items-center flex-col gap-2 sm:bg-secondaryClr w-full sm:w-1/2 sm:px-8 py-4 sm:mx-8 rounded-xl">
-                <h1 className='text-[1.8em] font-medium'>
-                    Welcome to
-                    <span className='text-primaryClr font-bold ml-2'>Next Mart</span>
-                </h1>
+        <section className='flex_center gap-8 px-4 sm:px-16 w-full h-full my-auto'>
+            <ShoppingSVG className='hidden sm:block px-8' />
 
-                <form onSubmit={HandleLogin} className='bg-baseClr py-4 sm:p-4 sm:pt-8 rounded-lg flex flex-col gap-8 sm:gap-4 w-full'>
+            <div className="flex justify-around items-center flex-col gap-2 w-full sm:w-1/2 py-4">
+                <div className='text-[1.8em] font-medium flex_center sm:gap-4 flex-col sm:flex-row'>
+                    Welcome to
+                    <LogoSVG width="200px" />
+                </div>
+
+                <form onSubmit={HandleLogin} className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full sm:max-w-md'>
                     <Input type='email' label='Email' placeholder='example@email.com' setValue={setEmail} />
 
                     <div className="flex flex-col gap-2">
@@ -66,16 +60,16 @@ const Login = () => {
                     </div>
                 </form>
 
-                <div className=" w-full flex_center gap-2 text-primaryClr font-medium">
+                <div className=" w-full sm:max-w-md sm:px-4 flex_center gap-2 text-primaryClr font-medium">
                     <span className='flex w-[15em] h-[2px] bg-secondaryDarkClr'></span>
                     <span>OR</span>
                     <span className='flex w-[15em] h-[2px] bg-secondaryDarkClr'></span>
                 </div>
 
-                <div className="flex_center flex-col gap-4 w-full ">
+                <div className="flex_center flex-col gap-4 w-full sm:max-w-md sm:px-4">
                     {/* Google Login Button */}
                     <button
-                        className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr sm:border-none'
+                        className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr'
                         onClick={() => signIn(provider["google"]?.id, {
                             redirect: true,
                             callbackUrl: "/"
@@ -85,7 +79,7 @@ const Login = () => {
                             xmlns="http://www.w3.org/2000/svg"
                             preserveAspectRatio="xMidYMid"
                             viewBox="-3 0 262 262"
-                            className='w-9 h-9'
+                            className='w-[30px] h-[30px]'
                         >
                             <path
                                 fill="#4285F4"
@@ -109,12 +103,12 @@ const Login = () => {
 
                     {/* GitHUb Login Button */}
                     <button
-                        className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr sm:border-none'
+                        className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr'
                         onClick={() => signIn(provider["github"]?.id, {
                             redirect: true,
                             callbackUrl: "/"
                         })}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className='w-9 h-9'>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className='w-[30px] h-[30px]'>
                             <path
                                 fill="currentColor"
                                 d="M94 7399c5.523 0 10 4.59 10 10.253 0 4.529-2.862 8.371-6.833 9.728-.507.101-.687-.219-.687-.492 0-.338.012-1.442.012-2.814 0-.956-.32-1.58-.679-1.898 2.227-.254 4.567-1.121 4.567-5.059 0-1.12-.388-2.034-1.03-2.752.104-.259.447-1.302-.098-2.714 0 0-.838-.275-2.747 1.051a9.396 9.396 0 00-2.505-.345 9.375 9.375 0 00-2.503.345c-1.911-1.326-2.751-1.051-2.751-1.051-.543 1.412-.2 2.455-.097 2.714-.639.718-1.03 1.632-1.03 2.752 0 3.928 2.335 4.808 4.556 5.067-.286.256-.545.708-.635 1.371-.57.262-2.018.715-2.91-.852 0 0-.529-.985-1.533-1.057 0 0-.975-.013-.068.623 0 0 .655.315 1.11 1.5 0 0 .587 1.83 3.369 1.21.005.857.014 1.665.014 1.909 0 .271-.184.588-.683.493-3.974-1.355-6.839-5.199-6.839-9.729 0-5.663 4.478-10.253 10-10.253"
@@ -125,6 +119,8 @@ const Login = () => {
                     </button>
                 </div>
             </div>
+
+            <DeliverySVG className='hidden sm:block px-8' />
         </section>
     )
 }
