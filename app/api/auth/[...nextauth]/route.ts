@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github";
@@ -6,11 +6,11 @@ import GitHubProvider from "next-auth/providers/github";
 
 import { connectDB } from "@utils/database"
 import User from "@models/UserModal"
-import Account from "@models/AccountModal";
+// import Account from "@models/AccountModal";
 import { SignToken } from "@utils/jwt";
 import axios from "axios";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -19,29 +19,19 @@ const handler = NextAuth({
                 password: { label: "Password", type: "password", placeholder: "Enter Password" },
             },
             async authorize(credentials) {
+                console.time("Credentials")
+
                 if (!credentials?.email || !credentials.password) {
                     return null
                 }
-
-                // const res = await fetch(`http://localhost:3000/api/login`, {
-                //     method: "POST",
-                //     headers: {
-                //         "Content-Type": "application/json"
-                //     },
-                //     body: JSON.stringify({
-                //         email: credentials?.email,
-                //         password: credentials?.password,
-                //     })
-                // })
 
                 const res = await axios.post(`${process.env.NEXTAUTH_URL}/api/login`, {
                     email: credentials?.email,
                     password: credentials?.password,
                 })
 
-                // const user = await res.json()
-                console.log("AuthRES", res?.data)
-
+                // console.log("AuthRES", res?.data)
+                console.timeEnd("Credentials")
                 if (res?.data) {
                     return res?.data
                 }
@@ -70,49 +60,55 @@ const handler = NextAuth({
     ],
     callbacks: {
         async jwt({ token, user, profile, account }) {
-            console.log("\nJWTCallback", { token, user, profile, account })
+            console.time("JWT")
+            // console.log("\nJWTCallback", { token, user, profile, account })
             if (account?.type === "oauth") {
-                console.log("\nJWT_Profile_After", { ...token, ...profile })
+
+                delete token.picture
+                delete user.id
+
                 const newToken = {
-                    uid: user?.uid,
-                    name: token?.name,
-                    email: token?.email,
-                    image: token?.picture,
+                    ...user,
                     emailVerified: profile?.email_verified
                 }
-
                 const accessToken = SignToken(newToken)
 
+                // console.log("\nJWT_Profile_After", { ...newToken, accessToken })
                 return { ...token, ...newToken, accessToken }
             } else if (user) {
-                console.log("\nJWT_User_After", { ...token, ...user })
+                delete token.picture
+
+                // console.log("\nJWT_User_After", { ...token, ...user })
                 return { ...token, ...user }
             }
 
+            console.timeEnd("JWT")
             return token
         },
 
         async session({ session, token, user }) {
-            console.log("\nSessionCallback", { session, token, user })
+            console.time("Session")
+            // console.log("\nSessionCallback", { session, token, user })
+
+            if (token?.picture) delete token?.picture
             session = {
-                ...session,
-                user: {
-                    uid: token?.uid as string,
-                    name: token?.name as string,
-                    email: token?.email as string,
-                    image: token?.image as string,
-                    emailVerified: token?.emailVerified as boolean,
-                    accessToken: token?.accessToken as string
-                }
+                user: { ...token },
+                expires: session.expires
             }
 
-            console.log("\nSessionAfter", session)
+            // console.log("\nSessionAfter", session)
+            console.timeEnd("Session")
             return session
         },
 
         async signIn({ user, profile, account }) {
-            console.log("\nSignINCallback", { user, profile, account })
-            let userData = {}
+            // console.log("\nSignINCallback", { user, profile, account })
+            console.time("SignIN")
+
+            if (account?.provider === "credentials") {
+                console.log("Credential Login")
+                return true
+            }
 
             try {
                 await connectDB()
@@ -126,63 +122,14 @@ const handler = NextAuth({
                         image: profile?.picture,
                     })
 
-                    const newAccount = await Account.create({
-                        userId: newUser?._id,
-                        userEmail: profile?.email,
-                        provider: account?.provider,
-                        providerAccountId: account?.providerAccountId,
-                        refresh_token: account?.refresh_token,
-                        access_token: account?.access_token,
-                        expires_at: account?.expires_at,
-                        id_token: account?.id_token,
-                    });
-
                     user.uid = newUser._id;
-
-                    //Add the Accounte Model Id to User model accounts Array
-                    newUser.accounts.push(newAccount._id);
-                    await newUser.save();
-
-                    // userData = {
-                    //     uid: newUser?._id,
-                    //     name: newUser?.name,
-                    //     email: newUser?.email,
-                    //     image: newUser?.image,
-                    //     emailVerified: newUser?.emailVerified,
-                    // }
-
-                    console.log("\nNEWOAuth", { newUser, newAccount })
+                    console.log("NewOAuth User")
                 } else {
-                    const accountExists = await Account.findOneAndUpdate(
-                        {
-                            userId: userExists?._id,
-                            provider: account?.provider
-                        },
-                        {
-                            providerAccountId: account?.id,
-                            accessToken: account?.accessToken,
-                            refresh_token: account?.refresh_token,
-                            expiresAt: account?.expiresAt,
-                            id_token: account?.id_token,
-                        },
-                        { new: true }
-                    )
-
-                    // userData = {
-                    //     uid: userExists?._id,
-                    //     name: userExists?.name,
-                    //     email: userExists?.email,
-                    //     image: userExists?.image,
-                    //     emailVerified: userExists?.emailVerified,
-                    // }
-                    console.log("\OldOAuth", accountExists)
+                    user.uid = userExists._id;
+                    console.log("OAuth User Exisits")
                 }
 
-                // const accessToken = SignToken(userData)
-                // const newUserObject = { ...userData, accessToken }
-                // console.log("\nNEwUSEROBJS", newUserObject)
-                // profile = newUserObject
-
+                console.timeEnd("SignIN")
                 return true
             } catch (err) {
                 console.log("Signin_Callback_Err", err)
@@ -198,55 +145,8 @@ const handler = NextAuth({
     },
     secret: process.env.NEXTAUTH_SECRET,
     debug: process.env.NODE_ENV === "development",
-})
+}
 
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }
-
-// callbacks: {
-//     // async signIn({ user, profile }) {
-//     //     console.log("\nSignInCallback", { user, profile })
-
-//     //     return true
-
-//     // try {
-//     //     await connectDB()
-
-//     //     const userExists = await User.findOne({email: profile?.email})
-//     //     if(!userExists){
-//     //         // await User.create({
-//     //         //     email: profile?.email,
-//     //         //     name: profile?.name,
-//     //         //     image: profile?.image,
-//     //         // })
-
-//     //         console.log("NO User FOund!")
-//     //     }
-
-//     //     // const {password, ...userWithoutPass} = userExists;
-//     //     // const token = SignToken(userWithoutPass)
-//     //     // const result = {...userWithoutPass, token}
-//     //     return true
-//     // } catch (err) {
-//     //     console.log(err)
-//     //     return false
-//     // }
-//     // },
-
-//     async session({ session, token }) {
-//         // const sessionUser = await User.findOne({ email: session.user?.email })
-//         // session.user.token = token as any
-//         // session.user.uid = sessionUser?._id.toString()
-//         session.accessToken = token as any
-//         session.user.uid = token?.uid as string
-
-//         console.log("\nSessionCallback", { session, token })
-//         return session
-//     },
-
-//     async jwt({ token, user }) {
-//         // token = user as any
-//         console.log("\nJWTCallback", { token, user })
-//         return { ...token, ...user }
-//     },
-// },

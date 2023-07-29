@@ -7,11 +7,14 @@ import Input from '@components/Form/Input'
 import ShoppingSVG from '@components/SVGs/ShoppingSVG'
 import DeliverySVG from '@components/SVGs/DeliverySVG'
 import LogoSVG from '@components/SVGs/LogoSVG'
+import { useRouter } from 'next/navigation'
 
 const Login = () => {
     const [provider, setProvider] = useState<any | null>({})
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
+
+    const router = useRouter()
 
     useEffect(() => {
         const FetchProviders = async () => {
@@ -21,14 +24,34 @@ const Login = () => {
         FetchProviders()
     }, [])
 
-    const HandleLogin = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        signIn("credentials", {
-            email: email,
-            password: password,
-            redirect: true,
-            callbackUrl: "/"
-        })
+    const HandleLogin = async (e: FormEvent<HTMLFormElement>) => {
+        e?.preventDefault()
+        try {
+            const res = await signIn("credentials", {
+                email: email,
+                password: password,
+                redirect: false,
+                callbackUrl: "/"
+            })
+
+            console.log("LoginRes", res)
+            router.push("/")
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const HandleOAuthLogin = async (provider: string) => {
+        try {
+            const res = await signIn(provider, {
+                redirect: true,
+                callbackUrl: "/"
+            })
+
+            console.log("LoginRes", res)
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     return (
@@ -70,11 +93,7 @@ const Login = () => {
                     {/* Google Login Button */}
                     <button
                         className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr'
-                        onClick={() => signIn(provider["google"]?.id, {
-                            redirect: true,
-                            callbackUrl: "/"
-                        }
-                        )}>
+                        onClick={() => HandleOAuthLogin(provider["google"]?.id)}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             preserveAspectRatio="xMidYMid"
@@ -104,10 +123,7 @@ const Login = () => {
                     {/* GitHUb Login Button */}
                     <button
                         className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr'
-                        onClick={() => signIn(provider["github"]?.id, {
-                            redirect: true,
-                            callbackUrl: "/"
-                        })}>
+                        onClick={() => HandleLogin(provider["github"]?.id)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className='w-[30px] h-[30px]'>
                             <path
                                 fill="currentColor"
