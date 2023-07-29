@@ -13,7 +13,6 @@ export async function POST(request: Request) {
 
     try {
         await connectDB()
-        console.log("LogIn_Route", body)
 
         const userExists = await User.findOne({ email: body?.email })
         const matchPassword = await bcrypt.compare(body?.password, userExists?.hashedPassword)
@@ -31,7 +30,7 @@ export async function POST(request: Request) {
 
         const accessToken = SignToken(userData)
         const result = { ...userData, accessToken }
-        console.log("LogIn_RouteRes", result)
+        // console.log("LogIn_RouteRes", result)
 
         return new Response(JSON.stringify(result))
     } catch (err) {

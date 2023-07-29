@@ -64,22 +64,26 @@ export const authOptions: NextAuthOptions = {
             // console.log("\nJWTCallback", { token, user, profile, account })
             if (account?.type === "oauth") {
 
-                delete token.picture
-                delete user.id
+                const { picture, ...restToken } = token
+                const { id, ...restUser } = user
+                // delete token.picture
+                // delete user.id
 
                 const newToken = {
-                    ...user,
+                    ...restToken,
+                    ...restUser,
                     emailVerified: profile?.email_verified
                 }
                 const accessToken = SignToken(newToken)
 
-                // console.log("\nJWT_Profile_After", { ...newToken, accessToken })
-                return { ...token, ...newToken, accessToken }
+                console.log("\nJWT_Profile_After", { ...newToken, accessToken })
+                return { ...newToken, accessToken }
             } else if (user) {
-                delete token.picture
+                // delete token.picture
+                const { picture, ...restToken } = token
 
                 // console.log("\nJWT_User_After", { ...token, ...user })
-                return { ...token, ...user }
+                return { ...restToken, ...user }
             }
 
             console.timeEnd("JWT")
@@ -90,13 +94,14 @@ export const authOptions: NextAuthOptions = {
             console.time("Session")
             // console.log("\nSessionCallback", { session, token, user })
 
-            if (token?.picture) delete token?.picture
+            // if (token?.picture) delete token?.picture
+            const { picture, ...restToken } = token
             session = {
-                user: { ...token },
+                user: { ...restToken },
                 expires: session.expires
             }
 
-            // console.log("\nSessionAfter", session)
+            console.log("\nSessionAfter", session)
             console.timeEnd("Session")
             return session
         },
