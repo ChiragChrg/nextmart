@@ -27,10 +27,7 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#fafafa' },
-    { media: '(prefers-color-scheme: dark)', color: '#050505' },
-  ],
+  themeColor: "#fafafa",
   icons: {
     icon: '/icons/192.png',
     shortcut: '/favicon.ico',

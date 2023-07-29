@@ -10,14 +10,9 @@ type Props = {
 
 const ThemeButton = ({ width = "100%", height = "100%", className = "w-6 h-6" }: Props) => {
     const [isDarkTheme, setIsDarkTheme] = useState(false)
+    const themeMetaTag = document.querySelector('meta[name="theme-color"]');
 
     useEffect(() => {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches && localStorage.getItem("nextmart-theme") === null) {
-            //Runs only if the initial localStorage theme was null
-            // and if OS theme preference is Dark
-            localStorage.setItem("nextmart-theme", "dark")
-        }
-
         if (localStorage.getItem("nextmart-theme") === "dark") {
             document.documentElement.setAttribute("data-theme", "dark")
             setIsDarkTheme(true)
@@ -33,10 +28,12 @@ const ThemeButton = ({ width = "100%", height = "100%", className = "w-6 h-6" }:
             document.documentElement.removeAttribute("data-theme")
             localStorage.setItem("nextmart-theme", "light")
             setIsDarkTheme(false)
+            themeMetaTag?.setAttribute('content', "#050505");
         } else {
             document.documentElement.setAttribute("data-theme", "dark")
             localStorage.setItem("nextmart-theme", "dark")
             setIsDarkTheme(true)
+            themeMetaTag?.setAttribute('content', "#fafafa");
         }
     }
 
