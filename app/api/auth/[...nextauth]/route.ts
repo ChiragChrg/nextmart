@@ -95,7 +95,7 @@ export const authOptions: NextAuthOptions = {
             // console.log("\nSessionCallback", { session, token, user })
 
             // if (token?.picture) delete token?.picture
-            const { picture, ...restToken } = token
+            const { picture, id, ...restToken } = token
             session = {
                 user: { ...restToken },
                 expires: session.expires
