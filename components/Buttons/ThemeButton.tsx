@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 type Props = {
     width?: string,
@@ -10,9 +10,11 @@ type Props = {
 
 const ThemeButton = ({ width = "100%", height = "100%", className = "w-6 h-6" }: Props) => {
     const [isDarkTheme, setIsDarkTheme] = useState(false)
-    const themeMetaTag = document.querySelector('meta[name="theme-color"]');
+    const themeMetaTagRef = useRef<HTMLElement | null>(null)
 
     useEffect(() => {
+        themeMetaTagRef.current = document?.querySelector('meta[name="theme-color"]');
+
         if (localStorage.getItem("nextmart-theme") === "dark") {
             document.documentElement.setAttribute("data-theme", "dark")
             setIsDarkTheme(true)
@@ -28,12 +30,12 @@ const ThemeButton = ({ width = "100%", height = "100%", className = "w-6 h-6" }:
             document.documentElement.removeAttribute("data-theme")
             localStorage.setItem("nextmart-theme", "light")
             setIsDarkTheme(false)
-            themeMetaTag?.setAttribute('content', "#050505");
+            themeMetaTagRef.current?.setAttribute('content', "#fafafa");
         } else {
             document.documentElement.setAttribute("data-theme", "dark")
             localStorage.setItem("nextmart-theme", "dark")
             setIsDarkTheme(true)
-            themeMetaTag?.setAttribute('content', "#fafafa");
+            themeMetaTagRef.current?.setAttribute('content', "#050505");
         }
     }
 
