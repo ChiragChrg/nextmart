@@ -1,11 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit"
-import userReducer from "./features/userSlice"
-import { TypedUseSelectorHook, useSelector } from "react-redux"
+import rootReducer from "./rootReducer"
 
 const store = configureStore({
-    reducer: {
-        account: userReducer
-    }
+    reducer: rootReducer
 })
 
 export type RootState = ReturnType<typeof store.getState>

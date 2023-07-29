@@ -2,15 +2,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import type { PayloadAction } from "@reduxjs/toolkit";
 
 type UserType = {
-    user: {
-        uid: string,
-        name: string,
-        email: string,
-        image: string,
-        emailVerified: boolean,
-        accessToken: string
+    user?: {
+        uid?: string | null,
+        name?: string | null,
+        email?: string | null,
+        image?: string | null,
+        emailVerified?: boolean | null,
+        accessToken?: string | null,
     },
-    expires: string
+    expires?: string | null
 }
 
 type InitialStateType = {

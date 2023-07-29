@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 
 import { LogIn, LogOut } from "@redux/features/userSlice"
+import { useAppSelector } from "@redux/features/hooks"
 import { useAppDispatch } from "@redux/features/hooks"
 
 const UserAvatar = () => {
@@ -12,6 +13,7 @@ const UserAvatar = () => {
     const [showDropMenu, setShowDropMenu] = useState<boolean>(false)
     const DropdownRef = useRef<HTMLDivElement>(null)
 
+    const user = useAppSelector((state) => state.account.account?.user)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -24,24 +26,39 @@ const UserAvatar = () => {
         //Hide Dropdown when user clicks anything other than Dropdown
         document.addEventListener("click", handleDropdownBlur)
         return () => document.removeEventListener("click", handleDropdownBlur)
-    }, [])
+    }, [showDropMenu])
 
     useEffect(() => {
-        if (session) {
-            console.count("Dispatched")
+        if (!session) return
+        console.count("Dispatched")
+
+        const savedUser = localStorage.getItem("nextmart-user")
+        if (savedUser) {
+            console.log("SettingLocalUser")
+            dispatch(LogIn(JSON.parse(savedUser)))
+        }
+        else {
             dispatch(LogIn(session))
+            localStorage.setItem("nextmart-user", JSON.stringify(session))
         }
     }, [session])
 
+    // const getUserToken = async () => {
+    //     console.time("token")
+    //     const res = await axios.get(`/api/getUser`)
+    //     console.log("GetToken", res)
+    //     console.timeEnd("token")
+    // }
+
     return (
         <>
-            {session ?
+            {user ?
                 <div
                     onClick={() => setShowDropMenu(prev => !prev)}
                     className="flex_center w-fit gap-2 cursor-pointer hover:bg-secondaryClr border border-secondaryClr p-1 px-2 rounded smooth_transition">
-                    {session?.user?.image ?
+                    {user?.image ?
                         <div className="flex_center rounded-full relative overflow-hidden">
-                            <Image src={session?.user?.image} alt="" width={40} height={40} />
+                            <Image src={user?.image} alt="" width={40} height={40} />
                         </div>
                         :
                         <div className="bg-primaryClr aspect-square text-white p-1 rounded-full">
@@ -53,7 +70,7 @@ const UserAvatar = () => {
 
                     <div className="flex flex-col justify-center max-w-[80px] w-full ml-1 overflow-hidden">
                         <span className="text-[0.75em] leading-[1em] text-textLiteClr">Welcome !</span>
-                        <span className="text-[0.9em]">{session?.user?.name}</span>
+                        <span className="text-[0.9em]">{user?.name}</span>
                     </div>
 
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-textLiteClr">
@@ -91,6 +108,12 @@ const UserAvatar = () => {
                 <Link href="/profile">
                     My Profile
                 </Link>
+
+                <button
+                    // onClick={getUserToken}
+                    className="flex_center gap-2 bg-primaryClr text-white p-2 rounded">
+                    GET USER TOKEN
+                </button>
 
                 <button
                     onClick={() => signOut()}

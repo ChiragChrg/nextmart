@@ -10,7 +10,7 @@ interface propTypes {
 
 const Provider = ({ children }: propTypes) => {
     return (
-        <SessionProvider>
+        <SessionProvider >
             <ReduxProvider store={store}>
                 {children}
             </ReduxProvider>
