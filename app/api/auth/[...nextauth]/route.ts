@@ -76,7 +76,7 @@ export const authOptions: NextAuthOptions = {
                 }
                 const accessToken = SignToken(newToken)
 
-                console.log("\nJWT_Profile_After", { ...newToken, accessToken })
+                // console.log("\nJWT_Profile_After", { ...newToken, accessToken })
                 return { ...newToken, accessToken }
             } else if (user) {
                 // delete token.picture
@@ -101,7 +101,7 @@ export const authOptions: NextAuthOptions = {
                 expires: session.expires
             }
 
-            console.log("\nSessionAfter", session)
+            // console.log("\nSessionAfter", session)
             console.timeEnd("Session")
             return session
         },
