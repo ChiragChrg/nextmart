@@ -49,20 +49,44 @@ const mockCarousel: Array<carouselType> = [
     }
 ]
 
+
 const Carousel = () => {
     const [carousel, setCarousel] = useState<Array<carouselType>>(mockCarousel)
     const [currentSlide, setCurrentSlide] = useState<number>(0)
+    const [swipeStartX, setSwipeStartX] = useState<number | null>(null)
 
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentSlide(prev => (prev === mockCarousel.length - 1) ? 0 : prev + 1);
         }, 5000);
 
+        const handleSwipeStart = (evt: TouchEvent) => {
+            setSwipeStartX(evt.touches[0].clientX)
+        }
+
+        const handleSwipeEnd = (evt: TouchEvent) => {
+            const swipeEndX = evt.changedTouches[0].clientX
+            const swipeDistance = swipeEndX - swipeStartX!
+
+            const swipeThreshold = 100
+
+            console.log("SWIPER", swipeDistance > swipeThreshold)
+            if (swipeDistance > swipeThreshold) {
+                setCurrentSlide(prev => (prev === 0) ? mockCarousel.length - 1 : prev - 1);
+            } else if (swipeDistance < -swipeThreshold) {
+                setCurrentSlide(prev => (prev === mockCarousel.length - 1) ? 0 : prev + 1);
+            }
+        }
+
+        document.addEventListener('touchstart', handleSwipeStart);
+        document.addEventListener('touchend', handleSwipeEnd);
+
         return () => {
+            document.removeEventListener('touchstart', handleSwipeStart);
+            document.removeEventListener('touchend', handleSwipeEnd);
             clearInterval(interval);
         };
-    }, []);
-
+    }, [swipeStartX])
 
     return (
         <div className="px-4 sm:px-[8em] py-2 flex justify-center flex-col sm:flex-row gap-2 sm:gap-10 w-full">

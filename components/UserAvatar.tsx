@@ -43,12 +43,11 @@ const UserAvatar = () => {
         }
     }, [session])
 
-    // const getUserToken = async () => {
-    //     console.time("token")
-    //     const res = await axios.get(`/api/getUser`)
-    //     console.log("GetToken", res)
-    //     console.timeEnd("token")
-    // }
+    const HandleLogout = async () => {
+        signOut()
+        dispatch(LogOut())
+        localStorage.removeItem("nextmart-user")
+    }
 
     return (
         <>
@@ -116,7 +115,7 @@ const UserAvatar = () => {
                 </button>
 
                 <button
-                    onClick={() => signOut()}
+                    onClick={HandleLogout}
                     className="flex_center gap-2 bg-red-600 text-white p-2 rounded">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
