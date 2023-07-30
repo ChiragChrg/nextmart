@@ -1,8 +1,12 @@
-import React from 'react'
+import ReturnNav from "@components/ReturnNav"
 
 const Profile = () => {
     return (
-        <div>Profile</div>
+        <div>
+            <ReturnNav />
+
+            Profile
+        </div>
     )
 }
 

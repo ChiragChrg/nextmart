@@ -79,7 +79,7 @@ const Login = () => {
 
                     <div className="w-full flex gap-2 justify-center">
                         New to NextMart?
-                        <TextButton href='/register' text='Sign Up' className='!text-primaryClr font-bold' />
+                        <TextButton href='/register' text='Register' className='!text-primaryClr font-bold' />
                     </div>
                 </form>
 

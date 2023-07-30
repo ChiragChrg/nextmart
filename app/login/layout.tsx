@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Provider from '@Providers/Provider'
-import Header from '@components/Header'
+import ReturnNav from '@components/ReturnNav'
 
 export const metadata: Metadata = {
     title: 'Login | NextMart',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 const layout = ({ children }: { children: React.ReactNode }) => {
     return (
         <Provider>
-            <Header isAuthPage />
+            <ReturnNav />
 
             {children}
         </Provider>

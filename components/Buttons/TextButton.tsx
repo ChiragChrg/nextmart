@@ -7,10 +7,8 @@ type PropTypes = {
 }
 
 const TextButton = ({ href, text, className }: PropTypes) => {
-    let classList = className ? `${className} text-textClr uppercase` : "text-textClr uppercase"
-
     return (
-        <Link href={href} className={classList}>
+        <Link href={href} className={`${className} text-textClr capitalize tracking-wider`}>
             {text}
         </Link>
     )

@@ -111,7 +111,8 @@ const UserAvatar = () => {
                                     d="M30 17V7L2 2v46l28-5V33m0-8H10m20 0l-10-8m10 8l-10 8"
                                 ></path>
                             </svg>
-                            Logout
+
+                            <span>Logout</span>
                         </button>
                     </div>}
                 </div >
@@ -135,7 +136,7 @@ const UserAvatar = () => {
     }
     else
         return (
-            <Link href="/login" className="bg-primaryClr flex_center gap-2 text-white px-2 py-1 rounded cursor-pointer">
+            <Link href="/login" className="bg-primaryClr flex_center gap-2 text-white px-2 py-[0.3em] rounded cursor-pointer">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"
@@ -152,7 +153,8 @@ const UserAvatar = () => {
                         d="M30 17V7L2 2v46l28-5V33M18 17l-8 8m0 0l8 8m-8-8h20"
                     ></path>
                 </svg>
-                Login
+
+                <span>Login</span>
             </Link>)
 }
 
