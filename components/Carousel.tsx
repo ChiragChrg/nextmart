@@ -100,7 +100,7 @@ const Carousel = () => {
                 {/* Dark Overlay */}
                 <div className="bg-gradient-to-t from-secondaryDarkClr via-transparent w-full h-full absolute"></div>
 
-                <span className='absolute bottom-0 text-[1.5em] tablet:text-[3em] font-josefin font-bold w-full p-2'>
+                <span className='absolute bottom-0 text-[1.8em] tablet:text-[3em] font-josefin font-bold w-full p-2'>
                     {carousel[currentSlide]?.textA} <br /> {carousel[currentSlide]?.textB}
                 </span>
             </div>
