@@ -10,8 +10,11 @@ import Link from "next/link"
 
 const Header = ({ hideSearch = false }: { hideSearch?: boolean }) => {
     const [isMobile, setIsMobile] = useState<boolean>(false)
+
     useEffect(() => {
-        setIsMobile(window?.innerWidth <= 750)
+        if (typeof window !== 'undefined')
+            setIsMobile(window?.innerWidth <= 750)
+        // console.log("isMob", window?.innerWidth)
     }, [])
 
     if (isMobile)
@@ -21,7 +24,7 @@ const Header = ({ hideSearch = false }: { hideSearch?: boolean }) => {
                     <Link href="/">
                         <IconSVG width="30px" />
                     </Link>
-                    {!hideSearch && <UserAvatar />}
+                    {!hideSearch && <UserAvatar mobileView />}
 
                     {hideSearch && <div className="flex gap-4 items-center">
                         <ThemeButton />

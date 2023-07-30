@@ -1,12 +1,20 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Noto_Sans } from "next/font/google"
 import Provider from '@Providers/Provider'
+import { Poppins, Josefin_Sans } from "next/font/google"
 
-export const NotoSans = Noto_Sans({
+export const Poppin = Poppins({
   weight: '400',
   subsets: ['latin'],
   display: 'swap',
+  variable: "--Poppins"
+})
+
+export const JosefinSans = Josefin_Sans({
+  weight: "700",
+  subsets: ['latin'],
+  display: 'swap',
+  variable: "--JosefinSans"
 })
 
 export const metadata: Metadata = {
@@ -42,7 +50,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-baseClr text-textClr min-h-screen">
+      <body className={`bg-baseClr text-textClr min-h-screen font-poppins ${JosefinSans.variable} ${Poppin.variable}`}>
         <Provider>
           {children}
         </Provider>

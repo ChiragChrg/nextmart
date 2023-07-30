@@ -11,7 +11,7 @@ const nextConfig = withPWA({
         domains: [
             "lh3.googleusercontent.com",
             "avatars.githubusercontent.com",
-            "placehold.co"
+            "via.placeholder.com",
         ]
     },
 })

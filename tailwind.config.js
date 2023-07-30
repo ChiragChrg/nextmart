@@ -15,6 +15,12 @@ module.exports = {
         baseLiteClr: 'var(--backgroundLite)',
         textClr: 'var(--text)',
         textLiteClr: 'var(--textLite)',
+        pinkClr: 'var(--pink)',
+        goldClr: 'var(--gold)',
+      },
+      fontFamily: {
+        poppins: ["var(--Poppins)"],
+        josefin: ["var(--JosefinSans)"],
       }
     },
   },

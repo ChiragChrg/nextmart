@@ -10,6 +10,8 @@
     --backgroundLite: rgba(250, 250, 250, 0.2);
     --text: #050505;
     --textLite: rgb(55, 65, 81);
+    --pink: #ff007f;
+    --gold: #fdd017;
 }
 
 [data-theme="dark"] {

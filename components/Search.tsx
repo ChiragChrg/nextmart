@@ -102,8 +102,9 @@ const Search = ({ hideSearchBtn = false }: SearchProps) => {
                     placeholder="Search for Products" />
 
                 {suggestionList && <div className="absolute bg-baseClr/25 backdrop-blur-sm w-full flex flex-col gap-2 top-11 p-2 border border-secondaryClr rounded z-10">
-                    {suggestionList.map(obj => {
+                    {suggestionList.map((obj, index) => {
                         return <div
+                            key={index}
                             onClick={(e) => HandleSuggestionClick(e.currentTarget.innerText)}
                             className="bg-baseClr p-2 rounded cursor-pointer hover:bg-secondaryClr">
                             {obj.name}
