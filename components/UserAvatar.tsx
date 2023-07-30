@@ -32,15 +32,15 @@ const UserAvatar = () => {
     }, [showDropMenu])
 
     useEffect(() => {
-        console.count("Dispatched")
         const savedUser = localStorage.getItem("nextmart-user")
         if (savedUser) {
-            console.log("SettingLocalUser")
             dispatch(LogIn(JSON.parse(savedUser)))
+            console.log("Dispatched LocalUser")
         }
         else if (session) {
             dispatch(LogIn(session))
             localStorage.setItem("nextmart-user", JSON.stringify(session))
+            console.count("Dispatched NewUser")
         }
     }, [session])
 

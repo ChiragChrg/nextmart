@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Provider from '@Providers/Provider'
-// import Header from '@components/Header'
 
 export const metadata: Metadata = {
     title: 'My Profile | NextMart',
@@ -24,8 +23,6 @@ export const metadata: Metadata = {
 const layout = ({ children }: { children: React.ReactNode }) => {
     return (
         <Provider>
-            {/* <Header hideSearch /> */}
-
             {children}
         </Provider>
     )

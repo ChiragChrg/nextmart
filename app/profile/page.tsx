@@ -2,11 +2,11 @@ import ReturnNav from "@components/ReturnNav"
 
 const Profile = () => {
     return (
-        <div>
+        <section>
             <ReturnNav />
 
             Profile
-        </div>
+        </section>
     )
 }
 

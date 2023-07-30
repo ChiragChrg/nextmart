@@ -123,7 +123,7 @@ const Login = () => {
                     {/* GitHUb Login Button */}
                     <button
                         className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr'
-                        onClick={() => HandleLogin(provider["github"]?.id)}>
+                        onClick={() => HandleOAuthLogin(provider["github"]?.id)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className='w-[30px] h-[30px]'>
                             <path
                                 fill="currentColor"
