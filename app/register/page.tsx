@@ -43,11 +43,11 @@ const Register = () => {
 
             <div className="flex justify-around items-center flex-col gap-2 w-full sm:min-w-[448px] py-4">
                 <div className='text-[1.8em] font-medium flex_center sm:gap-4 flex-col sm:flex-row'>
-                    Welcome to
+                    <h1>Register to</h1>
                     <LogoSVG width="200px" />
                 </div>
 
-                <form onSubmit={HandleSignUp} className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full'>
+                <form onSubmit={HandleSignUp} method='POST' className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full'>
                     <Input type='text' label='Username' placeholder='Enter your name' setValue={setUsername} />
                     <Input type='email' label='Email' placeholder='example@email.com' setValue={setEmail} />
                     <Input type='password' label='Password' placeholder='Enter Password' isPassword setValue={setPassword} />

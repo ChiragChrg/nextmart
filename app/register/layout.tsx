@@ -4,6 +4,7 @@ import ReturnNav from '@components/ReturnNav'
 
 export const metadata: Metadata = {
     title: 'Register | NextMart',
+    description: "Join the Next Mart family! Register now for an exceptional shopping experience. Access a vast array of products, from fashion to electronics. Enjoy personalized recommendations and exclusive deals. Sign up securely and embark on a journey of endless shopping possibilities!",
     creator: "ChiragChrg",
     authors: [{ name: 'ChiragChrg', url: 'https://chiragchrg.netlify.app/' }],
     verification: { google: "TSsuy8j81zZ0Ge0aestKiwZUPydASWd9aANj-ITDack" },
@@ -18,6 +19,9 @@ export const metadata: Metadata = {
             index: true,
             follow: true,
         },
+    },
+    alternates: {
+        canonical: 'https://nextmart.vercel.app/',
     },
 }
 

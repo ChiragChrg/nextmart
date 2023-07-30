@@ -60,11 +60,11 @@ const Login = () => {
 
             <div className="flex justify-around items-center flex-col gap-2 w-full sm:w-1/2 py-4">
                 <div className='text-[1.8em] font-medium flex_center sm:gap-4 flex-col sm:flex-row'>
-                    Welcome to
+                    <h1>Welcome to</h1>
                     <LogoSVG width="200px" />
                 </div>
 
-                <form onSubmit={HandleLogin} className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full sm:max-w-md'>
+                <form onSubmit={HandleLogin} method='POST' className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full sm:max-w-md'>
                     <Input type='email' label='Email' placeholder='example@email.com' setValue={setEmail} />
 
                     <div className="flex flex-col gap-2">

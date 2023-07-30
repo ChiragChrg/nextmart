@@ -41,6 +41,9 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico',
     apple: '/apple-touch-icon.png',
   },
+  alternates: {
+    canonical: 'https://nextmart.vercel.app/',
+  },
 }
 
 export default function RootLayout({
