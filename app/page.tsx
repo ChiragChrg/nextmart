@@ -5,12 +5,12 @@ import Feeds from "@components/Feeds"
 
 const Home = () => {
   return (
-    <>
+    <main>
       <Header />
       <Carousel />
       <Feeds />
       <MobileNav />
-    </>
+    </ main>
   )
 }
 

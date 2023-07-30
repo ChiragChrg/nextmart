@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation'
 import { TextButton } from '@components/Buttons'
 import Input from '@components/Form/Input'
 import axios from 'axios'
-import EmptyCartSVG from '@components/SVGs/EmptyCartSVG'
-import GroceriesSVG from '@components/SVGs/GroceriesSVG'
+import ShoppingSVG from '@components/SVGs/ShoppingSVG'
+import DeliverySVG from '@components/SVGs/DeliverySVG'
 import LogoSVG from '@components/SVGs/LogoSVG'
 
 const Register = () => {
@@ -39,7 +39,7 @@ const Register = () => {
 
     return (
         <section className='flex_center gap-8 px-4 sm:px-16 pt-8 w-full h-full my-auto'>
-            <GroceriesSVG className='hidden sm:block px-8' />
+            <ShoppingSVG className='hidden sm:block px-8' />
 
             <div className="flex justify-around items-center flex-col gap-2 w-full sm:min-w-[448px] py-4">
                 <div className='text-[1.8em] font-medium flex_center sm:gap-4 flex-col sm:flex-row'>
@@ -66,7 +66,7 @@ const Register = () => {
                 </form>
             </div>
 
-            <EmptyCartSVG className='hidden sm:block px-8' />
+            <DeliverySVG className='hidden sm:block px-8' />
         </section>
     )
 }

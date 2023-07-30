@@ -88,33 +88,31 @@ const Carousel = () => {
     }, [swipeStartX])
 
     return (
-        <div className="px-4 sm:px-[8em] py-2 flex justify-center flex-col sm:flex-row gap-2 sm:gap-10 w-full">
-            <div className="w-full h-[250px] sm:h-[400px] bg-red-500 flex justify-evenly items-center flex-col-reverse sm:flex-row rounded-xl relative overflow-hidden">
-                <span className='text-[1.5em] sm:text-[3em] font-bold w-full p-2'>{carousel[currentSlide]?.textA} <br /> {carousel[currentSlide]?.textB}</span>
+        <div className="px-4 py-2 flex justify-center flex-col tablet:flex-row gap-2 tablet:gap-10 mx-auto max-w-[65em]">
+            <div className="relative w-full h-[250px] sm:h-[400px] flex flex-col rounded-xl overflow-hidden">
                 <Image
                     src={carousel[currentSlide]?.poster as string}
                     alt='img'
                     fill={true}
                     style={{ objectFit: "cover" }}
                     className='!relative' />
-                {/* <Image
-                    loader={() => carousel[currentSlide]?.poster!}
-                    unoptimized
-                    src={carousel[currentSlide]?.poster!}
-                    alt='img'
-                    fill={true}
-                    style={{ objectFit: "cover" }}
-                    className='!relative' /> */}
+
+                {/* Dark Overlay */}
+                <div className="bg-gradient-to-t from-secondaryDarkClr via-transparent w-full h-full absolute"></div>
+
+                <span className='absolute bottom-0 text-[1.5em] tablet:text-[3em] font-josefin font-bold w-full p-2'>
+                    {carousel[currentSlide]?.textA} <br /> {carousel[currentSlide]?.textB}
+                </span>
             </div>
 
-            <div className="flex justify-between sm:w-1/8 sm:flex-col gap-2 px-[5em] sm:px-0">
+            <div className="flex justify-between tablet:w-1/8 tablet:flex-col gap-2 px-[5em] tablet:px-0">
                 {mockCarousel?.map((obj: carouselType, index: number) => {
                     return <div
                         style={index === currentSlide ? { backgroundColor: "var(--primary)", color: "#fff" } : {}}
-                        className="bg-secondaryClr w-[10px] h-[10px] sm:w-[150px] sm:h-full flex_center rounded-full sm:rounded-md cursor-pointer"
+                        className="bg-secondaryClr w-[10px] h-[10px] tablet:w-[150px] tablet:h-full flex_center rounded-full tablet:rounded-md cursor-pointer"
                         onClick={() => setCurrentSlide(index)}
                         key={index}>
-                        <span className='hidden sm:block text-[1em] font-bold'>{obj?.title}</span>
+                        <span className='hidden tablet:block text-[1em] font-bold tracking-wider'>{obj?.title}</span>
                     </div>
                 })}
             </div>

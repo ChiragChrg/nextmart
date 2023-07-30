@@ -21,6 +21,10 @@ module.exports = {
       fontFamily: {
         poppins: ["var(--Poppins)"],
         josefin: ["var(--JosefinSans)"],
+      },
+      screens: {
+        "tablet": "950px",
+        "desktop": "1150px"
       }
     },
   },

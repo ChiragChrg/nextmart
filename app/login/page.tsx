@@ -4,9 +4,9 @@ import { useState, useEffect, FormEvent } from 'react'
 import { signIn, getProviders } from "next-auth/react"
 import { TextButton } from '@components/Buttons'
 import Input from '@components/Form/Input'
-import ShoppingSVG from '@components/SVGs/ShoppingSVG'
-import DeliverySVG from '@components/SVGs/DeliverySVG'
 import LogoSVG from '@components/SVGs/LogoSVG'
+import GroceriesSVG from '@components/SVGs/GroceriesSVG'
+import EmptyCartSVG from '@components/SVGs/EmptyCartSVG'
 import { useRouter } from 'next/navigation'
 
 const Login = () => {
@@ -56,7 +56,7 @@ const Login = () => {
 
     return (
         <section className='flex_center gap-8 px-4 sm:px-16 w-full h-full my-auto'>
-            <ShoppingSVG className='hidden sm:block px-8' />
+            <GroceriesSVG className='hidden sm:block px-8' />
 
             <div className="flex justify-around items-center flex-col gap-2 w-full sm:w-1/2 py-4">
                 <div className='text-[1.8em] font-medium flex_center sm:gap-4 flex-col sm:flex-row'>
@@ -136,7 +136,7 @@ const Login = () => {
                 </div>
             </div>
 
-            <DeliverySVG className='hidden sm:block px-8' />
+            <EmptyCartSVG className='hidden sm:block px-8' />
         </section>
     )
 }

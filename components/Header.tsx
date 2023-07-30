@@ -1,6 +1,3 @@
-"use client"
-
-import { useEffect, useState } from "react"
 import { ThemeButton, CartButton, OrdersButton } from "./Buttons"
 import Search from "./Search"
 import UserAvatar from "./UserAvatar"
@@ -8,51 +5,44 @@ import LogoSVG from "./SVGs/LogoSVG"
 import IconSVG from "./SVGs/IconSVG"
 import Link from "next/link"
 
-const Header = ({ hideSearch = false }: { hideSearch?: boolean }) => {
-    const [isMobile, setIsMobile] = useState<boolean>(false)
-
-    useEffect(() => {
-        if (typeof window !== 'undefined')
-            setIsMobile(window?.innerWidth <= 750)
-        // console.log("isMob", window?.innerWidth)
-    }, [])
-
-    if (isMobile)
-        return (
-            <>
-                <header className="bg-baseClr w-full flex justify-between items-center px-4 py-3 pb-1">
+const Header = ({ isAuthPage = false }: { isAuthPage?: boolean }) => {
+    return (
+        <>
+            {/* Mobile Header -> Hides on large screen */}
+            <header className="lg:hidden flex justify-between items-center bg-baseClr w-full px-4 py-3 pb-1">
+                <div className="flex justify-between w-full">
                     <Link href="/">
                         <IconSVG width="30px" />
                     </Link>
-                    {!hideSearch && <UserAvatar mobileView />}
 
-                    {hideSearch && <div className="flex gap-4 items-center">
+                    {!isAuthPage && <UserAvatar />}
+
+                    {isAuthPage && <div className="flex gap-4 items-center">
                         <ThemeButton />
                         <Link href="/" className='bg-primaryClr px-2 py-1 text-white rounded flex_center gap-2'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                            <svg xmlns="http:www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                             </svg>
 
                             <span>Back</span>
                         </Link>
                     </div>}
-                </header>
+                </div>
+            </header>
 
-                {!hideSearch &&
-                    <div className="sticky top-0 z-10 w-full flex_center px-4 py-2 bg-gradient-to-b from-baseClr backdrop-blur-[1px]">
-                        <Search hideSearchBtn />
-                    </div>
-                }
-            </>
-        )
-    else
-        return (
-            <header className="bg-baseClr sticky top-0 z-10 w-full flex justify-between items-center p-3 px-4">
+            {!isAuthPage &&
+                <div className="lg:hidden sticky top-0 z-10 w-full flex_center px-4 py-2 bg-gradient-to-b from-baseClr backdrop-blur-[1px]">
+                    <Search />
+                </div>
+            }
+
+            {/* Desktop Header -> Hides on small screen */}
+            <header className="hidden lg:flex justify-between items-center gap-4 bg-baseClr sticky top-0 z-10 w-full p-3 px-4">
                 <Link href="/">
                     <LogoSVG width="200px" />
                 </Link>
 
-                {!hideSearch &&
+                {!isAuthPage ?
                     <>
                         <Search />
 
@@ -63,20 +53,20 @@ const Header = ({ hideSearch = false }: { hideSearch?: boolean }) => {
                             <UserAvatar />
                         </div>
                     </>
-                }
+                    :
+                    <div className="flex gap-4 items-center">
+                        <ThemeButton />
+                        <Link href="/" className='bg-primaryClr px-2 py-1 text-white rounded flex_center gap-2'>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                            </svg>
 
-                {hideSearch && <div className="flex gap-4 items-center">
-                    <ThemeButton />
-                    <Link href="/" className='bg-primaryClr px-2 py-1 text-white rounded flex_center gap-2'>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                        </svg>
-
-                        <span>Back</span>
-                    </Link>
-                </div>}
+                            <span>Back</span>
+                        </Link>
+                    </div>}
             </header>
-        )
+        </>
+    )
 }
 
 export default Header
