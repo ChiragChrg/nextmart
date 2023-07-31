@@ -1,7 +1,10 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import Provider from '@Providers/Provider'
 import { Poppins, Josefin_Sans } from "next/font/google"
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css';
+
+import Provider from '@Providers/Provider'
 
 export const Poppin = Poppins({
   weight: '400',
@@ -46,16 +49,28 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+type LayoutProps = {
+  children: React.ReactNode,
+}
+
+export default async function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="en">
       <body className={`bg-baseClr text-textClr min-h-screen font-poppins ${JosefinSans.variable} ${Poppin.variable}`}>
         <Provider>
           {children}
+          <ToastContainer
+            position="bottom-right"
+            autoClose={4000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme='light'
+          />
         </Provider>
       </body>
     </html>

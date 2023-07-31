@@ -3,6 +3,7 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import HeartSVG from './SVGs/HeartSVG'
 import StarSVG from './SVGs/StarSVG'
+import { toast } from 'react-toastify'
 
 type productType = {
     name: string,
@@ -93,7 +94,9 @@ const Feeds = () => {
             <h1 className='px-4 sm:px-8 pt-4 sm:pt-6 font-josefin text-[2em]'>Trending</h1>
             <div className='bg-secondary px-4 sm:px-8 pb-[5em] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4'>
                 {products.map((item, index) => {
-                    return <div key={index} className="relative flex_center flex-col rounded-md overflow-hidden cursor-pointer bg-slate-500/50">
+                    return <div key={index}
+                        onClick={() => toast.success(item.name)}
+                        className="relative flex_center flex-col rounded-md overflow-hidden cursor-pointer bg-slate-500/50">
                         <Image
                             src={item?.images as string}
                             alt='img'

@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 const layout = ({ children }: { children: React.ReactNode }) => {
     return (
         <Provider>
-            <ReturnNav />
+            <ReturnNav toHome />
 
             {children}
         </Provider>
