@@ -5,7 +5,7 @@ import Link from 'next/link'
 import BackSVG from './SVGs/BackSVG'
 import { useRouter } from 'next/navigation'
 
-const ReturnNav = () => {
+const ReturnNav = ({ toHome = false }: { toHome?: boolean }) => {
     const router = useRouter()
 
     return (
@@ -14,12 +14,21 @@ const ReturnNav = () => {
                 <LogoSVG width="200px" />
             </Link>
 
-            <button
-                onClick={() => router.back()}
-                className='lg:bg-primaryClr lg:px-2 py-1 lg:text-white rounded flex_center gap-2'>
-                <BackSVG width='20px' height='20px' />
-                <span>Back</span>
-            </button>
+            {toHome ?
+                <Link
+                    href="/"
+                    className='lg:bg-primaryClr lg:px-2 py-1 lg:text-white rounded flex_center gap-2'>
+                    <BackSVG width='20px' height='20px' />
+                    <span>Back</span>
+                </Link>
+                :
+                <button
+                    onClick={() => router.back()}
+                    className='lg:bg-primaryClr lg:px-2 py-1 lg:text-white rounded flex_center gap-2'>
+                    <BackSVG width='20px' height='20px' />
+                    <span>Back</span>
+                </button>
+            }
         </header>
     )
 }

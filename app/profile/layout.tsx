@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import Provider from '@Providers/Provider'
+import ReturnNav from '@components/ReturnNav'
 
 export const metadata: Metadata = {
     title: 'My Profile | NextMart',
+    description: "Your personalized shopping hub awaits! Access, update, and track orders hassle-free. Elevate your experience with Next Mart's My Profile page!",
     creator: "ChiragChrg",
     authors: [{ name: 'ChiragChrg', url: 'https://chiragchrg.netlify.app/' }],
     verification: { google: "TSsuy8j81zZ0Ge0aestKiwZUPydASWd9aANj-ITDack" },
@@ -18,11 +20,16 @@ export const metadata: Metadata = {
             follow: true,
         },
     },
+    alternates: {
+        canonical: 'https://nextmart.vercel.app/',
+    },
 }
 
 const layout = ({ children }: { children: React.ReactNode }) => {
     return (
         <Provider>
+            <ReturnNav />
+
             {children}
         </Provider>
     )
