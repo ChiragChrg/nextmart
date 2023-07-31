@@ -16,7 +16,10 @@ const UserSchema = new Schema({
         type: String,
         unique: true,
     },
-    hashedPassword: String,
+    hashedPassword: {
+        type: String,
+        default: null
+    },
     image: {
         type: String,
         default: null
@@ -37,6 +40,6 @@ const UserSchema = new Schema({
     updatedAt: { type: Date }
 });
 
-const User = models.User || model("User", UserSchema)
+const UserModel = models.User || model("User", UserSchema)
 
-export default User
+export default UserModel

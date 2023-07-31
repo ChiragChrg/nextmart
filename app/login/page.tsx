@@ -7,7 +7,9 @@ import Input from '@components/Form/Input'
 import LogoSVG from '@components/SVGs/LogoSVG'
 import GroceriesSVG from '@components/SVGs/GroceriesSVG'
 import EmptyCartSVG from '@components/SVGs/EmptyCartSVG'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useAppSelector } from '@redux/features/hooks'
+import { toast } from 'react-toastify'
 
 const Login = () => {
     const [provider, setProvider] = useState<any | null>({})
@@ -15,28 +17,49 @@ const Login = () => {
     const [password, setPassword] = useState<string>("")
 
     const router = useRouter()
+    const params = useSearchParams().get("callbackUrl")
+    const callback = params ? params as string : ""
+
+    const user = useAppSelector((state) => state.account.account?.user)
 
     useEffect(() => {
+        if (user) router.push("/")
+
         const FetchProviders = async () => {
             const response = await getProviders()
             setProvider(response)
         }
         FetchProviders()
-    }, [])
+    }, [user])
 
     const HandleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e?.preventDefault()
+        const tostID = toast.loading("Logging in...", { toastId: "CredentialLogin" })
+
         try {
             const res = await signIn("credentials", {
                 email: email,
                 password: password,
-                redirect: false,
-                callbackUrl: "/"
+                redirect: true,
+                callbackUrl: callback || "/"
             })
-
             console.log("LoginRes", res)
-            router.push("/")
+            if (res?.status === 200) {
+                toast.update(tostID, {
+                    render: "Logged in successfully!",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 4000
+                })
+
+                // router.push(callback || "/")
+            }
         } catch (err) {
+            toast.update("CredentialLogin", {
+                render: "Something went wrong!",
+                type: "error",
+                isLoading: false
+            })
             console.log(err)
         }
     }
@@ -44,8 +67,8 @@ const Login = () => {
     const HandleOAuthLogin = async (provider: string) => {
         try {
             const res = await signIn(provider, {
-                redirect: true,
-                callbackUrl: "/"
+                redirect: callback !== "" ? true : false,
+                callbackUrl: callback as string
             })
 
             console.log("LoginRes", res)
@@ -69,7 +92,7 @@ const Login = () => {
 
                     <div className="flex flex-col gap-2">
                         <Input type='password' label='Password' placeholder='Enter Password' isPassword setValue={setPassword} />
-                        <div className="text-primaryClr text-[0.9em] sm:text-[0.8em] w-full flex justify-end">Forgot Password?</div>
+                        <div onClick={() => toast.warn("Forgot Password")} className="text-primaryClr text-[0.9em] sm:text-[0.8em] w-full flex justify-end">Forgot Password?</div>
                     </div>
 
                     {/* <button type='submit'>Sign In</button> */}

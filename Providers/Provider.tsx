@@ -4,13 +4,13 @@ import { SessionProvider } from "next-auth/react"
 import { Provider as ReduxProvider } from "react-redux"
 import store from "@redux/store"
 
-interface propTypes {
+export interface ProviderProps {
     children: React.ReactNode,
 }
 
-const Provider = ({ children }: propTypes) => {
+const Provider = ({ children }: ProviderProps) => {
     return (
-        <SessionProvider >
+        <SessionProvider refetchOnWindowFocus={true}>
             <ReduxProvider store={store}>
                 {children}
             </ReduxProvider>

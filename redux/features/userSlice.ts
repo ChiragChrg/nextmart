@@ -28,7 +28,9 @@ const userSlice = createSlice({
         LogIn: (state, action: PayloadAction<UserType>) => {
             state.account = action.payload
         },
-        LogOut: () => InitialState
+        LogOut: () => {
+            return InitialState
+        }
     }
 })
 

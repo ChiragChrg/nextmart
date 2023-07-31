@@ -1,20 +1,23 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
 import { signOut, useSession } from "next-auth/react"
+
+import { LogIn, LogOut } from "@redux/features/userSlice"
+import { useAppDispatch } from "@redux/features/hooks"
+import { useAppSelector } from "@redux/features/hooks"
+import { usePathname, useRouter } from "next/navigation"
+import UserSVG from "./SVGs/UserSVG"
 import Link from "next/link"
 import Image from "next/image"
 
-import { LogIn, LogOut } from "@redux/features/userSlice"
-import { useAppSelector } from "@redux/features/hooks"
-import { useAppDispatch } from "@redux/features/hooks"
-import { usePathname, useRouter } from "next/navigation"
-
 const UserAvatar = () => {
-    const { data: session } = useSession()
+    const { data: session, status } = useSession()
+    console.log("SessionStatus", status)
+
     const [showDropMenu, setShowDropMenu] = useState<boolean>(false)
     const DropdownRef = useRef<HTMLDivElement>(null)
 
-    const user = useAppSelector((state) => state.account.account?.user)
+    const user = useAppSelector((state) => state?.account?.account?.user)
     const dispatch = useAppDispatch()
     const pathname = usePathname()
     const router = useRouter()
@@ -32,26 +35,25 @@ const UserAvatar = () => {
     }, [showDropMenu])
 
     useEffect(() => {
-        const savedUser = localStorage.getItem("nextmart-user")
-        if (savedUser) {
-            dispatch(LogIn(JSON.parse(savedUser)))
-            console.log("Dispatched LocalUser")
-        }
-        else if (session) {
+        if (session) {
             dispatch(LogIn(session))
-            localStorage.setItem("nextmart-user", JSON.stringify(session))
-            console.count("Dispatched NewUser")
+            console.log("Dispatched", session)
         }
     }, [session])
 
     const HandleLogout = async () => {
-        await signOut({
-            redirect: false
-        })
-        dispatch(LogOut())
-        localStorage.removeItem("nextmart-user")
+        try {
+            await signOut({
+                callbackUrl: '/',
+                redirect: false
+            })
+            // localStorage.removeItem("nextmart-user")
+            dispatch(LogOut())
 
-        pathname !== "/" && router.push("/")
+            if (pathname !== "/") router.push("/")
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     if (user) {
@@ -67,9 +69,7 @@ const UserAvatar = () => {
                         </div >
                         :
                         <div className="bg-primaryClr aspect-square text-white p-1 rounded-full">
-                            <svg width="27px" height="27px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                            </svg>
+                            <UserSVG width="27px" height="27px" />
                         </div>
                     }
 
@@ -125,16 +125,14 @@ const UserAvatar = () => {
                         </div>
                         :
                         <div className="bg-primaryClr aspect-square text-white p-1 rounded-full" >
-                            <svg width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                            </svg>
+                            <UserSVG width="30px" height="30px" />
                         </div>
                     }
                 </Link>
             </>
         )
     }
-    else
+    else {
         return (
             <Link href="/login" className="bg-primaryClr flex_center gap-2 text-white px-2 py-[0.3em] rounded cursor-pointer">
                 <svg
@@ -155,7 +153,9 @@ const UserAvatar = () => {
                 </svg>
 
                 <span>Login</span>
-            </Link>)
+            </Link>
+        )
+    }
 }
 
 export default UserAvatar
