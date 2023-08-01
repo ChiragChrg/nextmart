@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { TextButton } from '@components/Buttons'
 import Input from '@components/Form/Input'
@@ -10,6 +10,7 @@ import DeliverySVG from '@components/SVGs/DeliverySVG'
 import LogoSVG from '@components/SVGs/LogoSVG'
 import LoaderIcon from '@components/LoaderIcon'
 import { toast } from 'react-toastify'
+import { useAppSelector } from '@redux/features/hooks'
 
 const Register = () => {
     const [username, setUsername] = useState<string>("")
@@ -19,6 +20,11 @@ const Register = () => {
     const [loading, setLoading] = useState<boolean>(false)
 
     const router = useRouter()
+    const user = useAppSelector((state) => state.account.account?.user)
+
+    useEffect(() => {
+        if (user) router.push("/")
+    }, [user])
 
     const HandleSignUp = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
