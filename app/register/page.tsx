@@ -8,12 +8,15 @@ import axios from 'axios'
 import ShoppingSVG from '@components/SVGs/ShoppingSVG'
 import DeliverySVG from '@components/SVGs/DeliverySVG'
 import LogoSVG from '@components/SVGs/LogoSVG'
+import LoaderIcon from '@components/LoaderIcon'
+import { toast } from 'react-toastify'
 
 const Register = () => {
     const [username, setUsername] = useState<string>("")
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [confPassword, setConfPassword] = useState<string>("")
+    const [loading, setLoading] = useState<boolean>(false)
 
     const router = useRouter()
 
@@ -24,17 +27,25 @@ const Register = () => {
             return
         }
 
-        const res = await axios.post(`/api/register`, {
-            name: username,
-            email: email,
-            password: password,
-        })
+        setLoading(true)
+        try {
+            const res = await axios.post(`/api/register`, {
+                name: username,
+                email: email,
+                password: password,
+            })
 
-        if (res.status == 201) {
-            router.push("/login")
+            if (res.status == 201) {
+                router.push("/login")
+                console.log("SignupForm", res)
+                toast.success("User created successfully!")
+                setLoading(false)
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error("Something went wrong!")
+            setLoading(false)
         }
-
-        console.log("SignupForm", res)
     }
 
     return (
@@ -53,11 +64,17 @@ const Register = () => {
                     <Input type='password' label='Password' placeholder='Enter Password' isPassword setValue={setPassword} />
                     <Input type='password' label='Confirm Password' autoComplete='off' placeholder='Confirm Password' isPassword setValue={setConfPassword} />
 
-                    <button
-                        className='bg-primaryClr p-2 rounded text-white text-bold'
-                        type='submit'>
-                        Sign In
-                    </button>
+                    {!loading ?
+                        <button
+                            className='bg-primaryClr p-2 rounded text-white text-bold'
+                            type='submit'>
+                            Sign In
+                        </button>
+                        :
+                        <div className='flex_center bg-secondaryClr p-2 rounded'>
+                            <LoaderIcon width='23px' height='23px' />
+                        </div>
+                    }
 
                     <div className="w-full flex gap-2 justify-center">
                         Already have an account?

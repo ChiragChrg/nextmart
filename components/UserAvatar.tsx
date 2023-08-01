@@ -9,12 +9,13 @@ import { usePathname, useRouter } from "next/navigation"
 import UserSVG from "./SVGs/UserSVG"
 import Link from "next/link"
 import Image from "next/image"
+import LoaderIcon from "./LoaderIcon"
 
 const UserAvatar = () => {
     const { data: session, status } = useSession()
-    console.log("SessionStatus", status)
 
     const [showDropMenu, setShowDropMenu] = useState<boolean>(false)
+    const [loading, setLoading] = useState<string>("loading")
     const DropdownRef = useRef<HTMLDivElement>(null)
 
     const user = useAppSelector((state) => state?.account?.account?.user)
@@ -28,7 +29,6 @@ const UserAvatar = () => {
                 setShowDropMenu(false);
             }
         }
-
         //Hide Dropdown when user clicks anything other than Dropdown
         document.addEventListener("click", handleDropdownBlur)
         return () => document.removeEventListener("click", handleDropdownBlur)
@@ -39,7 +39,8 @@ const UserAvatar = () => {
             dispatch(LogIn(session))
             console.log("Dispatched", session)
         }
-    }, [session])
+        setLoading(status)
+    }, [session, status])
 
     const HandleLogout = async () => {
         try {
@@ -56,7 +57,7 @@ const UserAvatar = () => {
         }
     }
 
-    if (user) {
+    if (user && loading === "authenticated") {
         return (
             <>
                 {/* Desktop User Avatar */}
@@ -134,26 +135,34 @@ const UserAvatar = () => {
     }
     else {
         return (
-            <Link href="/login" className="bg-primaryClr flex_center gap-2 text-white px-2 py-[0.3em] rounded cursor-pointer">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="50"
-                    fill="none"
-                    viewBox="0 0 32 50"
-                    className="w-5 h-5"
-                >
-                    <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="4"
-                        d="M30 17V7L2 2v46l28-5V33M18 17l-8 8m0 0l8 8m-8-8h20"
-                    ></path>
-                </svg>
+            <>
+                {loading !== "loading" ?
+                    <Link href="/login" onClick={() => setLoading("loading")} className="bg-primaryClr flex_center gap-2 text-white px-2 py-[0.3em] rounded cursor-pointer">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="32"
+                            height="50"
+                            fill="none"
+                            viewBox="0 0 32 50"
+                            className="w-5 h-5"
+                        >
+                            <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="4"
+                                d="M30 17V7L2 2v46l28-5V33M18 17l-8 8m0 0l8 8m-8-8h20"
+                            ></path>
+                        </svg>
 
-                <span>Login</span>
-            </Link>
+                        <span>Login</span>
+                    </Link>
+                    :
+                    <div className="relative bg-secondaryClr flex_center gap-2 text-white px-2 py-[0.3em] min-w-[5.5em] rounded">
+                        <LoaderIcon width="24px" height="24px" />
+                    </div>
+                }
+            </>
         )
     }
 }
