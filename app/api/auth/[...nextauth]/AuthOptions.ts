@@ -68,11 +68,12 @@ export const AuthOptions: NextAuthOptions = {
     ],
     callbacks: {
         async signIn({ user, account, profile }) {
-            console.log("\nSignInCallback", { user, account, profile })
+            // console.log("\nSignInCallback", { user, account, profile })
 
             if (account?.type === 'credentials' && UserAccount !== null) return true
 
             try {
+                await connectDB()
                 const userExists = await UserModel.findOne({ email: profile?.email })
                 if (!userExists) {
                     const newUser = await UserModel.create({
@@ -83,10 +84,10 @@ export const AuthOptions: NextAuthOptions = {
                     })
 
                     user.uid = newUser._id;
-                    console.log("NewOAuth User")
+                    // console.log("NewOAuth User")
                 } else {
                     user.uid = userExists._id;
-                    console.log("OAuth User Exisits")
+                    // console.log("OAuth User Exisits")
                 }
                 return true
             } catch (err) {
@@ -115,7 +116,7 @@ export const AuthOptions: NextAuthOptions = {
             return token
         },
         async session({ session, user, token }) {
-            // console.log("\nSessionCallback", { session, user, token })
+            // console.log("\nSessionCallback", { session, user, token })            
 
             if (UserAccount !== null) {
                 // console.log("\nUserAccount_Session", UserAccount)
