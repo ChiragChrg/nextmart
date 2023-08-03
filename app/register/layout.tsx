@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Provider from '@Providers/Provider'
 import ReturnNav from '@components/ReturnNav'
 
 export const metadata: Metadata = {
@@ -27,11 +26,11 @@ export const metadata: Metadata = {
 
 const layout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <Provider>
+        <>
             <ReturnNav />
 
             {children}
-        </Provider>
+        </>
     )
 }
 
