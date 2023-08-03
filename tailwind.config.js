@@ -20,7 +20,7 @@ module.exports = {
       },
       fontFamily: {
         poppins: ["var(--Poppins)"],
-        josefin: ["var(--JosefinSans)"],
+        ubuntu: ["var(--Ubuntu)"],
       },
       screens: {
         "tablet": "950px",

@@ -1,23 +1,25 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Poppins, Josefin_Sans } from "next/font/google"
+import { Poppins, Ubuntu } from "next/font/google"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css';
 
 import Provider from '@Providers/Provider'
 
-export const Poppin = Poppins({
+export const poppins = Poppins({
   weight: '400',
   subsets: ['latin'],
   display: 'swap',
+  preload: true,
   variable: "--Poppins"
 })
 
-export const JosefinSans = Josefin_Sans({
+export const ubuntu = Ubuntu({
   weight: "700",
   subsets: ['latin'],
   display: 'swap',
-  variable: "--JosefinSans"
+  preload: true,
+  variable: '--Ubuntu'
 })
 
 export const metadata: Metadata = {
@@ -56,7 +58,7 @@ type LayoutProps = {
 export default async function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="en">
-      <body className={`bg-baseClr text-textClr min-h-screen font-poppins ${JosefinSans.variable} ${Poppin.variable}`}>
+      <body className={`bg-baseClr text-textClr min-h-screen font-poppins ${ubuntu.variable} ${poppins.variable}`}>
         <Provider>
           {children}
           <ToastContainer
