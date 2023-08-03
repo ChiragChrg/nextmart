@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 
 import { connectDB } from "@utils/database";
 import { SignToken } from "@utils/jwt";
-import UserModel from "@models/UserModal";
+import UserModel from "@models/UserModel";
 import * as bcrypt from "bcrypt"
 import { User } from "next-auth/core/types";
 
@@ -52,6 +52,8 @@ export const AuthOptions: NextAuthOptions = {
                         name: userExists?.name,
                         email: userExists?.email,
                         image: userExists?.image,
+                        phone: userExists?.phone,
+                        dob: userExists?.dob,
                         emailVerified: userExists?.emailVerified,
                     }
 
@@ -95,9 +97,31 @@ export const AuthOptions: NextAuthOptions = {
                 return false
             }
         },
-        async jwt({ token, user, account, profile }) {
-            // console.log("\nJWTCallback", { token, user, account, profile })
+        async jwt({ token, user, account, profile, trigger }) {
+            // console.log("\nJWTCallback", { token, user, account, profile, trigger })
             const { picture, sub, ...restToken } = token
+
+            if (trigger === "update") {
+                try {
+                    await connectDB()
+                    const userExists = await UserModel.findOne({ email: token?.email })
+                    // console.log("\nUpdatedToken", userExists)
+                    const userData = {
+                        uid: userExists?._id,
+                        name: userExists?.name,
+                        email: userExists?.email,
+                        image: userExists?.image,
+                        phone: userExists?.phone,
+                        dob: userExists?.dob,
+                        emailVerified: userExists?.emailVerified,
+                    }
+
+                    const accessToken = SignToken(userData)
+                    token = { ...userData, accessToken }
+                } catch (err) {
+                    console.log("Update_Callback_Err", err)
+                }
+            }
 
             if (account?.type === "oauth" && typeof user !== typeof undefined) {
                 const { id, ...restUser } = user
@@ -116,7 +140,7 @@ export const AuthOptions: NextAuthOptions = {
             return token
         },
         async session({ session, user, token }) {
-            // console.log("\nSessionCallback", { session, user, token })            
+            // console.log("\nSessionCallback", { session, user, token })
 
             if (UserAccount !== null) {
                 // console.log("\nUserAccount_Session", UserAccount)
