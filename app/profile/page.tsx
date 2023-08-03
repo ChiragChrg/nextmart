@@ -152,7 +152,8 @@ const Profile = () => {
                                 setPhoneValue={setPhoneValue}
                                 placeholder="Enter Phone Number" />
                             <InfoBar label="Birthday" value={user?.dob as Date}
-                                editable={isEditable} isDate
+                                editable={isEditable}
+                                isDate={true}
                                 setDobValue={setDobValue}
                                 placeholder="Enter your Birthday" />
                         </>
