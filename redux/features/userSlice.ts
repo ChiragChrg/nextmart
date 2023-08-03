@@ -7,6 +7,8 @@ type UserType = {
         name?: string | null,
         email?: string | null,
         image?: string | null,
+        phone?: string | null,
+        dob?: Date | null,
         emailVerified?: boolean | null,
         accessToken?: string | null,
     },

@@ -28,7 +28,14 @@ const UserSchema = new Schema({
         type: String,
         default: null
     },
-    address: [addressSchema],
+    dob: {
+        type: Date,
+        default: null
+    },
+    address: {
+        type: addressSchema,
+        default: null
+    },
     emailVerified: {
         type: Boolean,
         default: false
