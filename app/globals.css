@@ -92,7 +92,6 @@
     scale: 0.8;
   }
 }
-
 @keyframes SvgMartAnim {
   0% {
     fill: transparent;
@@ -109,9 +108,6 @@
     scale: 0.8;
   }
 }
-
-
-
 @-webkit-keyframes SvgNextAnim {
   0% {
     fill: transparent;
@@ -128,7 +124,6 @@
     scale: 0.8;
   }
 }
-
 @keyframes SvgNextAnim {
   0% {
     fill: transparent;
@@ -147,6 +142,26 @@
 }
 /* SVG Loader Animation */
 
+/* Custom Loader Animation */
+.SkeletonLoader{
+  background:linear-gradient(to right,
+    transparent, #cbcbcb,#cbcbcb, transparent);
+  background-size: 300%;
+  animation: LoaderAnimation 3s linear infinite;
+}
+
+@keyframes LoaderAnimation {
+  from {
+    background-position: 0% center;
+  }
+
+  to {
+    background-position: -300% center;
+  }
+}
+/* Custom Loader Animation */
+
+/* Toastify Mobile Responsive */
 .Toastify__close-button--light{
   color: var(--text)
 }
@@ -164,3 +179,4 @@
     border-radius: 5px; 
   }
 }
+/* Toastify Mobile Responsive */
