@@ -224,9 +224,6 @@ const Profile = () => {
     )
 }
 
-export default Profile
-
-
 // Custom User details component
 type InfoBarType = {
     label: string,
@@ -238,7 +235,7 @@ type InfoBarType = {
     setDobValue?: Dispatch<SetStateAction<Date | null>>
 }
 
-export const InfoBar = ({ label, value, placeholder, isDate = false, editable = false, setPhoneValue, setDobValue }: InfoBarType) => {
+const InfoBar = ({ label, value, placeholder, isDate = false, editable = false, setPhoneValue, setDobValue }: InfoBarType) => {
     const handleEdit = (e: ChangeEvent<HTMLInputElement>) => {
         if (isDate) {
             const newDate = e?.currentTarget?.value;
@@ -255,7 +252,6 @@ export const InfoBar = ({ label, value, placeholder, isDate = false, editable = 
         const dateObject = new Date(isoDateString);
         dateValue = dateObject.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
     }
-
 
     return (
         <div className="grid grid-cols-3 border border-secondaryClr px-2 py-1 rounded overflow-hidden">
@@ -274,3 +270,6 @@ export const InfoBar = ({ label, value, placeholder, isDate = false, editable = 
         </div>
     )
 }
+
+export default Profile
+export { InfoBar };
