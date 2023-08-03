@@ -1,5 +1,5 @@
 import { connectDB } from "@utils/database"
-import User from "@models/UserModal"
+import UserModel from "@models/UserModel"
 import * as bcrypt from "bcrypt"
 import { NextResponse } from "next/server"
 
@@ -18,12 +18,12 @@ export async function POST(request: Request) {
         }
 
         await connectDB()
-        const userExists = await User.findOne({ email: body?.email })
+        const userExists = await UserModel.findOne({ email: body?.email })
         if (userExists) {
             return new NextResponse("User already Exists!", { status: 400 })
         }
 
-        await User.create({
+        await UserModel.create({
             name: body?.name,
             email: body?.email,
             hashedPassword: await bcrypt.hash(body?.password, 10)

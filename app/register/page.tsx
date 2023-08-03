@@ -33,6 +33,7 @@ const Register = () => {
             return
         }
 
+        const registerId = toast.loading("Creating new User...")
         setLoading(true)
         try {
             const res = await axios.post(`/api/register`, {
@@ -44,13 +45,23 @@ const Register = () => {
             if (res.status == 201) {
                 router.push("/login")
                 console.log("SignupForm", res)
-                toast.success("User created successfully!")
+                toast.update(registerId, {
+                    render: "User registered successfully!",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 4000
+                })
                 setLoading(false)
             }
         } catch (err) {
             console.log(err)
-            toast.error("Something went wrong!")
             setLoading(false)
+            toast.update(registerId, {
+                render: "Something went wrong!",
+                type: "error",
+                isLoading: false,
+                autoClose: 4000
+            })
         }
     }
 

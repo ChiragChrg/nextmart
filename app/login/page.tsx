@@ -22,17 +22,18 @@ const Login = () => {
     const params = useSearchParams().get("callbackUrl")
     const callback = params ? params as string : ""
 
-    const user = useAppSelector((state) => state.account.account?.user)
+    const user = useAppSelector((state) => state?.account?.account?.user)
+    useEffect(() => {
+        if (user) router.push(callback || "/")
+    }, [user])
 
     useEffect(() => {
-        if (user) router.push("/")
-
         const FetchProviders = async () => {
             const response = await getProviders()
             setProvider(response)
         }
         FetchProviders()
-    }, [user])
+    }, [])
 
     const HandleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e?.preventDefault()
@@ -42,7 +43,7 @@ const Login = () => {
             const res = await signIn("credentials", {
                 email: email,
                 password: password,
-                redirect: true,
+                redirect: false,
                 callbackUrl: callback || "/"
             })
             console.log("LoginRes", res)
@@ -55,7 +56,7 @@ const Login = () => {
                 })
 
                 setLoading(false)
-                // router.push(callback || "/")
+                router.push(res?.url as string)
             }
         } catch (err) {
             toast.update(LoginTostID, {
@@ -70,7 +71,6 @@ const Login = () => {
     }
 
     const HandleOAuthLogin = async (provider: string) => {
-
         const OAuthTostID = toast.loading(`Connecting to ${provider.charAt(0).toUpperCase() + provider.slice(1)}...`,
             { toastId: "OAuthLogin" })
 

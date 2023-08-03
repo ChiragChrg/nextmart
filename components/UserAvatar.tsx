@@ -35,6 +35,7 @@ const UserAvatar = () => {
     }, [showDropMenu])
 
     useEffect(() => {
+        console.log("SessionChanged", session, status)
         if (session) {
             dispatch(LogIn(session))
             console.log("Dispatched", session)
@@ -76,7 +77,7 @@ const UserAvatar = () => {
 
                     <div className="flex flex-col justify-center max-w-fit w-full ml-1 overflow-hidden">
                         <span className="text-[0.75em] leading-[1em] text-textLiteClr">Welcome !</span>
-                        <span className="text-[0.9em]">{user?.name}</span>
+                        <span className="text-[0.9em]">{user?.name?.split(" ")[0]}</span>
                     </div>
 
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-textLiteClr">

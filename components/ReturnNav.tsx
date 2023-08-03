@@ -1,12 +1,25 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import LogoSVG from './SVGs/LogoSVG'
 import Link from 'next/link'
 import BackSVG from './SVGs/BackSVG'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { useAppDispatch } from '@redux/features/hooks'
+import { LogIn } from '@redux/features/userSlice'
 
 const ReturnNav = ({ toHome = false }: { toHome?: boolean }) => {
     const router = useRouter()
+    const { data: session, status } = useSession()
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        console.log("Profile: SessionChanged", session, status)
+        if (session) {
+            dispatch(LogIn(session))
+            console.log("Profile: Dispatched", session)
+        }
+    }, [session, status])
 
     return (
         <header className='flex justify-between items-center w-full px-4 py-2 lg:py-3'>
