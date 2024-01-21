@@ -1,33 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        primaryClr: 'var(--primary)',
-        secondaryClr: 'var(--secondary)',
-        secondaryDarkClr: 'var(--secondaryDark)',
-        baseClr: 'var(--background)',
-        baseLiteClr: 'var(--backgroundLite)',
-        textClr: 'var(--text)',
-        textLiteClr: 'var(--textLite)',
-        pinkClr: 'var(--pink)',
-        goldClr: 'var(--gold)',
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        btn: {
+          background: "hsl(var(--btn-background))",
+          "background-hover": "hsl(var(--btn-background-hover))",
+        },
       },
-      fontFamily: {
-        poppins: ["var(--Poppins)"],
-        ubuntu: ["var(--Ubuntu)"],
-      },
-      screens: {
-        "tablet": "950px",
-        "desktop": "1150px"
-      }
     },
   },
-  darkMode: '[data-theme="dark"]',
   plugins: [],
-}
+};
