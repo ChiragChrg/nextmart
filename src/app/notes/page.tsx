@@ -5,6 +5,7 @@ export default async function Page() {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
     const { data: notes } = await supabase.from('notes').select()
-
-    return <pre>{JSON.stringify(notes, null, 2)}</pre>
+    const { data } = await supabase.auth.getSession()
+    console.log(data)
+    return <pre>{JSON.stringify(data)}</pre>
 }
