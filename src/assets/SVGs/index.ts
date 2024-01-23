@@ -1,0 +1,5 @@
+export { default as TextLogoSVG } from "./TextLogo"
+export { default as GroceriesSVG } from "./GroceriesSVG"
+export { default as EmptyCartSVG } from "./EmptyCartSVG"
+export { default as DeliverySVG } from "./DeliverySVG"
+export { default as ShoppingSVG } from "./ShoppingSVG"
