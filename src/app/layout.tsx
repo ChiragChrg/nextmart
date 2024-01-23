@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   applicationName: "Next Mart",
   alternates: {
-    canonical: '/',
+    canonical: defaultUrl,
   },
   robots: {
     index: true,
@@ -27,12 +27,12 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'd2pS_qzLYMcFTx9l8FtCPjCaAQygUYw_NLlTZ_zlDJU',
+    google: 'TSsuy8j81zZ0Ge0aestKiwZUPydASWd9aANj-ITDack',
   },
   manifest: "/manifest.json",
   icons: {
     icon: '/Icons/144.png',
-    shortcut: '/favicon.svg',
+    shortcut: '/favicon.ico',
     apple: '/Icons/192.png',
   },
   openGraph: {
@@ -74,11 +74,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.className}>
       <body className="bg-background text-foreground">
-        <main className="min-h-screen flex flex-col items-center">
-          <Provider>
-            {children}
-          </Provider>
-        </main>
+        <Provider>
+          {children}
+        </Provider>
       </body>
     </html>
   );
