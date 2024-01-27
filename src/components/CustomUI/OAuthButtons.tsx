@@ -5,10 +5,10 @@ import LoaderIcon from './LoaderIcon'
 
 const OAuthButtons = () => {
     return (
-        <div className="flex_center flex-col gap-4 w-full sm:max-w-md sm:px-4">
+        <div className="flex_center gap-4 w-full sm:max-w-md sm:px-4">
             {/* Google Login Button */}
             <button
-                className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr disabled:cursor-not-allowed'
+                className='bg-secondary text-textClr w-full flex_center gap-4 p-2 rounded disabled:cursor-default'
                 disabled={false ? false : true}
                 onClick={() => { }}>
                 {true ?
@@ -38,15 +38,15 @@ const OAuthButtons = () => {
                     :
                     <LoaderIcon width='24px' height='24px' />
                 }
-                <span className='text-[1.2em] font-medium'>Continue with Google</span>
+                <span className='text-[1.2em] font-medium'>Google</span>
             </button>
 
             {/* GitHUb Login Button */}
             <button
-                className='bg-baseClr text-textClr w-full flex_center gap-4 p-2 rounded border border-secondaryClr disabled:cursor-not-allowed'
+                className='bg-secondary text-textClr w-full flex_center gap-4 p-2 rounded disabled:cursor-default'
                 disabled={false ? false : true}
                 onClick={() => { }}>
-                {false ?
+                {true ?
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className='w-[30px] h-[30px]'>
                         <path
                             fill="currentColor"
@@ -57,7 +57,7 @@ const OAuthButtons = () => {
                     :
                     <LoaderIcon width='24px' height='24px' />
                 }
-                <span className='text-[1.2em] font-medium'>Continue with GitHub</span>
+                <span className='text-[1.2em] font-medium'>GitHub</span>
             </button>
         </div>
     )

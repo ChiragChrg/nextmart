@@ -22,7 +22,7 @@ const Input = ({ label, type, name, placeholder, autoComplete = "", isPassword =
 
     return (
         <label className='relative border border-secondaryClr sm:focus-within:border-primaryClr rounded p-1 flex flex-col'>
-            <span className='absolute top-[-0.9em] text-[0.9em] bg-baseClr px-1 text-slate-500'>{label}</span>
+            <span className='absolute top-[-0.9em] text-[0.9em] bg-background px-1 text-slate-500'>{label}</span>
             <input
                 type={showPassword ? "text" : type}
                 name={name}
@@ -30,7 +30,7 @@ const Input = ({ label, type, name, placeholder, autoComplete = "", isPassword =
                 placeholder={placeholder}
                 required={required}
                 onChange={(e) => setValue && setValue(e.target.value)}
-                className='text-[1em] bg-baseClr text-textClr px-2 py-1 border-none outline-none' />
+                className='text-[1em] bg-background text-textClr px-2 py-1 border-none outline-none' />
 
             {isPassword &&
                 <div className="p-1 mr-2 w-fit absolute right-0 cursor-pointer" onClick={TogglePassword}>

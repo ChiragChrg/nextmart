@@ -66,16 +66,16 @@ export default function Login({
             New to NextMart?
             <Link
               href='/register'
-              className='!text-primaryClr font-bold text-textClr capitalize tracking-wider'>
+              className='text-primaryClr font-bold capitalize tracking-wider'>
               Register
             </Link>
           </div>
         </form>
 
-        <div className=" w-full sm:max-w-md sm:px-4 flex_center gap-2 text-primaryClr font-medium">
-          <span className='flex w-[15em] h-[2px] bg-secondaryDarkClr'></span>
+        <div className=" w-full sm:max-w-md sm:px-4 flex_center gap-2 font-bold">
+          <span className='flex w-[15em] h-[2px] bg-border'></span>
           <span>OR</span>
-          <span className='flex w-[15em] h-[2px] bg-secondaryDarkClr'></span>
+          <span className='flex w-[15em] h-[2px] bg-border'></span>
         </div>
 
         <OAuthButtons />
