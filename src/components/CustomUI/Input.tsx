@@ -6,14 +6,13 @@ interface InputProps {
     type: string,
     name?: string,
     placeholder?: string,
-    autoComplete?: string,
     isPassword?: boolean,
     required?: boolean,
     setValue?: Dispatch<SetStateAction<string>>
 }
 
 
-const Input = ({ label, type, name, placeholder, autoComplete = "", isPassword = false, required = true, setValue }: InputProps) => {
+const Input = ({ label, type, name, placeholder, isPassword = false, required = true, setValue }: InputProps) => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const TogglePassword = () => {
         setShowPassword(prev => !prev)
@@ -26,7 +25,6 @@ const Input = ({ label, type, name, placeholder, autoComplete = "", isPassword =
             <input
                 type={showPassword ? "text" : type}
                 name={name}
-                autoComplete={autoComplete}
                 placeholder={placeholder}
                 required={required}
                 onChange={(e) => setValue && setValue(e.target.value)}

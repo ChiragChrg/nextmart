@@ -1,15 +1,14 @@
 import { Metadata } from "next";
-import React from 'react'
-import { DeliverySVG, ShoppingSVG, TextLogoSVG } from "@/assets/SVGs";
 import OAuthButtons from "@/components/CustomUI/OAuthButtons";
 import RegisterForm from "@/components/Forms/RegisterForm";
+import { DeliverySVG, ShoppingSVG, TextLogoSVG } from "@/assets/SVGs";
 
 export const metadata: Metadata = {
     title: 'Register | NextMart',
     description: "Join the Next Mart family! Register now for an exceptional shopping experience. Access a vast array of products, from fashion to electronics. Enjoy personalized recommendations and exclusive deals. Sign up securely and embark on a journey of endless shopping possibilities!",
 }
 
-const page = () => {
+const Register = () => {
 
     return (
         <section className='section_style flex_center gap-8 px-4 sm:px-16 pt-8 w-full h-full my-auto'>
@@ -37,4 +36,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Register
