@@ -3,22 +3,11 @@ import React from 'react'
 type Props = {
     width?: string,
     height?: string,
-    className?: string
+    className?: string,
+    altColor?: boolean
 }
 
-const LoaderIcon = ({ width = "100%", height = "100%", className = "" }: Props) => {
-
-    const NextAnimation = {
-        animation: 'SvgAnimNext 3s cubic-bezier(0.47, 0, 0.745, 0.715) 0s both infinite',
-        WebkitAnimation: 'SvgAnimNext 3s cubic-bezier(0.47, 0, 0.745, 0.715) 0s both infinite',
-        fill: 'transparent',
-    };
-    const MartAnimation = {
-        animation: 'SvgAnimMart 3s cubic-bezier(0.47, 0, 0.745, 0.715) 0.5s both infinite',
-        WebkitAnimation: 'SvgAnimMart 3s cubic-bezier(0.47, 0, 0.745, 0.715) 0.5s both infinite',
-        fill: 'transparent',
-    };
-
+const LoaderIcon = ({ width = "100%", height = "100%", className = "", altColor = false }: Props) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -36,11 +25,81 @@ const LoaderIcon = ({ width = "100%", height = "100%", className = "" }: Props) 
                 className={`MartAnimation ${className}`}
             ></path>
             <path
-                fill="#050505"
+                fill={altColor ? "#FFFFFF" : "#050505"}
                 d="M0 39h6.167V8.937L30.833 39h4.934L6.167 0H0v39z"
                 stroke='none'
                 className={`NextAnimation ${className}`}
             ></path>
+
+            <style>{`
+                @-webkit-keyframes SvgMartAnim {
+                    0% {
+                        fill: transparent;
+                        scale: 0.8;
+                    }
+                
+                    75% {
+                        fill: rgb(0, 123, 255);
+                        scale: 1;
+                    }
+                
+                    100% {
+                        fill: transparent;
+                        scale: 0.8;
+                    }
+                }
+                
+                @keyframes SvgMartAnim {
+                    0% {
+                        fill: transparent;
+                        scale: 0.8;
+                    }
+                
+                    75% {
+                        fill: rgb(0, 123, 255);
+                        scale: 1;
+                    }
+                
+                    100% {
+                        fill: transparent;
+                        scale: 0.8;
+                    }
+                }
+                
+                @-webkit-keyframes SvgNextAnim {
+                    0% {
+                        fill: transparent;
+                        scale: 0.8;
+                    }
+                
+                    75% {
+                        fill: ${altColor ? "#FFFFFF" : "#050505"};
+                        scale: 1;
+                    }
+                
+                    100% {
+                        fill: transparent;
+                        scale: 0.8;
+                    }
+                }
+                
+                @keyframes SvgNextAnim {
+                    0% {
+                        fill: transparent;
+                        scale: 0.8;
+                    }
+                
+                    75% {
+                        fill: ${altColor ? "#FFFFFF" : "#050505"};
+                        scale: 1;
+                    }
+                
+                    100% {
+                        fill: transparent;
+                        scale: 0.8;
+                    }
+                }`
+            }</style>
         </svg>
     )
 }
