@@ -31,7 +31,7 @@ const RegisterForm = () => {
             <Input type='text' label='Username' name='username' placeholder='Enter your name' />
             <Input type='email' label='Email' name='email' placeholder='example@email.com' />
             <Input type='password' label='Password' name='password' placeholder='Enter Password' isPassword />
-            <Input type='password' label='Confirm Password' name='confirm_password' autoComplete='off' placeholder='Confirm Password' isPassword />
+            <Input type='password' label='Confirm Password' name='confirm_password' placeholder='Confirm Password' isPassword />
 
             <SubmitButton text='Create Account' />
 
