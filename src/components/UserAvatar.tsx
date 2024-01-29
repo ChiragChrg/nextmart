@@ -29,6 +29,7 @@ const UserAvatar = () => {
             }
 
             if (error) {
+                setLoading(false)
                 return toast.error(error.message)
             }
 
