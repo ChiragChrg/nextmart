@@ -1,14 +1,21 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
 
+import { useEffect, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import LoaderIcon from "./CustomUI/LoaderIcon"
 import { createClient } from "@/utils/supabase/client"
 import useUserStore from "@/store/useUserStore"
-import { User2Icon } from "lucide-react"
+import { ChevronDownIcon, HelpCircleIcon, LogOutIcon, User2Icon } from "lucide-react"
 import toast from "react-hot-toast"
+
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const UserAvatar = () => {
     const [loading, setLoading] = useState<boolean>(true)
@@ -54,7 +61,7 @@ const UserAvatar = () => {
         return (
             <>
                 {/* Desktop User Avatar */}
-                <div className="hidden lg:flex justify-center items-center relative w-fit gap-2 cursor-pointer hover:bg-secondaryClr border border-secondaryClr p-1 px-2 rounded smooth_transition" >
+                {/* <div className="hidden lg:flex justify-center items-center relative w-fit gap-2 cursor-pointer hover:bg-secondaryClr border border-secondaryClr p-1 px-2 rounded smooth_transition" >
                     {user?.avatarImg ?
                         <div className="flex_center rounded-full relative overflow-hidden">
                             <Image src={user?.avatarImg} alt="ProfileImage" width={35} height={35} />
@@ -73,10 +80,45 @@ const UserAvatar = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-textLiteClr">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                     </svg>
-                </div >
+                </div> */}
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger className="flex justify-between items-center w-[200px] bg-secondary px-2 py-1 rounded outline-border">
+                        {user?.avatarImg ?
+                            <div className="flex_center rounded-full relative overflow-hidden">
+                                <Image src={user?.avatarImg} alt="ProfileImage" width={35} height={35} />
+                            </div>
+                            :
+                            <div className="bg-primaryClr aspect-square text-white p-1 rounded-full w-[35px] h-[35px]">
+                                <User2Icon className="w-full" />
+                            </div>
+                        }
+                        <div className="flex_center flex-col">
+                            <span className="text-[0.8em]">Hi {user?.username}</span>
+                            <span className="text-[0.9em] font-medium">Your Account</span>
+                        </div>
+                        <ChevronDownIcon />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-[200px]">
+                        <DropdownMenuItem>
+                            <User2Icon className="mr-2 w-4 h-4" />
+                            <span>Profile</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>Billing</DropdownMenuItem>
+                        <DropdownMenuItem>Team</DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <HelpCircleIcon className="mr-2 w-4 h-4" />
+                            <span>Customer Service</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="flex_center bg-red-600 focus:bg-red-600/90 text-white focus:text-white rounded">
+                            <LogOutIcon className="mr-2 w-4 h-4" />
+                            <span>Logout</span>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
 
                 {/* Mobile User Avatar */}
-                <Link href="/profile" className="lg:hidden">
+                {/* <Link href="/profile" className="lg:hidden">
                     {user?.avatarImg ?
                         <div className="flex_center rounded-full relative overflow-hidden" >
                             <Image src={user?.avatarImg} alt="ProfileImage" width={40} height={40} />
@@ -86,7 +128,7 @@ const UserAvatar = () => {
                             <User2Icon size={35} />
                         </div>
                     }
-                </Link>
+                </Link> */}
             </>
         )
     }
