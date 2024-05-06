@@ -5,6 +5,7 @@
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
     "start_url": ".",
+    "id": "/",
     "display": "standalone",
     "orientation": "portrait",
     "dir": "ltr",
@@ -17,18 +18,19 @@
     "categories": [
         "shopping"
     ],
+    "prefer_related_applications": false,
     "icons": [
         {
             "src": "./icons/144.png",
             "sizes": "144x144",
             "type": "image/png",
-            "purpose": "any"
+            "purpose": "maskable"
         },
         {
             "src": "./icons/192.png",
             "sizes": "192x192",
             "type": "image/png",
-            "purpose": "maskable"
+            "purpose": "any"
         },
         {
             "src": "./icons/256.png",
@@ -52,13 +54,13 @@
             "sizes": "768x359",
             "type": "image/png",
             "form_factor": "wide",
-            "label": "Welcome to ARMS"
+            "label": "NextMart | Your Ultimate Shopping Destination!"
         },
         {
             "src": "./icons/ARMS-Screenshot-Mobile.png",
             "sizes": "354x787",
             "type": "image/png",
-            "label": "Welcome to ARMS"
+            "label": "NextMart | Your Ultimate Shopping Destination!"
         }
     ]
 }

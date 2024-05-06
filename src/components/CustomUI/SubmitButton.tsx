@@ -15,7 +15,7 @@ const SubmitButton = ({ text = "Submit", className }: Props) => {
 
     return <Button
         type='submit'
-        className={cn(className)}
+        className={cn(className, "disabled:bg-primary/50")}
         disabled={pending}>
         {pending ?
             <LoaderIcon width='23px' height='23px' />
