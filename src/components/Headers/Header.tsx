@@ -4,6 +4,7 @@ import { User2Icon } from "lucide-react"
 import { CartButton, OrdersButton } from "../Buttons"
 import Image from "next/image"
 import { TextLogoSVG } from "@/assets/SVGs"
+import UserAvatar from "../UserAvatar"
 
 const Header = () => {
     return (
@@ -35,7 +36,7 @@ const Header = () => {
                 <div className="flex gap-3 items-center">
                     <OrdersButton className='header_btn' width="25px" height="25px" />
                     <CartButton className='header_btn' width="25px" height="25px" />
-                    {/* <UserAvatar /> */}
+                    <UserAvatar />
                 </div>
             </header>
         </>
