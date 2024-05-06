@@ -13,12 +13,14 @@ const config = {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
     },
     extend: {
+      screens: {
+        "2xl": "1400px",
+        "4xl": "1800px",
+      },
       colors: {
+        baseClr: 'hsl(var(--background))',
         primaryClr: 'var(--primaryClr)',
         textClr: 'var(--textClr)',
         border: "hsl(var(--border))",

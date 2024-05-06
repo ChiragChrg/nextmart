@@ -39,16 +39,16 @@ const page = () => {
     };
 
     return (
-        <section className='section_style flex_center gap-8 px-4 sm:px-16 pt-8 w-full h-full my-auto'>
-            <ShoppingSVG className='hidden sm:block px-8' />
+        <section className='section_style flex justify-center items-end gap-8 px-4 sm:px-16 w-full h-full my-auto'>
+            <ShoppingSVG className='hidden sm:block px-8 max-w-[500px]' />
 
-            <div className="flex justify-around items-center flex-col gap-2 w-full sm:min-w-[448px] py-4">
-                <div className='text-[1.8em] font-medium flex_center sm:gap-4 flex-col sm:flex-row'>
+            <div className="flex justify-around items-center flex-col gap-2 w-full sm:w-1/2 py-4 my-auto">
+                <div className='text-[1.4em] font-medium flex_center sm:gap-4 flex-col'>
                     <h1>Register to</h1>
                     <TextLogoSVG width="200px" />
                 </div>
 
-                <form action={register} className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full'>
+                <form action={register} className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full sm:max-w-md'>
                     <Input type='text' label='Username' name='username' placeholder='Enter your name' />
                     <Input type='email' label='Email' name='email' placeholder='example@email.com' />
                     <Input type='password' label='Password' name='password' placeholder='Enter Password' isPassword />
@@ -60,14 +60,14 @@ const page = () => {
                         Already have an account?
                         <Link
                             href='/login'
-                            className='!text-primaryClr font-bold text-textClr capitalize tracking-wider'>
+                            className='text-primaryClr font-bold capitalize tracking-wider'>
                             Login
                         </Link>
                     </div>
                 </form>
             </div>
 
-            <DeliverySVG className='hidden sm:block px-8' />
+            <DeliverySVG className='hidden sm:block px-8 max-w-[500px]' />
         </section>
     )
 }

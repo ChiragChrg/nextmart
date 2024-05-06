@@ -43,10 +43,10 @@ export default function Login({
 
 
   return (
-    <section className='section_style flex_center gap-8 px-4 sm:px-16 w-full h-full my-auto'>
-      <GroceriesSVG className='hidden sm:block px-8' />
+    <section className='section_style flex justify-center items-end gap-8 px-4 sm:px-16 w-full h-full my-auto'>
+      <GroceriesSVG className='hidden sm:block px-8 max-w-[500px]' />
 
-      <div className="flex justify-around items-center flex-col gap-2 w-full sm:w-1/2 py-4">
+      <div className="flex justify-around items-center flex-col gap-2 w-full sm:w-1/2 py-4 my-auto">
         <div className='text-[1.8em] font-medium flex_center sm:gap-4 flex-col sm:flex-row'>
           <h1>Welcome to</h1>
           <TextLogoSVG width="200px" />
@@ -66,7 +66,7 @@ export default function Login({
             New to NextMart?
             <Link
               href='/register'
-              className='!text-primaryClr font-bold text-textClr capitalize tracking-wider'>
+              className='text-primaryClr font-bold capitalize tracking-wider'>
               Register
             </Link>
           </div>
@@ -81,7 +81,7 @@ export default function Login({
         <OAuthButtons />
       </div>
 
-      <EmptyCartSVG className='hidden sm:block px-8' />
+      <EmptyCartSVG className='hidden sm:block px-8 max-w-[500px]' />
     </section>
   );
 }
