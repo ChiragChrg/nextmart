@@ -27,17 +27,18 @@ const UserAvatar = () => {
     useEffect(() => {
         const GetSession = async () => {
             const { data, error } = await supabase.auth.getSession()
+
+            if (error || data?.session === null) {
+                setLoading(false)
+                return toast.error(error?.message || "User session expired!")
+            }
+
             const userSession = {
                 uid: data?.session?.user?.id as string,
                 username: data?.session?.user?.user_metadata?.username as string,
                 email: data?.session?.user?.email as string,
                 avatarImg: data?.session?.user?.user_metadata?.avatar_url as string,
                 isAuthenticated: data?.session?.user?.aud ? true : false,
-            }
-
-            if (error) {
-                setLoading(false)
-                return toast.error(error.message)
             }
 
             setUser(userSession)
