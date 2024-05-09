@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { LogoSVG } from "@/assets"
-import { User2Icon } from "lucide-react"
+import { SearchIcon, User2Icon } from "lucide-react"
 import { CartButton, OrdersButton } from "../Buttons"
 import Image from "next/image"
 import { TextLogoSVG } from "@/assets/SVGs"
@@ -13,17 +13,21 @@ const Header = () => {
             <header className="lg:hidden flex justify-between items-center bg-baseClr w-full px-4 py-3 pb-1">
                 <div className="flex justify-between w-full">
                     <Link href="/">
-                        <Image src={LogoSVG} alt="LogoSVG" width={30} />
+                        {/* <Image src={LogoSVG} alt="LogoSVG" width={30} /> */}
+                        <TextLogoSVG width='150px' />
                     </Link>
 
-                    <User2Icon />
+                    <div className="flex_center gap-4">
+                        <SearchIcon />
+                        <UserAvatar />
+                    </div>
                 </div>
             </header>
 
             {/* Mobile Searchbar -> Hides on large screen */}
-            {/* <div className="lg:hidden sticky top-0 z-10 w-full flex_center px-4 py-2 bg-gradient-to-b from-baseClr backdrop-blur-[1px]">
-                <Search />
-            </div> */}
+            <div className="lg:hidden sticky top-0 z-10 w-full flex_center px-4 py-2 bg-gradient-to-b from-baseClr backdrop-blur-[1px]">
+                <SearchIcon />
+            </div>
 
             {/* Desktop Header -> Hides on small screen */}
             <header className="hidden lg:flex justify-between items-center gap-4 bg-baseClr sticky top-0 z-10 w-full p-3 px-4">

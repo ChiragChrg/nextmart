@@ -40,8 +40,6 @@ export default function Login({
     return redirect("/");
   };
 
-
-
   return (
     <section className='section_style flex justify-center items-end gap-8 px-4 sm:px-16 w-full h-full my-auto'>
       <GroceriesSVG className='hidden sm:block px-8 max-w-[500px]' />
