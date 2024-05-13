@@ -58,14 +58,14 @@ export const CarouselUI = () => {
         <Carousel
             opts={{
                 loop: true,
-                align: "center"
+                align: "center",
             }}
-            className="bg-red-500/30 w-full max-w-sm lg:max-w-[90%]">
+            className="bg-red-500/30 w-full max-w-sm lg:max-w-[100%]">
             <CarouselContent>
                 {mockCarousel.map((item, index) => (
                     <CarouselItem key={index} className="p-4 pl-8">
                         <div
-                            className="bg-primaryClr w-full h-full min-h-[500px] p-4 rounded-md">
+                            className="bg-primaryClr w-full h-full min-h-[500px] p-4 rounded-lg">
                             <span className='hidden tablet:block text-[1em] font-bold tracking-wider'>{item?.title}</span>
                         </div>
                     </CarouselItem>
@@ -75,6 +75,5 @@ export const CarouselUI = () => {
             <CarouselNext />
         </Carousel>
         // </div>
-
     )
 }
