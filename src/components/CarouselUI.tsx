@@ -73,7 +73,13 @@ export const CarouselUI = () => {
                 {mockCarousel.map((item, index) => (
                     <CarouselItem key={index} className="p-4 pl-8">
                         <div
-                            className="bg-primary/20 w-full h-full min-h-[300px] p-4 rounded-2xl flex relative px-[6em] overflow-hidden">
+                            className="bg-primary/20 w-full h-full min-h-[300px] p-4 rounded-2xl flex justify-between relative px-[3em] overflow-hidden">
+                            <div className="flex flex-col w-1/2 pl-8 text-white">
+                                <h2 className='text-[3em] font-bold tracking-wider'>{item?.title}</h2>
+                                <span className='text-[1.5em]'>{item.textA}</span>
+                                <span className='text-[1.5em]'>{item.textB}</span>
+                            </div>
+
                             <Image
                                 src={item.poster}
                                 alt={`Poster ${item.title}`}
@@ -89,18 +95,12 @@ export const CarouselUI = () => {
                                 unoptimized
                                 height={100}
                                 className="inset-0 w-full h-full absolute object-cover scale-125 z-[-1] rounded-2xl blur-xl opacity-40" />
-
-                            <div className="flex flex-col pl-8 text-white">
-                                <h2 className='text-[3em] font-bold tracking-wider'>{item?.title}</h2>
-                                <span className='text-[1.5em]'>{item.textA}</span>
-                                <span className='text-[1.5em]'>{item.textB}</span>
-                            </div>
                         </div>
                     </CarouselItem>
                 ))}
             </CarouselContent>
 
-            <div className="absolute bottom-12 right-10 w-1/2 h-max">
+            <div className="absolute bottom-12 left-10 w-1/2 h-max">
                 <CarouselPrevious />
                 <CarouselNext />
                 <CarouselDots />
