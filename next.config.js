@@ -16,6 +16,14 @@ const nextConfig = withPWA({
                 protocol: 'https',
                 hostname: "avatars.githubusercontent.com",
             },
+            {
+                protocol: 'http',
+                hostname: "via.placeholder.com",
+            },
+            {
+                protocol: 'https',
+                hostname: "placehold.co",
+            },
         ],
     }
 })
