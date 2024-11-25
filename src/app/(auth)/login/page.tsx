@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
 
 import Input from "@/components/CustomUI/Input";
 import OAuthButtons from "@/components/CustomUI/OAuthButtons";
@@ -21,23 +20,17 @@ export default function Login({
 }) {
 
   const signIn = async (formData: FormData) => {
-    "use server";
+    // "use server";
 
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    // const email = formData.get("email") as string;
+    // const password = formData.get("password") as string;
 
-    const { error, data } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
 
-    if (error) {
-      return redirect("/login?message=Could not authenticate user");
-    }
+    // if (error) {
+    //   return redirect("/login?message=Could not authenticate user");
+    // }
 
-    return redirect("/");
+    // return redirect("/");
   };
 
   return (

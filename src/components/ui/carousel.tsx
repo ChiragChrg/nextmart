@@ -9,7 +9,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useDotButton, DotButton } from './carouselDotButton';
-import { ChildProcess } from "child_process"
 
 
 type CarouselApi = UseEmblaCarouselType[1]

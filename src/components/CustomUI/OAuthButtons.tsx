@@ -1,6 +1,5 @@
 "use client"
 
-import { OAuthLogin } from '@/app/actions/AuthActions'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
@@ -8,13 +7,13 @@ const OAuthButtons = () => {
     const router = useRouter()
 
     const handleOAuthLogin = async (provider: any) => {
-        const { error, data } = await OAuthLogin(provider)
+        // const { error, data } = await OAuthLogin(provider)
 
-        if (error) {
-            return toast.error(error.message)
-        }
+        // if (error) {
+        //     return toast.error(error.message)
+        // }
 
-        router.push(data?.url)
+        // router.push(data?.url)
     }
 
     return (

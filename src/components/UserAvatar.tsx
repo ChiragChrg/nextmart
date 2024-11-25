@@ -1,14 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import LoaderIcon from "./CustomUI/LoaderIcon"
-import { createClient } from "@/utils/supabase/client"
-import useUserStore from "@/store/useUserStore"
 import { ChevronDownIcon, HelpCircleIcon, LogOutIcon, User2Icon } from "lucide-react"
-import toast from "react-hot-toast"
+// import toast from "react-hot-toast"
 
 import {
     DropdownMenu,
@@ -19,38 +17,38 @@ import {
 
 const UserAvatar = () => {
     const [loading, setLoading] = useState<boolean>(true)
-    const { user, setUser } = useUserStore()
-    const supabase = createClient()
+    let user: any
+    // const supabase = createClient()
     const pathname = usePathname()
     const router = useRouter()
 
-    useEffect(() => {
-        const GetSession = async () => {
-            const { data, error } = await supabase.auth.getSession()
+    // useEffect(() => {
+    //     const GetSession = async () => {
+    //         const { data, error } = await supabase.auth.getSession()
 
-            if (error || data?.session === null) {
-                setLoading(false)
-                return toast.error(error?.message || "User session expired!")
-            }
+    //         if (error || data?.session === null) {
+    //             setLoading(false)
+    //             return toast.error(error?.message || "User session expired!")
+    //         }
 
-            const userSession = {
-                uid: data?.session?.user?.id as string,
-                username: data?.session?.user?.user_metadata?.username as string,
-                email: data?.session?.user?.email as string,
-                avatarImg: data?.session?.user?.user_metadata?.avatar_url as string,
-                isAuthenticated: data?.session?.user?.aud ? true : false,
-            }
+    //         const userSession = {
+    //             uid: data?.session?.user?.id as string,
+    //             username: data?.session?.user?.user_metadata?.username as string,
+    //             email: data?.session?.user?.email as string,
+    //             avatarImg: data?.session?.user?.user_metadata?.avatar_url as string,
+    //             isAuthenticated: data?.session?.user?.aud ? true : false,
+    //         }
 
-            setUser(userSession)
-            setLoading(false)
-            // console.log("ClientUser", data)
-        }
-        GetSession()
-    }, [setUser, supabase.auth])
+    //         setUser(userSession)
+    //         setLoading(false)
+    //         // console.log("ClientUser", data)
+    //     }
+    //     GetSession()
+    // }, [setUser, supabase.auth])
 
     const HandleLogout = async () => {
         try {
-
+            setLoading(true)
 
             if (pathname !== "/") router.push("/")
         } catch (error) {
