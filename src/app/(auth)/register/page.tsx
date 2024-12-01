@@ -1,7 +1,4 @@
 import { Metadata } from "next";
-import { createClient } from "@/utils/supabase/server";
-import { cookies, headers } from 'next/headers';
-import { redirect } from "next/navigation";
 import React from 'react'
 import { DeliverySVG, ShoppingSVG, TextLogoSVG } from "@/assets/SVGs";
 import Input from "@/components/CustomUI/Input";
@@ -14,29 +11,6 @@ export const metadata: Metadata = {
 }
 
 const page = () => {
-    const register = async (formData: FormData) => {
-        "use server";
-
-        const origin = headers().get("origin");
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-        const cookieStore = cookies();
-        const supabase = createClient(cookieStore);
-
-        const { error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                emailRedirectTo: `${origin}/auth/callback`,
-            },
-        });
-
-        if (error) {
-            return redirect("/login?message=Could not authenticate user");
-        }
-
-        return redirect("/login?message=Check email to continue sign in process");
-    };
 
     return (
         <section className='section_style grid grid-cols-1 sm:grid-cols-3 gap-8 px-4 sm:px-16 w-full h-full my-auto'>
@@ -48,7 +22,7 @@ const page = () => {
                     <TextLogoSVG width="200px" />
                 </div>
 
-                <form action={register} className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full sm:max-w-md'>
+                <form className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full sm:max-w-md'>
                     <Input type='text' label='Username' name='username' placeholder='Enter your name' />
                     <Input type='email' label='Email' name='email' placeholder='example@email.com' />
                     <Input type='password' label='Password' name='password' placeholder='Enter Password' isPassword />
