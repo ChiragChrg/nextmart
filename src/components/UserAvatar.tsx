@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import LoaderIcon from "./CustomUI/LoaderIcon"
 import { ChevronDownIcon, HelpCircleIcon, LogOutIcon, User2Icon } from "lucide-react"
+import { useSession } from "next-auth/react"
 // import toast from "react-hot-toast"
 
 import {
@@ -14,37 +15,23 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { protectedRoutes, publicRoutes } from "@/lib/routes"
 
 const UserAvatar = () => {
     const [loading, setLoading] = useState<boolean>(true)
-    let user: any
-    // const supabase = createClient()
+    const { data: session, status } = useSession()
+
     const pathname = usePathname()
     const router = useRouter()
 
-    // useEffect(() => {
-    //     const GetSession = async () => {
-    //         const { data, error } = await supabase.auth.getSession()
+    console.log(session)
 
-    //         if (error || data?.session === null) {
-    //             setLoading(false)
-    //             return toast.error(error?.message || "User session expired!")
-    //         }
-
-    //         const userSession = {
-    //             uid: data?.session?.user?.id as string,
-    //             username: data?.session?.user?.user_metadata?.username as string,
-    //             email: data?.session?.user?.email as string,
-    //             avatarImg: data?.session?.user?.user_metadata?.avatar_url as string,
-    //             isAuthenticated: data?.session?.user?.aud ? true : false,
-    //         }
-
-    //         setUser(userSession)
-    //         setLoading(false)
-    //         // console.log("ClientUser", data)
-    //     }
-    //     GetSession()
-    // }, [setUser, supabase.auth])
+    useEffect(() => {
+        if (protectedRoutes.includes(pathname) && status === "unauthenticated")
+            router.push("/login")
+        else
+            setLoading(false)
+    }, [session, status, router, pathname])
 
     const HandleLogout = async () => {
         try {
@@ -56,15 +43,15 @@ const UserAvatar = () => {
         }
     }
 
-    if (user) {
+    if (session?.user) {
         return (
             <>
                 <div className="hidden lg:flex">
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex justify-between items-center w-[200px] bg-secondary px-2 py-1 rounded outline-border">
-                            {user?.avatarImg ?
+                            {session?.user?.image ?
                                 <div className="flex_center rounded-full relative overflow-hidden">
-                                    <Image src={user?.avatarImg} alt="ProfileImage" width={35} height={35} />
+                                    <Image src={session?.user?.image} alt="ProfileImage" width={35} height={35} />
                                 </div>
                                 :
                                 <div className="bg-primaryClr aspect-square text-white p-1 rounded-full w-[35px] h-[35px]">
@@ -72,7 +59,7 @@ const UserAvatar = () => {
                                 </div>
                             }
                             <div className="flex_center flex-col">
-                                <span className="text-[0.8em]">Hi {user?.username}</span>
+                                <span className="text-[0.8em]">Hi {session?.user?.name}</span>
                                 <span className="text-[0.9em] font-medium">Your Account</span>
                             </div>
                             <ChevronDownIcon />
@@ -98,9 +85,9 @@ const UserAvatar = () => {
 
                 {/* Mobile User Avatar */}
                 <Link href="/profile" className="lg:hidden">
-                    {user?.avatarImg ?
+                    {session?.user?.picture ?
                         <div className="flex_center rounded-full relative overflow-hidden" >
-                            <Image src={user?.avatarImg} alt="ProfileImage" width={40} height={40} />
+                            <Image src={session?.user?.image} alt="ProfileImage" width={40} height={40} />
                         </div>
                         :
                         <div className="bg-primaryClr aspect-square text-white p-1 rounded-full" >
@@ -115,7 +102,7 @@ const UserAvatar = () => {
         return (
             <>
                 {!loading ?
-                    <Link href="/login" className="bg-primaryClr flex_center gap-2 text-white px-2 py-[0.3em] rounded cursor-pointer">
+                    <Link href="/login" className="bg-primaryClr flex_center gap-2 text-white px-4 py-[0.5em] rounded cursor-pointer">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="32"

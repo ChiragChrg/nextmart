@@ -1,5 +1,3 @@
-"use client"
-
 import { TextLogoSVG } from '@/assets/SVGs'
 import { ChevronLeftIcon } from 'lucide-react'
 import Link from 'next/link'
@@ -14,7 +12,7 @@ const AuthHeader = () => {
 
             <Link
                 href="/"
-                className='lg:bg-primary lg:px-2 py-1 lg:text-white rounded flex_center gap-2'>
+                className='lg:bg-primaryClr lg:px-4 py-2 lg:text-white rounded flex_center gap-2'>
                 <ChevronLeftIcon width='20px' height='20px' />
                 <span>Back</span>
             </Link>

@@ -3,22 +3,19 @@ import { useState, SetStateAction, Dispatch } from "react"
 
 interface InputProps {
     label: string,
-    type: string,
+    type: "text" | "email" | "password",
     name?: string,
     placeholder?: string,
-    autoComplete?: string,
-    isPassword?: boolean,
     required?: boolean,
-    setValue?: Dispatch<SetStateAction<string>>
+    setValue?: Dispatch<SetStateAction<any>>
 }
 
 
-const Input = ({ label, type, name, placeholder, autoComplete = "", isPassword = false, required = true, setValue }: InputProps) => {
+const Input = ({ label, type, name, placeholder, required = true, setValue }: InputProps) => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const TogglePassword = () => {
         setShowPassword(prev => !prev)
     }
-
 
     return (
         <label className='relative border border-secondaryClr sm:focus-within:border-primaryClr rounded p-1 flex flex-col'>
@@ -26,13 +23,12 @@ const Input = ({ label, type, name, placeholder, autoComplete = "", isPassword =
             <input
                 type={showPassword ? "text" : type}
                 name={name}
-                autoComplete={autoComplete}
                 placeholder={placeholder}
                 required={required}
                 onChange={(e) => setValue && setValue(e.target.value)}
                 className='text-[1em] bg-baseClr text-textClr px-2 py-1 border-none outline-none' />
 
-            {isPassword &&
+            {type === "password" &&
                 <div className="p-1 mr-2 w-fit absolute right-0 cursor-pointer" onClick={TogglePassword}>
                     {showPassword ?
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

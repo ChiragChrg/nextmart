@@ -5,7 +5,7 @@ import { protectedRoutes, authRoutes, DEFAULT_LOGIN_REDIRECT } from '@/lib/route
 
 const { auth } = NextAuth(authConfig)
 
-export default async function middleware(req: NextRequest) {
+export default auth(async function middleware(req: NextRequest) {
     const session = await auth();
 
     const { nextUrl } = req;
@@ -15,26 +15,23 @@ export default async function middleware(req: NextRequest) {
 
     // console.log("\nMiddleware : ", { nextUrl: nextUrl.pathname, isLoggedIn, isProtectedRoutes, isAuthRoute })
 
-    if (isAuthRoute) {
-        if (isLoggedIn) {
-            console.log("M_Redirect : isLoggedIn")
-            return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-        }
+    // if (isAuthRoute) {
+    //     if (isLoggedIn) {
+    //         console.log("M_Redirect : isLoggedIn")
+    //         return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    //     }
 
-        console.log("M_Redirect : isAuthRoute")
-        return NextResponse.next();
-    }
-    if (!isLoggedIn && isProtectedRoutes) {
-        console.log("M_Redirect : isAuthRoute")
-        return NextResponse.redirect(new URL('/login', nextUrl));
-    }
+    //     console.log("M_Redirect : isAuthRoute")
+    //     return NextResponse.next();
+    // }
+    // if (!isLoggedIn && isProtectedRoutes) {
+    //     console.log("M_Redirect : isAuthRoute")
+    //     return NextResponse.redirect(new URL('/login', nextUrl));
+    // }
     return NextResponse.next();
-}
+})
 
 
 export const config = {
     matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-    unstable_allowDynamic: [
-        '/node_modules/mongoose/dist/browser.umd.js',
-    ],
 }
