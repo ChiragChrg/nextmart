@@ -13,21 +13,21 @@ export default auth(async function middleware(req: NextRequest) {
     const isProtectedRoutes = protectedRoutes.some(route => nextUrl.pathname === route);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    // console.log("\nMiddleware : ", { nextUrl: nextUrl.pathname, isLoggedIn, isProtectedRoutes, isAuthRoute })
+    console.log("\nMiddleware : ", { nextUrl: nextUrl.pathname, isLoggedIn, isProtectedRoutes, isAuthRoute })
 
-    // if (isAuthRoute) {
-    //     if (isLoggedIn) {
-    //         console.log("M_Redirect : isLoggedIn")
-    //         return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-    //     }
+    if (isAuthRoute) {
+        if (isLoggedIn) {
+            // Redirect logged-in user from auth routes to home page
+            return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+        }
 
-    //     console.log("M_Redirect : isAuthRoute")
-    //     return NextResponse.next();
-    // }
-    // if (!isLoggedIn && isProtectedRoutes) {
-    //     console.log("M_Redirect : isAuthRoute")
-    //     return NextResponse.redirect(new URL('/login', nextUrl));
-    // }
+        return NextResponse.next();
+    }
+
+    if (!isLoggedIn && isProtectedRoutes) {
+        return NextResponse.redirect(new URL('/login', nextUrl));
+    }
+
     return NextResponse.next();
 })
 

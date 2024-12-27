@@ -1,4 +1,4 @@
-export const adminRoutes = ["/admin", "/events", "/payment"];
+export const adminRoutes = ["/admin"];
 export const protectedRoutes = ["/profile", "/checkout", "/payment"];
 export const publicRoutes = ["/", "/search/:query", "/product/:productID"];
 
