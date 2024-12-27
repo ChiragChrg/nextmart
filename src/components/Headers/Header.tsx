@@ -1,8 +1,6 @@
 import Link from "next/link"
-// import { LogoSVG } from "@/assets"
 import { SearchIcon } from "lucide-react"
 import { CartButton, OrdersButton } from "../Buttons"
-// import Image from "next/image"
 import { TextLogoSVG } from "@/assets/SVGs"
 import UserAvatar from "../UserAvatar"
 

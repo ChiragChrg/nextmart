@@ -1,10 +1,16 @@
 "use server";
 
-import { signIn, signOut } from "@/auth";
 import { prisma } from "@/prisma";
-import { revalidatePath } from "next/cache";
+import { saltAndHashPassword } from "@/lib/utils";
 
-const getUserByEmail = async (email: string) => {
+type ResponseType = {
+    status: number;
+    message: string;
+    formFields?: any;
+    response?: any;
+}
+
+export const getUserByEmail = async (email: string) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -18,53 +24,43 @@ const getUserByEmail = async (email: string) => {
     }
 };
 
-export const login = async (provider: string) => {
-    await signIn(provider, { redirectTo: "/" });
-    revalidatePath("/");
-};
+export const registerUser = async (previousState: unknown, formData: FormData) => {
+    const username = formData.get("username") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirm_password") as string;
+    console.log("User_Reg_Init", { username, email, password, confirmPassword })
 
-export const logout = async () => {
-    await signOut({ redirectTo: "/" });
-    revalidatePath("/");
-};
+    const formFields = { username, email, password, confirmPassword }
 
-export const loginWithCreds = async ({ email, password }: { email: string, password: string }): Promise<any> => {
     try {
-        const existingUser = await getUserByEmail(email);
-        if (!existingUser) {
-            throw new Error("Invalid User Credentials!");
+        if (!username || !email || !password || !confirmPassword) {
+            return { status: 422, message: "Invalid User Registration Fields!", formFields } as ResponseType
         }
-        console.log("\nexistingUser : ", existingUser);
 
-        const userData = {
-            email,
-            password,
-            redirectTo: "/",
-        };
-        await signIn("credentials", userData);
-        revalidatePath("/");
+        if (password !== confirmPassword) {
+            return { status: 422, message: 'Password and Confirm Password do not match', formFields } as ResponseType
+        }
+
+        const existingUser = await getUserByEmail(email);
+        if (existingUser) {
+            return { status: 409, message: "User Email already exists!", formFields } as ResponseType
+        }
+
+        const hashedPassword = saltAndHashPassword(password)
+        const newUser = await prisma.user.create({
+            data: {
+                name: username,
+                email: email,
+                password: hashedPassword
+            }
+        })
+
+        console.log("New_User", newUser)
+
+        return { status: 201, message: "User Registered Successfully!" } as ResponseType
     } catch (error: any) {
-        console.log("Login_Credentials : ", error)
-        return { error: error.message || "An unexpected error occurred." };
+        console.log("User_Register : ", error)
+        return { status: 500, message: error.message || "An unexpected error occurred.", formFields } as ResponseType;
     }
-};
-
-export const OAuthLogin = async (provider: string) => {
-    // try {
-    const res = await signIn(provider, {
-        callbackUrl: "/",
-    });
-    console.log("oAUthLoginRes", res);
-    // redirect: callback !== "" ? true : false,
-
-    //     router.push(res?.url || "/dashboard");
-    // } catch (err) {
-    //     toast.error("Something went wrong!", {
-    //         id: OAuthTostID,
-    //     });
-    //     console.log(err);
-    // } finally {
-    //     setIsLoading(false);
-    //     toast.dismiss();
-    // }
-};
+}

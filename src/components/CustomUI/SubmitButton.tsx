@@ -1,6 +1,5 @@
 "use client"
 
-import { useFormStatus } from 'react-dom';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import LoaderIcon from './LoaderIcon';
@@ -8,10 +7,10 @@ import LoaderIcon from './LoaderIcon';
 type Props = {
     text?: string,
     className?: string
+    pending?: boolean
 }
 
-const SubmitButton = ({ text = "Submit", className }: Props) => {
-    const { pending } = useFormStatus();
+const SubmitButton = ({ text = "Submit", className, pending = false }: Props) => {
 
     return <Button
         type='submit'

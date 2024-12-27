@@ -6,12 +6,13 @@ interface InputProps {
     type: "text" | "email" | "password",
     name?: string,
     placeholder?: string,
+    defaultValue?: string,
     required?: boolean,
     setValue?: Dispatch<SetStateAction<any>>
 }
 
 
-const Input = ({ label, type, name, placeholder, required = true, setValue }: InputProps) => {
+const Input = ({ label, type, name, placeholder, defaultValue, required = true, setValue }: InputProps) => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const TogglePassword = () => {
         setShowPassword(prev => !prev)
@@ -19,11 +20,12 @@ const Input = ({ label, type, name, placeholder, required = true, setValue }: In
 
     return (
         <label className='relative border border-secondaryClr sm:focus-within:border-primaryClr rounded p-1 flex flex-col'>
-            <span className='absolute top-[-0.9em] text-[0.9em] bg-baseClr px-1 text-slate-500'>{label}</span>
+            <span className='absolute top-[-0.9em] text-[0.9em] bg-background px-1 text-slate-500'>{label}</span>
             <input
                 type={showPassword ? "text" : type}
                 name={name}
                 placeholder={placeholder}
+                defaultValue={defaultValue}
                 required={required}
                 onChange={(e) => setValue && setValue(e.target.value)}
                 className='text-[1em] bg-baseClr text-textClr px-2 py-1 border-none outline-none' />

@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Toaster } from 'react-hot-toast'
 import { SessionProvider } from 'next-auth/react'
+import { store } from '@/store'
+import { Provider as StoreProvider } from 'react-redux'
 
 type ProviderProps = {
     children: React.ReactNode,
@@ -29,12 +31,14 @@ const Provider = ({ children }: ProviderProps) => {
 
     if (isMounted)
         return (
-            <SessionProvider>
-                <QueryClientProvider client={queryClient}>
-                    {children}
-                    <Toaster position="bottom-right" />
-                    <ReactQueryDevtools initialIsOpen={false} />
-                </QueryClientProvider>
+            <SessionProvider refetchOnWindowFocus={false}>
+                <StoreProvider store={store}>
+                    <QueryClientProvider client={queryClient}>
+                        {children}
+                        <Toaster position="bottom-right" />
+                        <ReactQueryDevtools initialIsOpen={false} />
+                    </QueryClientProvider>
+                </StoreProvider>
             </SessionProvider>
         )
 }

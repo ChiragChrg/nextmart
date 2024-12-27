@@ -1,22 +1,36 @@
 "use client"
 
-import { OAuthLogin } from '@/app/actions/AuthActions'
-import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 const OAuthButtons = () => {
     const router = useRouter()
+    const params = useSearchParams().get("callbackUrl")
+    const callback = params ? params as string : ""
 
     const handleOAuthLogin = async (provider: any) => {
-        const res = await OAuthLogin(provider)
+        const OAuthTostID = toast.loading(`Connecting to ${provider.charAt(0).toUpperCase() + provider.slice(1)}...`)
 
-        console.log("LoginRes", res);
+        try {
+            const res = await signIn(provider, {
+                callbackUrl: callback || "/"
+            })
 
-        // if (error) {
-        //     return toast.error(error.message)
-        // }
-
-        // router.push(data?.url)
+            if (res?.status === 200) {
+                toast.success("Logged in Successfully!", {
+                    id: OAuthTostID
+                })
+                router.push("/")
+            }
+        } catch (err) {
+            toast.error(err || "Something went wrong!", {
+                id: OAuthTostID
+            })
+            console.log(err)
+        } finally {
+            toast.dismiss()
+        }
     }
 
     return (

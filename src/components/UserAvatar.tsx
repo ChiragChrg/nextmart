@@ -1,13 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import LoaderIcon from "./CustomUI/LoaderIcon"
+import { signOut, useSession } from "next-auth/react"
 import { ChevronDownIcon, HelpCircleIcon, LogOutIcon, User2Icon } from "lucide-react"
-import { useSession } from "next-auth/react"
-// import toast from "react-hot-toast"
 
 import {
     DropdownMenu,
@@ -15,29 +13,35 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { protectedRoutes, publicRoutes } from "@/lib/routes"
+
+import { useDispatch, useSelector } from "react-redux"
+import { userActions } from "@/store/userSlice"
+import { RootState } from "@/store"
+import { useRouter } from "next/navigation"
 
 const UserAvatar = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const { data: session, status } = useSession()
-
-    const pathname = usePathname()
     const router = useRouter()
 
-    console.log(session)
+    const user = useSelector((state: RootState) => state.user)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        if (protectedRoutes.includes(pathname) && status === "unauthenticated")
-            router.push("/login")
+        if (session?.user && status === "authenticated")
+            dispatch(userActions.setUser(session?.user))
         else
-            setLoading(false)
-    }, [session, status, router, pathname])
+            dispatch(userActions.clearUser())
+
+        setLoading(false)
+    }, [session, status, dispatch])
 
     const HandleLogout = async () => {
         try {
             setLoading(true)
+            await signOut();
 
-            if (pathname !== "/") router.push("/")
+            dispatch(userActions.clearUser())
         } catch (error) {
             console.log(error)
         }
@@ -75,7 +79,7 @@ const UserAvatar = () => {
                                 <HelpCircleIcon className="mr-2 w-4 h-4" />
                                 <span>Customer Service</span>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="flex_center bg-red-600 focus:bg-red-600/90 text-white focus:text-white rounded">
+                            <DropdownMenuItem role="button" onClick={HandleLogout} className="flex_center bg-red-600 focus:bg-red-600/90 text-white focus:text-white rounded cursor-pointer">
                                 <LogOutIcon className="mr-2 w-4 h-4" />
                                 <span>Logout</span>
                             </DropdownMenuItem>
