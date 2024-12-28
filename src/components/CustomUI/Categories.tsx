@@ -10,7 +10,7 @@ import Link from "next/link"
 
 const Categories = () => {
     return (
-        <div>
+        <div className="z-0">
             <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>

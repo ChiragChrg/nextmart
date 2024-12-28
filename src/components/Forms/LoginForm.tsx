@@ -49,7 +49,7 @@ const LoginForm = () => {
     };
 
     return (
-        <form onSubmit={handleLogin} className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full sm:max-w-md'>
+        <form onSubmit={handleLogin} className='bg-background py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full sm:max-w-md'>
             <Input
                 type='email'
                 name="email"

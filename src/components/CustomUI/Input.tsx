@@ -28,7 +28,7 @@ const Input = ({ label, type, name, placeholder, defaultValue, required = true, 
                 defaultValue={defaultValue}
                 required={required}
                 onChange={(e) => setValue && setValue(e.target.value)}
-                className='text-[1em] bg-baseClr text-textClr px-2 py-1 border-none outline-none' />
+                className='text-[1em] bg-background text-textClr px-2 py-1 border-none outline-none' />
 
             {type === "password" &&
                 <div className="p-1 mr-2 w-fit absolute right-0 cursor-pointer" onClick={TogglePassword}>
