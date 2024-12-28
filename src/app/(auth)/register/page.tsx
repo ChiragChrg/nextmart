@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     description: "Join the Next Mart family! Register now for an exceptional shopping experience. Access a vast array of products, from fashion to electronics. Enjoy personalized recommendations and exclusive deals. Sign up securely and embark on a journey of endless shopping possibilities!",
 }
 
-const page = () => {
+const Register = () => {
 
     return (
         <section className='section_style grid grid-cols-1 sm:grid-cols-3 gap-8 px-4 sm:px-16 w-full h-full my-auto'>
@@ -28,4 +28,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Register

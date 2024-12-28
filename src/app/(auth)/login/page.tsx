@@ -8,11 +8,7 @@ export const metadata: Metadata = {
   description: 'Unlock a world of shopping delights at Next Mart! Your gateway to a seamless shopping experience awaits. Log in securely to access a vast array of products, from trendy fashion to cutting-edge electronics. Discover personalized recommendations and exclusive deals. Join us now and redefine the way you shop!',
 }
 
-export default function Login({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
+export default function Login() {
   return (
     <section className='section_style grid grid-cols-1 sm:grid-cols-3 gap-8 px-4 sm:px-16 w-full h-full my-auto'>
       <GroceriesSVG className='hidden sm:block px-8 max-w-[500px]' />
