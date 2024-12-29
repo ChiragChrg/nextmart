@@ -9,7 +9,7 @@ type Props = {
     isFilled?: boolean
 }
 
-const StarSVG = ({ width = "100%", height = "100%", className = "", fill = "var(--gold)", isFilled = false, stroke = "var(--gold)" }: Props) => {
+const StarSVG = ({ width = "100%", height = "100%", className = "", fill = "#E6C419", isFilled = false, stroke = "#E6C419" }: Props) => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg"
             width={width}

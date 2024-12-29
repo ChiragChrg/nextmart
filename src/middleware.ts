@@ -13,7 +13,7 @@ export default auth(async function middleware(req: NextRequest) {
     const isProtectedRoutes = protectedRoutes.some(route => nextUrl.pathname === route);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    console.log("\nMiddleware : ", { nextUrl: nextUrl.pathname, isLoggedIn, isProtectedRoutes, isAuthRoute })
+    // console.log("\nMiddleware : ", { nextUrl: nextUrl.pathname, isLoggedIn, isProtectedRoutes, isAuthRoute })
 
     if (isAuthRoute) {
         if (isLoggedIn) {

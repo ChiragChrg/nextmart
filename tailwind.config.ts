@@ -12,6 +12,7 @@ export default {
 			colors: {
 				primaryClr: 'hsl(var(--primaryClr))',
 				textClr: 'hsl(var(--textClr))',
+				goldClr: 'hsl(var(--goldClr))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				card: {
