@@ -74,11 +74,12 @@ export const CarouselUI = () => {
                     <CarouselItem key={index} className="p-4 pl-8">
                         <div
                             className="bg-primary/20 w-full h-full min-h-[300px] p-4 rounded-2xl flex justify-between relative px-[3em] overflow-hidden">
-                            <div className="flex flex-col w-1/2 pl-8 text-white">
-                                <h2 className='text-[3em] font-bold tracking-wider'>{item?.title}</h2>
-                                <span className='text-[1.5em]'>{item.textA}</span>
-                                <span className='text-[1.5em]'>{item.textB}</span>
+                            <div className="flex flex-col justify-center sm:w-1/2 sm:pl-8 text-white z-10">
+                                <h2 className='text-[2em] sm:text-[3em] font-bold tracking-wider'>{item?.title}</h2>
+                                <span className='text-[1em] sm:text-[1.5em]'>{item.textA}</span>
+                                <span className='text-[1em] sm:text-[1.5em]'>{item.textB}</span>
                             </div>
+                            <div className="sm:hidden bg-foreground/20 absolute inset-0"></div>
 
                             <Image
                                 src={item.poster}
@@ -86,7 +87,7 @@ export const CarouselUI = () => {
                                 width={100}
                                 height={100}
                                 unoptimized
-                                className="w-max h-full rounded-xl" />
+                                className="w-max object-cover inset-0 h-full rounded-xl absolute sm:relative z-[-10] sm:z-0" />
 
                             <Image
                                 src={item.poster}
@@ -100,7 +101,7 @@ export const CarouselUI = () => {
                 ))}
             </CarouselContent>
 
-            <div className="absolute bottom-12 left-10 w-1/2 h-max">
+            <div className="absolute bottom-12 sm:left-10 w-full sm:w-1/2 h-max">
                 <CarouselPrevious />
                 <CarouselNext />
                 <CarouselDots />

@@ -17,7 +17,7 @@ const Header = () => {
                     </Link>
 
                     <div className="flex_center gap-4">
-                        <SearchIcon />
+                        {/* <SearchIcon /> */}
                         <UserAvatar />
                     </div>
                 </div>
@@ -25,7 +25,8 @@ const Header = () => {
 
             {/* Mobile Searchbar -> Hides on large screen */}
             <div className="lg:hidden sticky top-0 z-10 w-full flex_center px-4 py-2 bg-gradient-to-b from-background backdrop-blur-[1px]">
-                <SearchIcon />
+                <Search />
+                {/* <SearchIcon /> */}
             </div>
 
             {/* Desktop Header -> Hides on small screen */}
