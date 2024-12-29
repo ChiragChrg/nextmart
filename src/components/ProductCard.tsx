@@ -1,57 +1,66 @@
-"use client"
-import { HeartIcon } from 'lucide-react'
+import Link from 'next/link'
 import Image from 'next/image'
-import toast from 'react-hot-toast'
 import { StarSVG } from '../assets/SVGs'
-
-type ProductType = {
-    name: string | null,
-    image: string | null,
-    rating: number | null,
-    price: number | null,
-}
+import { productType } from './ProductSection'
 
 type Props = {
-    data: ProductType | null,
+    data: productType | null,
 }
 
 const ProductCard = ({ data }: Props) => {
-    const BlurData = "iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAEUlEQVR42mM8PZMBAzAOZUEAN/kN81AIvjgAAAAASUVORK5CYII="
-
     return (
-        <div
-            onClick={() => toast.success(data?.name)}
-            className="relative flex_center flex-col rounded-md overflow-hidden cursor-pointer bg-slate-500/10">
+        <Link
+            href={`product/${data?.category}/${data?.name}`}
+            className="relative flex_center flex-col rounded-md overflow-hidden cursor-pointer">
             <Image
-                src={data?.image as string}
-                alt='img'
+                src={data?.images[0].imageUrl as string}
+                alt={data?.images[0].altText as string}
                 fill={true}
                 style={{ objectFit: "cover" }}
                 placeholder='blur'
-                blurDataURL={BlurData}
-                className='!relative' />
+                blurDataURL={data?.images[0].blurData as string}
+                className='!relative rounded-md' />
 
-            <HeartIcon width='25px' height='25px' className='absolute top-2 right-2' />
+            {/* <HeartIcon width='25px' height='25px' className='absolute top-2 right-2' /> */}
 
-            <div className="w-full flex flex-col p-1 px-2 bg-baseLiteClr">
-                <h3>{data?.name}</h3>
-                {data?.rating && <StarRating rating={data?.rating} />}
+            <div className="w-full flex flex-col p-1 px-2">
+                <h3 className='font-bold'>{data?.name}</h3>
+                <div className='flex items-center gap-1'>
+                    <span className='text-[0.9em] pt-1'>{data?.ratings.average?.toFixed(1)}</span>
+                    <StarRating rating={data?.ratings.average || 0} />
+                    <span className='text-[0.8em]'>({data?.ratings.reviewCount?.toLocaleString("en-US", {
+                        notation: "compact",
+                        compactDisplay: "short"
+                    })})</span>
+                </div>
 
-                <div className="p-1 px-2">
-                    <h3 className='font-sans font-bold'>{data?.price && data?.price.toLocaleString("en-IN", {
+
+                <div className="p-1 px-2 flex items-center gap-2">
+                    <h3 className='font-sans text-[1.2em] font-bold'>{data?.price?.current?.toLocaleString("en-IN", {
                         style: 'currency',
                         currency: 'INR',
                         minimumFractionDigits: 0,
                         maximumFractionDigits: 0
                     })}</h3>
+
+                    <div className='flex_center gap-1 font-bold text-green-500'>
+                        <span> -{data?.price?.discount}%</span>
+                    </div>
+
+                    <span className='font-sans line-through'>{data?.price?.original?.toLocaleString("en-IN", {
+                        style: 'currency',
+                        currency: 'INR',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                    })}</span>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 
 export const StarRating = ({ rating }: { rating: number }) => {
-    return <div className="flex relative w-full">
+    return <div className="flex relative">
         <StarSVG width='20px' height='20px' isFilled={1 <= rating} />
         <StarSVG width='20px' height='20px' isFilled={2 <= rating} />
         <StarSVG width='20px' height='20px' isFilled={3 <= rating} />
