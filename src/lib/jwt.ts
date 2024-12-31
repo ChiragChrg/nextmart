@@ -18,7 +18,7 @@ export async function VerifyToken(token: string) {
     try {
         const secretKey = new TextEncoder().encode(process.env.JWT_SECRET_KEY)
         const { payload, protectedHeader } = await jose.jwtVerify(token, secretKey)
-        console.log("JWT_Verification : ", { payload, protectedHeader })
+        // console.log("JWT_Verification : ", { payload, protectedHeader })
         return { payload, protectedHeader }
     } catch (error) {
         return null
