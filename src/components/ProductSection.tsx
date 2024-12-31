@@ -4,7 +4,8 @@ import ProductCard from './ProductCard'
 
 export type productType = {
     productId: string
-    name: string,
+    title: string,
+    longTitle: string,
     description: string,
     category: string,
     brand: string,
@@ -40,20 +41,22 @@ export type productType = {
 const mockProducts: productType[] = [
     {
         productId: "a1b2c3d4",
-        name: "Ergonomic Office Chair",
+        title: "Ergonomic Office Chair",
+        longTitle: "Ergonomic Office Chair",
         description: "A comfortable chair for long work hours.",
         category: "Furniture",
         brand: "OfficePro",
         price: { original: 299, current: 249, discount: 17 },
         stock: { quantity: 50, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "Chair image", blurData: "blur1", averageColor: "#f0f0f0" }],
-        ratings: { average: 4.5, reviewCount: 32 },
+        ratings: { average: 4.5, reviewCount: 3220 },
         reviews: [{ reviewId: "r1", userId: "u1", rating: 5, comment: "Great chair!", date: "2024-10-26T10:00:00.000Z" }],
         tags: ["office", "chair", "ergonomic"]
     },
     {
         productId: "e5f6g7h8",
-        name: "Wireless Headphones",
+        title: "Wireless Headphones",
+        longTitle: "Wireless Headphones",
         description: "Noise-cancelling headphones with great sound.",
         category: "Electronics",
         brand: "AudioTech",
@@ -66,7 +69,8 @@ const mockProducts: productType[] = [
     },
     {
         productId: "i9j0k1l2",
-        name: "Cotton T-Shirt",
+        title: "Cotton T-Shirt",
+        longTitle: "Cotton T-Shirt",
         description: "Soft and comfortable cotton t-shirt.",
         category: "Clothing",
         brand: "FashionCo",
@@ -79,7 +83,8 @@ const mockProducts: productType[] = [
     },
     {
         productId: "m3n4o5p6",
-        name: "Cookware Set",
+        title: "Cookware Set",
+        longTitle: "Cookware Set",
         description: "Non-stick cookware set for everyday cooking.",
         category: "Kitchen",
         brand: "CookMaster",
@@ -92,7 +97,8 @@ const mockProducts: productType[] = [
     },
     {
         productId: "q7r8s9t0",
-        name: "Mystery Novel",
+        title: "Mystery Novel",
+        longTitle: "Mystery Novel",
         description: "A thrilling mystery novel.",
         category: "Books",
         brand: "ReadMore",
@@ -105,7 +111,8 @@ const mockProducts: productType[] = [
     },
     {
         productId: "u1v2w3x4",
-        name: "Building Blocks Set",
+        title: "Building Blocks Set",
+        longTitle: "Building Blocks Set",
         description: "A set of colorful building blocks for kids.",
         category: "Toys",
         brand: "PlayTime",
@@ -118,7 +125,8 @@ const mockProducts: productType[] = [
     },
     {
         productId: "y5z6a7b8",
-        name: "Laptop Backpack",
+        title: "Laptop Backpack",
+        longTitle: "Laptop Backpack",
         description: "Durable backpack for laptops and essentials.",
         category: "Bags",
         brand: "TravelGear",
@@ -131,7 +139,8 @@ const mockProducts: productType[] = [
     },
     {
         productId: "c9d0e1f2",
-        name: "Ceramic Coffee Mug",
+        title: "Ceramic Coffee Mug",
+        longTitle: "Ceramic Coffee Mug",
         description: "A stylish ceramic mug for coffee or tea.",
         category: "Kitchen",
         brand: "MugLife",
@@ -144,7 +153,8 @@ const mockProducts: productType[] = [
     },
     {
         productId: "g3h4i5j6",
-        name: "Running Shoes",
+        title: "Running Shoes",
+        longTitle: "Running Shoes",
         description: "Lightweight running shoes for optimal performance.",
         category: "Shoes",
         brand: "RunFast",
@@ -157,7 +167,8 @@ const mockProducts: productType[] = [
     },
     {
         productId: "k7l8m9n0",
-        name: "Desk Lamp",
+        title: "Desk Lamp",
+        longTitle: "Desk Lamp",
         description: "Adjustable desk lamp for reading and working.",
         category: "Lighting",
         brand: "BrightLight",
