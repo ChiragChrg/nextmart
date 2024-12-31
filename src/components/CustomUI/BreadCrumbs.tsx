@@ -12,7 +12,7 @@ type Props = {
 const BreadCrumbs = ({ routes = [], className = "" }: Props) => {
 
     return (
-        <div className={cn("w-full hidden lg:flex items-center", className)}>
+        <div className={cn("w-full hidden lg:flex justify-start items-center", className)}>
             <Link href={`/`} className='capitalize'>
                 Home
             </Link>
