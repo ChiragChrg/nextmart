@@ -1,4 +1,6 @@
 "use server";
+import { cookies } from 'next/headers';
+import { SignToken } from '@/lib/jwt';
 
 type ResponseType = {
     status: number;
@@ -24,6 +26,15 @@ export const adminLogin = async (previousState: unknown, formData: FormData) => 
         if (password !== process.env.ADMIN_PASSWORD) {
             return { status: 422, message: 'Invalid Password' } as ResponseType
         }
+
+        const token = await SignToken({ email }, "1h");
+        const cookieStore = await cookies();
+        cookieStore.set('nextmart_admin_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 60,
+            path: '/admin',
+        });
 
         return { status: 200, message: "Admin Login Successful!" } as ResponseType
     } catch (error: any) {

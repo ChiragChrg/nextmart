@@ -1,4 +1,3 @@
-export const ADMIN_BASE_ROUTE = "/admin";
 export const adminRoutes = ["/admin"];
 export const protectedRoutes = ["/profile", "/checkout", "/payment"];
 export const publicRoutes = ["/", "/search/:query", "/product/:productID"];
@@ -11,3 +10,5 @@ export const authRoutes = [
 ];
 
 export const DEFAULT_LOGIN_REDIRECT = "/";
+export const ADMIN_BASE_REDIRECT = "/admin";
+export const ADMIN_DASHBOARD_REDIRECT = "/admin/dashboard";
