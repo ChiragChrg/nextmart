@@ -5,7 +5,7 @@ import ProductSection from '@/components/ProductSection'
 
 const page = () => {
     return (
-        <main className="min-h-screen flex flex-col max-w-[1600px] mx-auto">
+        <main className="main_style">
             {/* <Categories /> */}
             <CarouselUI />
 

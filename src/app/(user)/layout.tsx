@@ -7,9 +7,9 @@ type PropType = {
 
 export default function UserLayout({ children }: PropType) {
     return (
-        <main className='flex flex-col min-h-screen'>
+        <>
             <Header />
             {children}
-        </main>
+        </>
     )
 }

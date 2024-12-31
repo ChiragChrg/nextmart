@@ -5,6 +5,8 @@
 @layer base {
   :root {
     --primaryClr: 221.2 83.2% 53.3%;
+    --secondaryClr: 221.2 80% 95%;
+    --secondaryClr_Alt: 221.2 80% 90%;
     --textClr: 222.2 84% 4.9%;
     --goldClr: 50 80% 50%;
 
@@ -76,6 +78,10 @@
 
   .flex_center {
     @apply flex justify-center items-center
+  }
+
+  .main_style {
+    @apply min-h-screen flex flex-col max-w-[1600px] mx-auto
   }
 
   .section_style {
