@@ -11,6 +11,8 @@ export default {
 		extend: {
 			colors: {
 				primaryClr: 'hsl(var(--primaryClr))',
+				secondaryClr: 'hsl(var(--secondaryClr))',
+				secondaryClr_Alt: 'hsl(var(--secondaryClr_Alt))',
 				textClr: 'hsl(var(--textClr))',
 				goldClr: 'hsl(var(--goldClr))',
 				background: 'hsl(var(--background))',
