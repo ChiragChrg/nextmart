@@ -1,7 +1,7 @@
 import React from 'react'
 import { CarouselUI } from '@/components/CarouselUI'
 import Categories from '@/components/CustomUI/Categories'
-import ProductSection from '@/components/ProductSection'
+import ProductSection from '@/components/products/ProductSection'
 
 const page = () => {
     return (

@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { productType } from './ProductSection'
-import StarRating from './CustomUI/StarRating'
+import StarRating from '../CustomUI/StarRating'
+
 
 type Props = {
     data: productType | null,
