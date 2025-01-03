@@ -1,0 +1,84 @@
+type Price {
+    original Float
+    current  Float
+    discount Float
+}
+
+type Stock {
+    quantity  Int
+    isInStock Boolean
+}
+
+type Image {
+    imageUrl     String
+    altText      String
+    blurData     String?
+    averageColor String?
+}
+
+type VariantDetail {
+    size  String
+    color String
+}
+
+type Feature {
+    variant VariantDetail?
+}
+
+type SizeVariant {
+    productSlug String?
+    size        String?
+}
+
+type ColorVariant {
+    productSlug String?
+    color       String?
+}
+
+type Variant {
+    size  SizeVariant[]
+    color ColorVariant[]
+}
+
+type Ratings {
+    average     Float
+    reviewCount Int
+}
+
+model Product {
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    productSlug String   @unique
+    title       String
+    longTitle   String
+    description String
+    brand       String
+    price       Price
+    stock       Stock
+    images      Image[]
+    features    Feature?
+    variants    Variant?
+    ratings     Ratings?
+    tags        String[]
+
+    category   Category[] @relation(fields: [categoryId], references: [id])
+    categoryId String[]   @db.ObjectId
+
+    OrderItem OrderItem[]
+    CartItem  CartItem[]
+}
+
+model Category {
+    id               String     @id @default(auto()) @map("_id") @db.ObjectId
+    categoryName     String     @unique
+    categorySlug     String
+    description      String?
+    imageUrl         String?
+    parentCategory   Category?  @relation("CategoryParent", fields: [parentCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    parentCategoryId String?    @db.ObjectId
+    childCategory    Category[] @relation("CategoryParent")
+    products         Product[]  @relation(fields: [productId], references: [id])
+    productId        String[]   @db.ObjectId
+
+    @@index([categorySlug], map: "category_slug_idx")
+    @@index([parentCategoryId], map: "parent_category_idx")
+}
