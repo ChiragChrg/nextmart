@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
 const Variants = ({ variants, activeVariant }: { variants: any, activeVariant: any }) => {
-    console.log({ variants })
+    // console.log({ variants })
+
     return (
         <div className="flex flex-col gap-4 py-2">
             {Object.keys(variants)?.map((variantKey: string, index: number) => {

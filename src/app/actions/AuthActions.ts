@@ -13,11 +13,19 @@ type ResponseType = {
 export const getUserByEmail = async (email: string) => {
     try {
         const user = await prisma.user.findUnique({
-            where: {
-                email,
-            },
+            where: { email }
         });
-        return user;
+
+        if (user) {
+            const { password, ...restInfo } = user
+            return {
+                ...restInfo,
+                createdAt: user.createdAt.toISOString(),
+                updatedAt: user.updatedAt.toISOString(),
+            };
+        }
+
+        return null;
     } catch (error) {
         console.log(error);
         return null;

@@ -17,24 +17,41 @@ import {
 import { useDispatch, useSelector } from "react-redux"
 import { userActions } from "@/store/userSlice"
 import { RootState } from "@/store"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useQuery } from "@tanstack/react-query"
+import { getUserByEmail } from "@/app/actions/AuthActions"
 
 const UserAvatar = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const { data: session, status } = useSession()
     const router = useRouter()
+    const pathname = usePathname()
 
-    const user = useSelector((state: RootState) => state.user)
+    const { user } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch()
 
+    const { data: fetchData, status: userFetchStatus } = useQuery({
+        queryKey: ["fetch-user"],
+        queryFn: async () => {
+            try {
+                const res = await getUserByEmail(session?.user?.email);
+                // console.log("Fetch_Res", res)
+                return res
+            } catch (error) {
+                console.error('Error fetching User:', error);
+                throw new Error('Failed to fetch User data');
+            }
+        },
+        enabled: !!session?.user?.email,
+    })
+
     useEffect(() => {
-        if (session?.user && status === "authenticated")
-            dispatch(userActions.setUser(session?.user))
-        else
-            dispatch(userActions.clearUser())
+        if (userFetchStatus === "success" && status === "authenticated") {
+            dispatch(userActions.setUser(fetchData))
+        }
 
         setLoading(false)
-    }, [session, status, dispatch])
+    }, [fetchData, userFetchStatus, session, status, dispatch])
 
     const HandleLogout = async () => {
         try {

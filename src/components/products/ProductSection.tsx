@@ -3,10 +3,12 @@ import React, { useState } from 'react'
 import ProductCard from './ProductCard'
 
 export type productType = {
-    productId: string
+    productID: string,
+    productSlug: string
     title: string,
     longTitle: string,
     description: string,
+    categoryId: string[],
     category: string,
     brand: string,
     price: {
@@ -24,159 +26,178 @@ export type productType = {
         blurData: string,
         averageColor: string
     }[],
-    ratings: {
+    features?: {
+        variant: {
+            size: string,
+            color: string,
+        }
+    },
+    variants?: {
+        size?: {
+            productSlug: string,
+            size: string
+        }[],
+        color?: {
+            productSlug: string,
+            color: string
+        }[]
+    }
+    ratings?: {
         average: number,
         reviewCount: number
     },
-    reviews: {
-        reviewId: string,
-        userId: string,
-        rating: number,
-        comment: string,
-        date: string,
-    }[],
     tags: string[]
 }
 
 const mockProducts: productType[] = [
     {
-        productId: "a1b2c3d4",
+        productID: "a1b2c3d4",
+        productSlug: "a1b2c3d4-Ergonomic-Office-Chair-BLUE",
         title: "Ergonomic Office Chair",
         longTitle: "Ergonomic Office Chair",
         description: "A comfortable chair for long work hours.",
         category: "Furniture",
+        categoryId: ["Furniture"],
         brand: "OfficePro",
         price: { original: 299, current: 249, discount: 17 },
         stock: { quantity: 50, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "Chair image", blurData: "blur1", averageColor: "#f0f0f0" }],
         ratings: { average: 4.5, reviewCount: 3220 },
-        reviews: [{ reviewId: "r1", userId: "u1", rating: 5, comment: "Great chair!", date: "2024-10-26T10:00:00.000Z" }],
         tags: ["office", "chair", "ergonomic"]
     },
     {
-        productId: "e5f6g7h8",
+        productID: "e5f6g7h8",
+        productSlug: "e5f6g7h8",
         title: "Wireless Headphones",
         longTitle: "Wireless Headphones",
         description: "Noise-cancelling headphones with great sound.",
         category: "Electronics",
+        categoryId: ["Electronics"],
         brand: "AudioTech",
         price: { original: 199, current: 149, discount: 25 },
         stock: { quantity: 20, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "Headphones image", blurData: "blur2", averageColor: "#000000" }],
         ratings: { average: 4.2, reviewCount: 60 },
-        reviews: [{ reviewId: "r2", userId: "u2", rating: 4, comment: "Good quality.", date: "2024-10-25T12:30:00.000Z" }],
         tags: ["headphones", "wireless", "audio"]
     },
     {
-        productId: "i9j0k1l2",
+        productID: "i9j0k1l2",
+        productSlug: "i9j0k1l2",
         title: "Cotton T-Shirt",
         longTitle: "Cotton T-Shirt",
         description: "Soft and comfortable cotton t-shirt.",
         category: "Clothing",
+        categoryId: ["Clothing"],
         brand: "FashionCo",
         price: { original: 29, current: 19, discount: 34 },
         stock: { quantity: 100, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "T-shirt image", blurData: "blur3", averageColor: "#ffffff" }],
         ratings: { average: 4.0, reviewCount: 45 },
-        reviews: [],
         tags: ["t-shirt", "cotton", "casual"]
     },
     {
-        productId: "m3n4o5p6",
+        productID: "m3n4o5p6",
+        productSlug: "m3n4o5p6",
         title: "Cookware Set",
         longTitle: "Cookware Set",
         description: "Non-stick cookware set for everyday cooking.",
         category: "Kitchen",
+        categoryId: ["Kitchen"],
         brand: "CookMaster",
         price: { original: 149, current: 99, discount: 33 },
         stock: { quantity: 30, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "Cookware image", blurData: "blur4", averageColor: "#c0c0c0" }],
         ratings: { average: 4.6, reviewCount: 28 },
-        reviews: [],
         tags: ["cookware", "kitchen", "pots"]
     },
     {
-        productId: "q7r8s9t0",
+        productID: "q7r8s9t0",
+        productSlug: "q7r8s9t0",
         title: "Mystery Novel",
         longTitle: "Mystery Novel",
         description: "A thrilling mystery novel.",
         category: "Books",
+        categoryId: ["Books"],
         brand: "ReadMore",
         price: { original: 12, current: 9, discount: 25 },
         stock: { quantity: 75, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "Book cover", blurData: "blur5", averageColor: "#a08060" }],
         ratings: { average: 4.3, reviewCount: 15 },
-        reviews: [],
         tags: ["book", "mystery", "fiction"]
     },
     {
-        productId: "u1v2w3x4",
+        productID: "u1v2w3x4",
+        productSlug: "u1v2w3x4",
         title: "Building Blocks Set",
         longTitle: "Building Blocks Set",
         description: "A set of colorful building blocks for kids.",
         category: "Toys",
+        categoryId: ["Toys"],
         brand: "PlayTime",
         price: { original: 39, current: 29, discount: 26 },
         stock: { quantity: 60, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "Blocks image", blurData: "blur6", averageColor: "#ff0000" }],
         ratings: { average: 4.7, reviewCount: 35 },
-        reviews: [],
         tags: ["toys", "blocks", "kids"]
     },
     {
-        productId: "y5z6a7b8",
+        productID: "y5z6a7b8",
+        productSlug: "y5z6a7b8",
         title: "Laptop Backpack",
         longTitle: "Laptop Backpack",
         description: "Durable backpack for laptops and essentials.",
         category: "Bags",
+        categoryId: ["Bags"],
         brand: "TravelGear",
         price: { original: 79, current: 59, discount: 25 },
         stock: { quantity: 40, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "Backpack image", blurData: "blur7", averageColor: "#008000" }],
         ratings: { average: 4.1, reviewCount: 22 },
-        reviews: [],
         tags: ["backpack", "laptop", "travel"]
     },
     {
-        productId: "c9d0e1f2",
+        productID: "c9d0e1f2",
+        productSlug: "c9d0e1f2",
         title: "Ceramic Coffee Mug",
         longTitle: "Ceramic Coffee Mug",
         description: "A stylish ceramic mug for coffee or tea.",
         category: "Kitchen",
+        categoryId: ["Kitchen"],
         brand: "MugLife",
         price: { original: 15, current: 10, discount: 33 },
         stock: { quantity: 120, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "Mug image", blurData: "blur8", averageColor: "#0000ff" }],
         ratings: { average: 4.4, reviewCount: 50 },
-        reviews: [],
         tags: ["mug", "coffee", "tea"]
     },
     {
-        productId: "g3h4i5j6",
+        productID: "g3h4i5j6",
+        productSlug: "g3h4i5j6",
         title: "Running Shoes",
         longTitle: "Running Shoes",
         description: "Lightweight running shoes for optimal performance.",
         category: "Shoes",
+        categoryId: ["Shoes"],
         brand: "RunFast",
         price: { original: 99, current: 79, discount: 20 },
         stock: { quantity: 80, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "Shoes image", blurData: "blur9", averageColor: "#800080" }],
         ratings: { average: 4.8, reviewCount: 65 },
-        reviews: [],
         tags: ["shoes", "running", "sports"]
     },
     {
-        productId: "k7l8m9n0",
+        productID: "k7l8m9n0",
+        productSlug: "k7l8m9n0",
         title: "Desk Lamp",
         longTitle: "Desk Lamp",
         description: "Adjustable desk lamp for reading and working.",
         category: "Lighting",
+        categoryId: ["Lighting"],
         brand: "BrightLight",
         price: { original: 49, current: 39, discount: 20 },
         stock: { quantity: 90, isInStock: true },
         images: [{ imageUrl: "http://via.placeholder.com/400x400", altText: "Lamp image", blurData: "blur10", averageColor: "#ffff00" }],
         ratings: { average: 4.2, reviewCount: 38 },
-        reviews: [],
         tags: ["lamp", "desk", "lighting"]
     }
 ]

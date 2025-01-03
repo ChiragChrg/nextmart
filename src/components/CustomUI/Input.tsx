@@ -4,25 +4,28 @@ import { useState, SetStateAction, Dispatch } from "react"
 
 interface InputProps {
     label: string,
-    type: "text" | "email" | "password",
+    type: "text" | "email" | "password" | "number",
     name?: string,
     placeholder?: string,
     defaultValue?: string,
     required?: boolean,
     disabled?: boolean,
+    className?: string,
+    min?: number,
+    max?: number,
     setValue?: Dispatch<SetStateAction<any>>
-    className?: string
+    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
 }
 
 
-const Input = ({ label, type, name, placeholder, defaultValue, required = true, disabled = false, setValue, className }: InputProps) => {
+const Input = ({ label, type, name, placeholder, defaultValue, required = true, disabled = false, className, min, max, setValue, onBlur }: InputProps) => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const TogglePassword = () => {
         setShowPassword(prev => !prev)
     }
 
     return (
-        <label className={cn('relative border border-secondaryClr sm:focus-within:border-primaryClr rounded p-1 flex flex-col', className)}>
+        <label className={cn('relative border border-primaryClr_Lite sm:focus-within:border-primaryClr rounded p-1 flex flex-col w-full', className)}>
             <span className='absolute top-[-0.9em] text-[0.9em] bg-background px-1 text-slate-500'>{label}</span>
             <input
                 type={showPassword ? "text" : type}
@@ -32,6 +35,9 @@ const Input = ({ label, type, name, placeholder, defaultValue, required = true, 
                 required={required}
                 disabled={disabled}
                 onChange={(e) => setValue && setValue(e.target.value)}
+                onBlur={onBlur}
+                min={min}
+                max={max}
                 className='text-[1em] bg-background text-textClr px-2 py-1 border-none outline-none disabled:text-muted-foreground' />
 
             {type === "password" &&

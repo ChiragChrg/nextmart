@@ -11,7 +11,7 @@ type Props = {
 const ProductCard = ({ data }: Props) => {
     return (
         <Link
-            href={`product/${data?.category}/${data?.title}`}
+            href={`product/${data?.category}/${data?.productSlug}`}
             className="relative flex_center flex-col rounded-md overflow-hidden cursor-pointer">
             <Image
                 src={data?.images[0].imageUrl as string}
