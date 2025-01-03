@@ -58,7 +58,7 @@ const NewCategory = () => {
             toast.success("Category created successfully!")
             router.push("/admin/category")
         }
-    }, [state?.status])
+    }, [state?.status, router])
 
     return (
         <section className='admin_section'>

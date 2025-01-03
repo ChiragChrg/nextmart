@@ -52,7 +52,7 @@ const CartIcon = ({ width = "100%", height = "100%", className = "", showText = 
 
             cartItems.forEach(item => dispatch(cartActions.updateCart(item)));
         }
-    }, [cartData, cartFetchStatus])
+    }, [cartData, cartFetchStatus, dispatch])
 
     return (
         <Button variant={"secondary"} size={"icon"} className={cn(`relative flex_center flex-col bg-secondaryClr hover:bg-secondaryClr_Alt cursor-pointer rounded-full w-12 h-12`, className)}>

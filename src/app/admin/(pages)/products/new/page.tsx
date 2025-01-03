@@ -79,7 +79,7 @@ const NewProduct = () => {
             toast.success("Category created successfully!")
             router.push("/admin/category")
         }
-    }, [state?.status])
+    }, [state?.status, router])
 
     const handleProductPrice = (e: React.FocusEvent<HTMLInputElement>) => {
         const currentPrice = parseInt(e.target.value, 10)
