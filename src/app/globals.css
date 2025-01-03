@@ -4,9 +4,13 @@
 
 @layer base {
   :root {
-    --primaryClr: 221.2 83.2% 53.3%;
+    --primaryClr: 221.2 83.2% 53%;
+    --primaryClr_Alt: 221.2 83.2% 65%;
+    --primaryClr_Lite: 221.2 83.2% 80%;
+
     --secondaryClr: 221.2 80% 95%;
-    --secondaryClr_Alt: 221.2 80% 90%;
+    --secondaryClr_Alt: 221.2 80% 91%;
+
     --textClr: 222.2 84% 4.9%;
     --goldClr: 50 80% 50%;
 
@@ -86,6 +90,10 @@
 
   .section_style {
     @apply w-full h-full overflow-y-auto px-2
+  }
+
+  .admin_section {
+    @apply bg-background w-full rounded-md p-4 shadow
   }
 }
 

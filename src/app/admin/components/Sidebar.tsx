@@ -1,14 +1,17 @@
 'use client'
 import { TextLogoSVG } from '@/assets/SVGs'
 import { Button } from '@/components/ui/button'
-import { LayoutGridIcon, LogOutIcon, PackageIcon, ShoppingBagIcon, User2Icon, UsersRoundIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { LayoutGridIcon, LogOutIcon, PackageIcon, ShoppingBagIcon, SwatchBookIcon, User2Icon, UsersRoundIcon } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 const Sidebar = () => {
     const { data: session } = useSession()
+    const pathname = usePathname()
 
     const NavigationList = [
         {
@@ -17,7 +20,12 @@ const Sidebar = () => {
             icon: <LayoutGridIcon />,
         },
         {
-            title: "Products",
+            title: "Category",
+            path: "/admin/category",
+            icon: <SwatchBookIcon />,
+        },
+        {
+            title: "Product",
             path: "/admin/products",
             icon: <PackageIcon />,
         },
@@ -34,22 +42,25 @@ const Sidebar = () => {
     ]
 
     return (
-        <aside className='w-full sm:w-1/5 h-full flex_center flex-col bg-secondaryClr relative border border-primaryClr'>
+        <aside className='w-full sm:w-1/5 h-full flex_center flex-col bg-secondaryClr relative'>
             <Link href="/admin" className="flex_center gap-2 w-full p-2">
                 <TextLogoSVG width='150px' />
                 <span className="text-[1.5em]">| ADMIN</span>
             </Link>
 
-            <nav className='flex flex-col gap-2 p-4 w-full h-full'>
+            <nav className='flex flex-col gap-2 px-2 py-4 w-full h-full'>
                 {NavigationList.map((nav, index) => (
-                    <Link key={index} href={nav.path} className='flex gap-4 p-3 rounded-md border border-primaryClr'>
+                    <Link
+                        key={index}
+                        href={nav.path}
+                        className={cn('flex gap-4 p-3 rounded-md bg-secondaryClr_Alt', pathname.includes(nav.path) && "bg-primaryClr text-white")}>
                         {nav.icon}
                         <span>{nav.title}</span>
                     </Link>
                 ))}
             </nav>
 
-            <div className="w-[90%] flex justify-between items-center gap-4 p-2 m-2 rounded-md bg-secondaryClr_Alt">
+            <div className="w-[95%] flex justify-between items-center gap-4 p-2 rounded-md bg-secondaryClr_Alt">
                 <div className="flex_center gap-3">
                     {session?.user?.image ?
                         <Image src={session?.user?.image} alt="ProfileImage" width={40} height={40} className='rounded-full' />
