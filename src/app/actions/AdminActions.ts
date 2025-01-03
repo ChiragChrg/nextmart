@@ -1,6 +1,7 @@
 "use server";
 import { cookies } from 'next/headers';
 import { SignToken } from '@/lib/jwt';
+import { prisma } from '@/prisma';
 
 type ResponseType = {
     status: number;
@@ -37,6 +38,35 @@ export const adminLogin = async (previousState: unknown, formData: FormData) => 
         });
 
         return { status: 200, message: "Admin Login Successful!" } as ResponseType
+    } catch (error: any) {
+        console.log("Admin_Login : ", error)
+        return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
+    }
+}
+
+export const createCategory = async (previousState: unknown, formData: FormData) => {
+    const parentCategoryId = formData.get("parentCategoryID") as string;
+    const categoryName = formData.get("categoryName") as string;
+    const categorySlug = formData.get("categorySlug") as string;
+    const categoryDescription = formData.get("categoryDescription") as string;
+    // console.log("createCategory", { parentCategoryId, categoryName, categorySlug, categoryDescription })
+
+    try {
+        if (!categoryName || !categorySlug || !categoryDescription) {
+            return { status: 422, message: "Invalid Category Fields!" } as ResponseType
+        }
+
+        const newCategory = await prisma.category.create({
+            data: {
+                parentCategoryId,
+                categoryName,
+                categorySlug,
+                description: categoryDescription
+            }
+        })
+
+        // console.log("newCategory", newCategory)
+        return { status: 201, message: "Category Created Successfully!", response: newCategory } as ResponseType
     } catch (error: any) {
         console.log("Admin_Login : ", error)
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
