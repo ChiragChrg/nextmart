@@ -1,63 +1,63 @@
 "use client"
 import React, { useState } from 'react'
 import ProductCard from './ProductCard'
+import { productType } from '@/types'
 
-export type productType = {
-    productID: string,
-    productSlug: string
-    title: string,
-    longTitle: string,
-    description: string,
-    categoryId: string[],
-    category: string,
-    brand: string,
-    price: {
-        original: number,
-        current: number,
-        discount: number,
-    },
-    stock: {
-        quantity: number,
-        isInStock: boolean
-    }
-    images: {
-        imageUrl: string,
-        altText: string,
-        blurData: string,
-        averageColor: string
-    }[],
-    features?: {
-        variant: {
-            size: string,
-            color: string,
-        }
-    },
-    variants?: {
-        size?: {
-            productSlug: string,
-            size: string
-        }[],
-        color?: {
-            productSlug: string,
-            color: string
-        }[]
-    }
-    ratings?: {
-        average: number,
-        reviewCount: number
-    },
-    tags: string[]
-}
+// export type productType = {
+//     productId: string,
+//     productSlug: string
+//     title: string,
+//     longTitle: string,
+//     description: string,
+//     categoryId: string,
+//     category: string,
+//     brand: string,
+//     price: {
+//         original: number,
+//         current: number,
+//         discount: number,
+//     },
+//     stock: {
+//         quantity: number,
+//         isInStock: boolean
+//     }
+//     images: {
+//         imageUrl: string,
+//         altText: string,
+//         blurData: string,
+//         averageColor: string
+//     }[],
+//     features?: {
+//         variant: {
+//             size: string,
+//             color: string,
+//         }
+//     },
+//     variants?: {
+//         size?: {
+//             productSlug: string,
+//             size: string
+//         }[],
+//         color?: {
+//             productSlug: string,
+//             color: string
+//         }[]
+//     }
+//     ratings?: {
+//         average: number,
+//         reviewCount: number
+//     },
+//     tags: string[]
+// }
 
 const mockProducts: productType[] = [
     {
-        productID: "a1b2c3d4",
         productSlug: "a1b2c3d4-Ergonomic-Office-Chair-BLUE",
         title: "Ergonomic Office Chair",
         longTitle: "Ergonomic Office Chair",
         description: "A comfortable chair for long work hours.",
         category: "Furniture",
-        categoryId: ["Furniture"],
+        categoryId: "Furniture",
         brand: "OfficePro",
         price: { original: 299, current: 249, discount: 17 },
         stock: { quantity: 50, isInStock: true },
@@ -66,13 +66,12 @@ const mockProducts: productType[] = [
         tags: ["office", "chair", "ergonomic"]
     },
     {
-        productID: "e5f6g7h8",
         productSlug: "e5f6g7h8",
         title: "Wireless Headphones",
         longTitle: "Wireless Headphones",
         description: "Noise-cancelling headphones with great sound.",
         category: "Electronics",
-        categoryId: ["Electronics"],
+        categoryId: "Electronics",
         brand: "AudioTech",
         price: { original: 199, current: 149, discount: 25 },
         stock: { quantity: 20, isInStock: true },
@@ -81,13 +80,12 @@ const mockProducts: productType[] = [
         tags: ["headphones", "wireless", "audio"]
     },
     {
-        productID: "i9j0k1l2",
         productSlug: "i9j0k1l2",
         title: "Cotton T-Shirt",
         longTitle: "Cotton T-Shirt",
         description: "Soft and comfortable cotton t-shirt.",
         category: "Clothing",
-        categoryId: ["Clothing"],
+        categoryId: "Clothing",
         brand: "FashionCo",
         price: { original: 29, current: 19, discount: 34 },
         stock: { quantity: 100, isInStock: true },
@@ -96,13 +94,12 @@ const mockProducts: productType[] = [
         tags: ["t-shirt", "cotton", "casual"]
     },
     {
-        productID: "m3n4o5p6",
         productSlug: "m3n4o5p6",
         title: "Cookware Set",
         longTitle: "Cookware Set",
         description: "Non-stick cookware set for everyday cooking.",
         category: "Kitchen",
-        categoryId: ["Kitchen"],
+        categoryId: "Kitchen",
         brand: "CookMaster",
         price: { original: 149, current: 99, discount: 33 },
         stock: { quantity: 30, isInStock: true },
@@ -111,13 +108,12 @@ const mockProducts: productType[] = [
         tags: ["cookware", "kitchen", "pots"]
     },
     {
-        productID: "q7r8s9t0",
         productSlug: "q7r8s9t0",
         title: "Mystery Novel",
         longTitle: "Mystery Novel",
         description: "A thrilling mystery novel.",
         category: "Books",
-        categoryId: ["Books"],
+        categoryId: "Books",
         brand: "ReadMore",
         price: { original: 12, current: 9, discount: 25 },
         stock: { quantity: 75, isInStock: true },
@@ -126,13 +122,12 @@ const mockProducts: productType[] = [
         tags: ["book", "mystery", "fiction"]
     },
     {
-        productID: "u1v2w3x4",
         productSlug: "u1v2w3x4",
         title: "Building Blocks Set",
         longTitle: "Building Blocks Set",
         description: "A set of colorful building blocks for kids.",
         category: "Toys",
-        categoryId: ["Toys"],
+        categoryId: "Toys",
         brand: "PlayTime",
         price: { original: 39, current: 29, discount: 26 },
         stock: { quantity: 60, isInStock: true },
@@ -141,13 +136,12 @@ const mockProducts: productType[] = [
         tags: ["toys", "blocks", "kids"]
     },
     {
-        productID: "y5z6a7b8",
         productSlug: "y5z6a7b8",
         title: "Laptop Backpack",
         longTitle: "Laptop Backpack",
         description: "Durable backpack for laptops and essentials.",
         category: "Bags",
-        categoryId: ["Bags"],
+        categoryId: "Bags",
         brand: "TravelGear",
         price: { original: 79, current: 59, discount: 25 },
         stock: { quantity: 40, isInStock: true },
@@ -156,13 +150,12 @@ const mockProducts: productType[] = [
         tags: ["backpack", "laptop", "travel"]
     },
     {
-        productID: "c9d0e1f2",
         productSlug: "c9d0e1f2",
         title: "Ceramic Coffee Mug",
         longTitle: "Ceramic Coffee Mug",
         description: "A stylish ceramic mug for coffee or tea.",
         category: "Kitchen",
-        categoryId: ["Kitchen"],
+        categoryId: "Kitchen",
         brand: "MugLife",
         price: { original: 15, current: 10, discount: 33 },
         stock: { quantity: 120, isInStock: true },
@@ -171,13 +164,12 @@ const mockProducts: productType[] = [
         tags: ["mug", "coffee", "tea"]
     },
     {
-        productID: "g3h4i5j6",
         productSlug: "g3h4i5j6",
         title: "Running Shoes",
         longTitle: "Running Shoes",
         description: "Lightweight running shoes for optimal performance.",
         category: "Shoes",
-        categoryId: ["Shoes"],
+        categoryId: "Shoes",
         brand: "RunFast",
         price: { original: 99, current: 79, discount: 20 },
         stock: { quantity: 80, isInStock: true },
@@ -186,13 +178,12 @@ const mockProducts: productType[] = [
         tags: ["shoes", "running", "sports"]
     },
     {
-        productID: "k7l8m9n0",
         productSlug: "k7l8m9n0",
         title: "Desk Lamp",
         longTitle: "Desk Lamp",
         description: "Adjustable desk lamp for reading and working.",
         category: "Lighting",
-        categoryId: ["Lighting"],
+        categoryId: "Lighting",
         brand: "BrightLight",
         price: { original: 49, current: 39, discount: 20 },
         stock: { quantity: 90, isInStock: true },

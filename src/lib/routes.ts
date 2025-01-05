@@ -1,6 +1,6 @@
 export const adminRoutes = ["/admin"];
 export const protectedRoutes = ["/profile", "/checkout", "/payment"];
-export const publicRoutes = ["/", "/search/:query", "/product/:productID"];
+export const publicRoutes = ["/", "/search/:query", "/product/:productId"];
 
 export const authRoutes = [
     "/login",

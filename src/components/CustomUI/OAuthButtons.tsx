@@ -9,7 +9,7 @@ const OAuthButtons = () => {
     const params = useSearchParams().get("callbackUrl")
     const callback = params ? params as string : ""
 
-    const handleOAuthLogin = async (provider: any) => {
+    const handleOAuthLogin = async (provider: "google" | "github") => {
         const OAuthTostID = toast.loading(`Connecting to ${provider.charAt(0).toUpperCase() + provider.slice(1)}...`)
 
         try {
