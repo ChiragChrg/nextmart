@@ -111,8 +111,8 @@ const NewProduct = () => {
     }
 
     return (
-        <section className='admin_section'>
-            <div className="flex justify-between items-center">
+        <section className='admin_section w-full flex flex-col justify-start items-center gap-[4em]'>
+            <div className="flex justify-between items-center w-full">
                 <h1 className='text-[2em] font-bold'>Add new <span className='text-primaryClr'>Product</span></h1>
 
                 <Button className='flex_center gap-2 bg-primaryClr hover:bg-primaryClr_Alt' asChild>
@@ -134,7 +134,10 @@ const NewProduct = () => {
                     productData={productData}
                     updateProductData={updateProductData}
                 />
-                <ProductImages />
+                <ProductImages
+                    productData={productData}
+                    updateProductData={updateProductData}
+                />
             </MultiStepForm>
         </section>
     )

@@ -110,6 +110,15 @@ const ProductInfo = ({ productData, updateProductData, categoryList, productList
                     onChange={e => updateProductData({ description: e.target.value })}
                     className='text-[1em] bg-background text-textClr px-2 py-1 border-none outline-none resize-none disabled:text-muted-foreground' />
             </label>
+
+            <Input
+                type='text'
+                name='tags'
+                label='Product Tags'
+                placeholder='Enter Product Tags (Separate Tags by `,` Commas)'
+                value={productData.tags.join(', ')}
+                onChange={e => updateProductData({ tags: e.target.value.split(",").map(tag => tag.trim()) })}
+                required />
         </div>
     )
 }

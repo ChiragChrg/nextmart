@@ -26,7 +26,7 @@ const MultiStepForm = ({ children, onSubmit, isPending }: Props) => {
     }
 
     return (
-        <form onSubmit={onSubmit} className='border border-primaryClr flex flex-col justify-between items-center gap-6 max-w-[800px] p-4 mx-auto max-h-[90%]'>
+        <form onSubmit={onSubmit} className='flex flex-col justify-between items-center gap-6 w-full max-w-[800px] p-4 max-h-[90%] rounded-md border border-secondaryClr shadow-lg'>
             <div className="w-full flex_center">
                 {steps.map((_, index) => {
                     const isActiveStep = index <= currentStep;

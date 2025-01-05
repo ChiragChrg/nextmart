@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast'
 import { SessionProvider } from 'next-auth/react'
 import { store } from '@/store'
 import { Provider as StoreProvider } from 'react-redux'
+import { EdgeStoreProvider } from '@/lib/edgestore'
 
 type ProviderProps = {
     children: React.ReactNode,
@@ -34,9 +35,11 @@ const Provider = ({ children }: ProviderProps) => {
             <SessionProvider refetchOnWindowFocus={false}>
                 <StoreProvider store={store}>
                     <QueryClientProvider client={queryClient}>
-                        {children}
-                        <Toaster position="bottom-right" />
-                        <ReactQueryDevtools initialIsOpen={false} />
+                        <EdgeStoreProvider>
+                            {children}
+                            <Toaster position="bottom-right" />
+                            <ReactQueryDevtools initialIsOpen={false} />
+                        </EdgeStoreProvider>
                     </QueryClientProvider>
                 </StoreProvider>
             </SessionProvider>

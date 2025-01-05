@@ -42,7 +42,7 @@ const Sidebar = () => {
     ]
 
     return (
-        <aside className='w-full sm:w-1/5 h-full flex_center flex-col bg-secondaryClr relative'>
+        <aside className='w-full sm:w-1/5 sm:min-w-[265px] h-full flex_center flex-col bg-secondaryClr relative'>
             <Link href="/admin" className="flex_center gap-2 w-full p-2">
                 <TextLogoSVG width='150px' />
                 <span className="text-[1.5em]">| ADMIN</span>
