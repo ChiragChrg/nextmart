@@ -2,6 +2,7 @@
 import { cookies } from 'next/headers';
 import { SignToken } from '@/lib/jwt';
 import { prisma } from '@/prisma';
+import { productType } from '@/types';
 
 type ResponseType = {
     status: number;
@@ -68,7 +69,43 @@ export const createCategory = async (previousState: unknown, formData: FormData)
         // console.log("newCategory", newCategory)
         return { status: 201, message: "Category Created Successfully!", response: newCategory } as ResponseType
     } catch (error: any) {
-        console.log("Admin_Login : ", error)
+        console.log("Create_Category_Error : ", error)
+        return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
+    }
+}
+
+export const createProduct = async (productData: productType) => {
+    const { productSlug, title, longTitle, description, categoryId, brand, price, stock, images, features, variants, ratings, tags } = productData
+    console.log("createProduct", productData)
+
+
+    try {
+        if (!productSlug || !title || !longTitle || !description || !categoryId || !brand || !price || !stock || !images || !tags) {
+            return { status: 422, message: "Invalid Category Fields!" } as ResponseType
+        }
+
+        const newProduct = await prisma.product.create({
+            data: {
+                productSlug,
+                title,
+                longTitle,
+                description,
+                categoryId,
+                brand,
+                price,
+                stock,
+                images,
+                features,
+                variants,
+                ratings,
+                tags
+            }
+        })
+
+        console.log("newProduct", newProduct)
+        return { status: 201, message: "Product Created Successfully!" } as ResponseType
+    } catch (error: any) {
+        console.log("Create_Product_Error : ", error)
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
     }
 }

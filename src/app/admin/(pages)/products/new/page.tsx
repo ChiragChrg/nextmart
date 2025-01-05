@@ -1,40 +1,79 @@
 "use client"
 
-import { createCategory } from '@/app/actions/AdminActions'
-import Input from '@/components/CustomUI/Input'
-import SubmitButton from '@/components/CustomUI/SubmitButton'
+import { createProduct } from '@/app/actions/AdminActions'
 import { Button } from '@/components/ui/button'
 import { CategoryType } from '@/store/categorySlice'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronLeftIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { useActionState, useEffect, useState } from 'react'
+import React, { FormEvent, useActionState, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getAllCategories, getAllProducts } from '@/app/actions/ProductsAction'
-import { productType } from '@/components/products/ProductSection'
-import { z } from 'zod'
+import MultiStepForm from '@/components/Forms/MultiStepForm'
+import ProductInfo from './components/ProductInfo'
+import ProductPrice from './components/ProductPrice'
+import ProductImages from './components/ProductImages'
+import { productType } from '@/types'
 
-
+const INITIAL_PRODUCT_DATA: productType = {
+    productSlug: "",
+    title: "",
+    longTitle: "",
+    description: "",
+    categoryId: "",
+    brand: "",
+    price: {
+        original: 0,
+        current: 0,
+        discount: 0,
+    },
+    stock: {
+        quantity: 0,
+        isInStock: false
+    },
+    images: [],
+    features: undefined,
+    variants: undefined,
+    ratings: {
+        average: 0,
+        reviewCount: 0
+    },
+    tags: []
+}
 
 const NewProduct = () => {
-    const [productName, setProductName] = useState<string>("")
-    const [productSlug, setProductSlug] = useState<string>("")
-    const [productPrice, setproductPrice] = useState<string>("")
-
-
-    const [disableSubmit, setDisableSubmit] = useState<boolean>(false)
-    const [state, action, isPending] = useActionState(createCategory, undefined)
+    const [productData, setProductData] = useState<productType>(INITIAL_PRODUCT_DATA)
+    const [isPending, setIsPending] = useState<boolean>(false)
     const router = useRouter()
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+        setIsPending(true)
+
+        const [categoryId, category] = productData.categoryId.split("<|>")
+        const formattedData = {
+            ...productData,
+            categoryId,
+            category
+        }
+
+        try {
+            const response = await createProduct(formattedData);
+            if (response.status === 201) {
+                toast.success("Product created successfully!");
+                router.push("/admin/products");
+            } else {
+                toast.error("Failed to create product");
+            }
+        } catch (error) {
+            console.error('Error creating product:', error);
+            toast.error("An error occurred while creating the product");
+        } finally {
+            setIsPending(false)
+        }
+    }
 
     const { data: categoryList } = useQuery({
         queryKey: ["fetch-category"],
@@ -64,29 +103,11 @@ const NewProduct = () => {
         }
     })
 
-    useEffect(() => {
-        if (productSlug.length <= 0) return
 
-        const productExists = productList?.some(product => product.productSlug.toLowerCase() === productSlug.toLowerCase())
-        if (productExists) {
-            setDisableSubmit(true)
-            toast.error("Product Slug already Exists!")
-        }
-    }, [productList, productSlug])
-
-    useEffect(() => {
-        if (state?.status === 201) {
-            toast.success("Category created successfully!")
-            router.push("/admin/category")
-        }
-    }, [state?.status, router])
-
-    const handleProductPrice = (e: React.FocusEvent<HTMLInputElement>) => {
-        const currentPrice = parseInt(e.target.value, 10)
-        if (currentPrice <= 0) {
-            toast.error("Price cannot be ₹0")
-            return
-        }
+    const updateProductData = (fields: Partial<productType>) => {
+        setProductData(prev => {
+            return { ...prev, ...fields }
+        })
     }
 
     return (
@@ -102,92 +123,19 @@ const NewProduct = () => {
                 </Button>
             </div>
 
-            <form action={action} className='flex_center flex-col gap-6 max-w-[800px] p-4 mx-auto h-[90%] mt-auto'>
-                <div className="w-full flex flex-col gap-3">
-                    <span className='self-start text-[1.1em]'>Product Details</span>
-                    <Select name='categoryId'>
-                        <SelectTrigger className='relative'>
-                            <span className='absolute top-[-0.9em] left-1.5 text-[0.9em] bg-background px-1 text-slate-500'>Select Product Category</span>
-                            <SelectValue placeholder="Category Name" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {categoryList?.map((item, index) =>
-                                <SelectItem
-                                    key={index}
-                                    value={`${item.categoryID}<|>${item.categoryName}`}>
-                                    {item.categoryName}
-                                </SelectItem>
-                            )}
-                        </SelectContent>
-                    </Select>
-                </div>
-
-                <Input
-                    type='text'
-                    name='productName'
-                    label='Product Name'
-                    placeholder='Enter Product Name'
-                    setValue={setProductName}
-                    required />
-                <Input
-                    type='text'
-                    name='productSlug'
-                    label='Product Slug'
-                    placeholder='Enter Product Slug'
-                    defaultValue={productName.toLowerCase().replaceAll(" ", "-")}
-                    setValue={setProductSlug}
-                    required />
-                <Input
-                    type='text'
-                    name='title'
-                    label='Short Title'
-                    placeholder='Enter Product Title'
-                    required />
-                <Input
-                    type='text'
-                    name='longTitle'
-                    label='Full Title'
-                    placeholder='Enter Full Title'
-                    required />
-
-                <Input
-                    type='text'
-                    name='brand'
-                    label='Product Brand'
-                    placeholder='Enter Product Brand'
-                    required />
-
-                <label className={'relative border border-primaryClr_Lite sm:focus-within:border-primaryClr rounded p-1 flex flex-col w-full'}>
-                    <span className='absolute top-[-0.9em] text-[0.9em] bg-background px-1 text-slate-500'>Product Description</span>
-                    <textarea
-                        name="description"
-                        placeholder='Enter Product Description'
-                        rows={4}
-                        required={true}
-                        className='text-[1em] bg-background text-textClr px-2 py-1 border-none outline-none resize-none disabled:text-muted-foreground' />
-                </label>
-
-
-                <div className="w-full flex flex-col gap-3">
-                    <span className='self-start text-[1.1em]'>Product Price</span>
-                    <Input
-                        type='number'
-                        name='currentPrice'
-                        label='Maximum Retail Price'
-                        placeholder='Enter Product Price (in ₹ Rupees)'
-                        onBlur={handleProductPrice}
-                        required />
-                    <Input
-                        type='number'
-                        name='brand'
-                        label='Product Discount'
-                        placeholder='Enter Discount (in % Percentage)'
-                        min={0}
-                        max={100}
-                        required />
-                </div>
-
-            </form>
+            <MultiStepForm onSubmit={handleSubmit} isPending={isPending}>
+                <ProductInfo
+                    productData={productData}
+                    updateProductData={updateProductData}
+                    categoryList={categoryList}
+                    productList={productList}
+                />
+                <ProductPrice
+                    productData={productData}
+                    updateProductData={updateProductData}
+                />
+                <ProductImages />
+            </MultiStepForm>
         </section>
     )
 }

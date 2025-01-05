@@ -60,8 +60,8 @@ model Product {
     ratings     Ratings?
     tags        String[]
 
-    category   Category[] @relation(fields: [categoryId], references: [id])
-    categoryId String[]   @db.ObjectId
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId String   @db.ObjectId
 
     OrderItem OrderItem[]
     CartItem  CartItem[]
@@ -76,7 +76,7 @@ model Category {
     parentCategory   Category?  @relation("CategoryParent", fields: [parentCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
     parentCategoryId String?    @db.ObjectId
     childCategory    Category[] @relation("CategoryParent")
-    products         Product[]  @relation(fields: [productId], references: [id])
+    products         Product[]
     productId        String[]   @db.ObjectId
 
     @@index([categorySlug], map: "category_slug_idx")

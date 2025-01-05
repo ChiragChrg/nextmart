@@ -121,7 +121,7 @@ const NewCategory = () => {
                                     <SelectValue placeholder="Parent Category Name" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {categoryList?.map((item, index) => <SelectItem key={index} value={item.categoryID}>{item.categoryName}</SelectItem>)}
+                                    {categoryList?.map((item, index) => <SelectItem key={index} value={item.categoryId}>{item.categoryName}</SelectItem>)}
                                 </SelectContent>
                             </Select>
 
