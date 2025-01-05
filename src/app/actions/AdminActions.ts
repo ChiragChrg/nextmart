@@ -7,8 +7,8 @@ import { productType } from '@/types';
 type ResponseType = {
     status: number;
     message: string;
-    formFields?: any;
-    response?: any;
+    formFields?: unknown;
+    response?: unknown;
 }
 
 export const adminLogin = async (previousState: unknown, formData: FormData) => {

@@ -4,6 +4,7 @@ import LoaderIcon from '@/components/CustomUI/LoaderIcon';
 import { Button } from '@/components/ui/button';
 import { formatFileSize } from '@edgestore/react/utils';
 import { CheckCircleIcon, ImageUpIcon, UploadCloudIcon, X } from 'lucide-react';
+import Image from 'next/image';
 import * as React from 'react';
 import { useDropzone, type DropzoneOptions } from 'react-dropzone';
 import { twMerge } from 'tailwind-merge';
@@ -138,6 +139,8 @@ const MultiImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
         // error validation messages
         const errorMessage = React.useMemo(() => {
             if (fileRejections[0]) {
+                setFileStates([])
+
                 const { errors } = fileRejections[0];
                 if (errors[0]?.code === 'file-too-large') {
                     return ERROR_MESSAGES.fileTooLarge(dropzoneOptions?.maxSize ?? 0);
@@ -148,11 +151,9 @@ const MultiImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
                 } else {
                     return ERROR_MESSAGES.fileNotSupported();
                 }
-
-                setFileStates([])
             }
             return undefined;
-        }, [fileRejections, dropzoneOptions]);
+        }, [fileRejections, dropzoneOptions, setFileStates]);
 
         return (
             <div className='w-full'>
@@ -160,7 +161,7 @@ const MultiImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
                     {/* Images */}
                     {value?.map(({ file, progress }, index) => (
                         <div key={index} className={variants.image + ' aspect-video'}>
-                            <img
+                            <Image
                                 className="h-full w-full rounded-md object-cover"
                                 src={imageUrls[index]}
                                 alt={typeof file === 'string' ? file : file.name}

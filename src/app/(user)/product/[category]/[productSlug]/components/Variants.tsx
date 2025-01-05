@@ -3,7 +3,13 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
-const Variants = ({ variants, activeVariant }: { variants: any, activeVariant: any }) => {
+type VariantsType = {
+    [key: string]: {
+        productSlug: string,
+        [key: string]: string
+    }[]
+}
+const Variants = ({ variants, activeVariant }: { variants: VariantsType, activeVariant: VariantsType }) => {
     // console.log({ variants })
 
     return (
@@ -15,8 +21,8 @@ const Variants = ({ variants, activeVariant }: { variants: any, activeVariant: a
                     <div key={index}>
                         <span className="font-bold capitalize">{variantKey}</span>
                         <div className="flex gap-2 flex-wrap">
-                            {variantItems?.map((item: any, indx: number) => {
-                                const isActive = item?.[variantKey] === activeVariant?.[variantKey];
+                            {variantItems?.map((item, indx: number) => {
+                                const isActive = item?.[variantKey] === activeVariant?.[variantKey]?.[0]?.[variantKey];
 
                                 return (
                                     <Link href={item?.productSlug} key={indx}>
