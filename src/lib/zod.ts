@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const ProductValidation = z.object({
-    productID: z
+    productId: z
         .string()
         .nonempty({ message: "Product ID is required." }),
     productSlug: z

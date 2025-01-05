@@ -9,12 +9,12 @@ import Variants from './components/Variants'
 import { HeartIcon, MinusIcon, PlusIcon, Share2Icon, ShoppingCartIcon } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { cartActions } from '@/store/cartSlice'
-import { productType } from '@/components/products/ProductSection'
 import { RootState } from '@/store'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { updateUserCart } from '@/app/actions/UserActions'
 import toast from 'react-hot-toast'
 import { getProductBySlug } from '@/app/actions/ProductsAction'
+import { productType } from '@/types'
 
 const ProductDetails = () => {
   const { category, productSlug } = useParams<{ category: string, productSlug: string }>()
@@ -44,16 +44,16 @@ const ProductDetails = () => {
   })
 
   useEffect(() => {
-    console.log(status, !!productData?.productID)
-    if (status === "error" || (status === "success" && !productData.productID)) {
+    console.log(status, !!productData?.productId)
+    if (status === "error" || (status === "success" && !productData.productId)) {
       toast.error("Product not Found!")
       router.push("/notfound");
     }
   }, [status, productData, router]);
 
   useEffect(() => {
-    setExistsInCart(cartItems.some(item => item.product.productID === productData?.productID))
-  }, [cartItems, productData?.productID])
+    setExistsInCart(cartItems.some(item => item.product.productId === productData?.productId))
+  }, [cartItems, productData?.productId])
 
   const updateQuantity = (type: "increment" | "decrement") => {
     if (type === 'increment') {
@@ -78,7 +78,7 @@ const ProductDetails = () => {
       const flatProductData = {
         userId: user.id,
         items: {
-          productId: productData.productID,
+          productId: productData.productId,
           quantity: quantity,
           unitRate: productData.price.current,
           price: productData.price.current * quantity
@@ -94,7 +94,7 @@ const ProductDetails = () => {
 
       // Update Cart Redux store
       dispatch(cartActions.updateCart({
-        productId: productData.productID,
+        productId: productData.productId,
         product: productData,
         quantity: quantity,
         unitRate: productData.price.current,
@@ -124,7 +124,7 @@ const ProductDetails = () => {
     return <div>Loading...</div>
   }
 
-  if (status === 'error' && !productData?.productID) {
+  if (status === 'error' && !productData?.productId) {
     console.error("ERROR")
     return null
   }
@@ -135,22 +135,24 @@ const ProductDetails = () => {
         {/* Left section - Product Preview images */}
         <div className="w-1/2 flex justify-center items-start gap-4">
           <div className="flex flex-col gap-2">
-            {productData?.images?.map((img, index) => (
-              <Image
+            {productData?.images?.map((img, index) => {
+              if (!img.imageUrl) return null
+
+              return <Image
                 key={index}
-                src={img?.imageUrl}
-                alt={img?.altText}
+                src={img.imageUrl}
+                alt={img.altText}
                 width={80}
                 height={80}
                 style={{ objectFit: "cover" }}
                 placeholder='blur'
-                blurDataURL={img?.blurData}
+                blurDataURL={img.blurData}
                 onClick={() => setPreviewImageIndex(index)}
                 className='!relative rounded-md' />
-            ))}
+            })}
           </div>
 
-          <Image
+          {productData?.images[previewImageIndex]?.imageUrl && <Image
             src={productData?.images[previewImageIndex]?.imageUrl}
             alt={productData?.images[previewImageIndex]?.altText}
             width={500}
@@ -158,7 +160,7 @@ const ProductDetails = () => {
             style={{ objectFit: "cover" }}
             placeholder='blur'
             blurDataURL={productData?.images[previewImageIndex]?.blurData}
-            className='!relative rounded-md' />
+            className='!relative rounded-md' />}
         </div>
 
         {/* Right section - Product Details */}
@@ -201,7 +203,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          <Variants variants={productData?.variants} activeVariant={productData?.features?.variant} />
+          {productData?.variants && <Variants variants={productData?.variants} activeVariant={productData?.features?.variant} />}
 
           <div className="flex gap-4 py-2">
             <span>Availability : </span>

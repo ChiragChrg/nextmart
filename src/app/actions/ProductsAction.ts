@@ -1,8 +1,8 @@
 "use server"
 
-import { productType } from "@/components/products/ProductSection";
 import { prisma } from "@/prisma";
 import { CategoryType } from "@/store/categorySlice";
+import { productType } from "@/types";
 
 type ResponseType = {
     status: number;
@@ -22,11 +22,10 @@ export const getAllCategories = async () => {
         // console.log("Categories_Data", categories)
         const formattedCategories = categories?.map(category => {
             // console.log("AllCats", category)
-            const { id, parentCategoryId, productId, ...restCategory } = category
+            const { id, parentCategoryId, ...restCategory } = category
             return {
-                categoryID: id,
+                categoryId: id,
                 parentCategoryID: parentCategoryId,
-                productID: productId,
                 ...restCategory
             }
         });
@@ -50,7 +49,7 @@ export const getAllProducts = async () => {
         const formattedProducts = products?.map(prod => {
             const { id, ...restProduct } = prod
             return {
-                productID: id,
+                productId: id,
                 ...restProduct
             }
         });
@@ -80,7 +79,7 @@ export const getProductBySlug = async (productSlug: string) => {
         const { id, ...restProduct } = product
 
         const formattedProduct = {
-            productID: id,
+            productId: id,
             ...restProduct
         }
 

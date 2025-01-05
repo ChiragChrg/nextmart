@@ -1,14 +1,13 @@
-import { productType } from "@/components/products/ProductSection";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CategoryType {
-    categoryID: string;
+    categoryId: string;
     categoryName: string;
     categorySlug: string;
     description: string;
     imageUrl?: string;
     parentCategoryID?: string;
-    productID: string;
+    productId: string;
 }
 
 const initialState: CategoryType[] = [];

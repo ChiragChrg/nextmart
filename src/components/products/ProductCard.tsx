@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { productType } from './ProductSection'
 import StarRating from '../CustomUI/StarRating'
+import { productType } from '@/types'
 
 
 type Props = {
@@ -27,9 +27,9 @@ const ProductCard = ({ data }: Props) => {
             <div className="w-full flex flex-col p-1 px-2">
                 <h3 className='font-bold'>{data?.title}</h3>
                 <div className='flex items-center gap-1'>
-                    <span className='text-[0.9em] pt-1'>{data?.ratings.average?.toFixed(1)}</span>
-                    <StarRating rating={data?.ratings.average || 0} />
-                    <span className='text-[0.8em]'>({data?.ratings.reviewCount?.toLocaleString("en-US", {
+                    <span className='text-[0.9em] pt-1'>{data?.ratings?.average?.toFixed(1)}</span>
+                    <StarRating rating={data?.ratings?.average || 0} />
+                    <span className='text-[0.8em]'>({data?.ratings?.reviewCount?.toLocaleString("en-US", {
                         notation: "compact",
                         compactDisplay: "short"
                     })})</span>

@@ -1,4 +1,4 @@
-import { productType } from "@/components/products/ProductSection";
+import { productType } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CartItemType {
@@ -10,8 +10,8 @@ export interface CartItemType {
 }
 
 export interface CartType {
-    cartID?: string;
-    userID?: string;
+    cartId?: string;
+    userId?: string;
     items: CartItemType[];
     totalAmount: number;
     createdAt?: string;
@@ -19,8 +19,8 @@ export interface CartType {
 }
 
 const initialState: CartType = {
-    cartID: undefined,
-    userID: undefined,
+    cartId: undefined,
+    userId: undefined,
     items: [],
     totalAmount: 0,
     createdAt: undefined,

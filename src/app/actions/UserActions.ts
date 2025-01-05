@@ -1,6 +1,5 @@
 "use server";
 
-import { productType } from "@/components/products/ProductSection";
 import { prisma } from "@/prisma";
 import { CartType } from "@/store/cartSlice";
 import { CategoryType } from "@/store/categorySlice";
@@ -40,23 +39,27 @@ export const getUserCart = async (userId: string) => {
             }
         })
 
-        const formattedCart = {
-            cartID: cart?.id,
-            userID: cart?.userId,
-            items: cart?.items?.map(item => ({
-                ...item,
-                product: {
-                    ...item.product,
-                    productID: item.product.id
-                }
-            })),
-            totalAmount: cart?.totalAmount,
-            createdAt: cart?.createdAt.toISOString(),
-            updatedAt: cart?.updatedAt.toISOString(),
+        if (!cart) {
+            return { status: 404, message: "Cart not found!" } as ResponseType;
         }
 
+        // const formattedCart = {
+        //     cartId: cart?.id,
+        //     userId: cart?.userId,
+        //     items: cart?.items?.map(item => ({
+        //         ...item,
+        //         product: {
+        //             ...item.product,
+        //             productId: item.product.id
+        //         }
+        //     })),
+        //     totalAmount: cart?.totalAmount,
+        //     createdAt: cart?.createdAt.toISOString(),
+        //     updatedAt: cart?.updatedAt.toISOString(),
+        // }
+
         console.log("Cart_Data", cart)
-        return { status: 200, message: "Product fetched successfully!", response: formattedCart as unknown as CartType } as ResponseType
+        return { status: 200, message: "Product fetched successfully!" } as ResponseType
     } catch (error: any) {
         console.log("Product_Fetch_Error : ", error)
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
