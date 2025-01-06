@@ -39,7 +39,11 @@ export const getAllCategories = async () => {
 
 export const getAllProducts = async () => {
     try {
-        const products = await prisma.product.findMany()
+        const products = await prisma.product.findMany({
+            include: {
+                category: true
+            }
+        })
 
         if (!products) {
             throw new Error("No products found");
@@ -47,9 +51,20 @@ export const getAllProducts = async () => {
 
         console.log("Products_Data", products)
         const formattedProducts = products?.map(prod => {
-            const { id, ...restProduct } = prod
+            const { id, category, ...restProduct } = prod
+            const formattedCategory = category ? {
+                categoryId: category.id,
+                categoryName: category.categoryName,
+                categorySlug: category.categorySlug,
+                description: category.description,
+                imageUrl: category.imageUrl,
+                parentCategoryID: category.parentCategoryId,
+                productId: category.productId[0]
+            } : null;
+
             return {
                 productId: id,
+                category: formattedCategory,
                 ...restProduct
             }
         });
@@ -92,3 +107,52 @@ export const getProductBySlug = async (productSlug: string) => {
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
     }
 }
+
+export const deleteProductById = async (productId: string) => {
+    try {
+        if (!productId) {
+            return { status: 422, message: "Invalid Product ID!" } as ResponseType;
+        }
+
+        const existingProduct = await prisma.product.findUnique({
+            where: { id: productId },
+        });
+
+        if (!existingProduct) {
+            return { status: 404, message: "Product not found!" } as ResponseType;
+        }
+
+        await prisma.cartItem.deleteMany({
+            where: { productId },
+        });
+
+        await prisma.orderItem.deleteMany({
+            where: { productId },
+        });
+
+        await prisma.category.updateMany({
+            where: { productId: { has: productId } },
+            data: {
+                productId: {
+                    set: [],
+                },
+            },
+        });
+
+        const deletedProduct = await prisma.product.delete({
+            where: { id: productId },
+        });
+
+        return {
+            status: 204,
+            message: "Product deleted successfully!",
+            response: deletedProduct,
+        } as ResponseType;
+    } catch (error: any) {
+        console.error("Product_Delete_Error:", error);
+        return {
+            status: 500,
+            message: error.message || "An unexpected error occurred.",
+        } as ResponseType;
+    }
+};

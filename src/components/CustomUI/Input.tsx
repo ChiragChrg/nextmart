@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils"
 import { useState, SetStateAction, Dispatch } from "react"
 
 interface InputProps {
-    label: string,
+    label?: string,
     type: "text" | "email" | "password" | "number",
     name?: string,
     placeholder?: string,
@@ -27,7 +27,7 @@ const Input = ({ label, type, name, placeholder, defaultValue, required = true, 
 
     return (
         <label className={cn('relative border border-primaryClr_Lite sm:focus-within:border-primaryClr rounded p-1 flex flex-col w-full', className)}>
-            <span className='absolute top-[-0.9em] text-[0.9em] bg-background px-1 text-slate-500'>{label}</span>
+            {label && <span className='absolute top-[-0.9em] text-[0.9em] bg-background px-1 text-slate-500'>{label}</span>}
             <input
                 type={showPassword ? "text" : type}
                 name={name}

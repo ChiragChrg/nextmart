@@ -165,6 +165,7 @@ const MultiImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
                                 className="h-full w-full rounded-md object-cover"
                                 src={imageUrls[index]}
                                 alt={typeof file === 'string' ? file : file.name}
+                                fill={true}
                             />
                             {/* Progress Bar */}
                             {typeof progress === 'number' && (

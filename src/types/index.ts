@@ -1,3 +1,5 @@
+import { CategoryType } from "@/store/categorySlice"
+
 export type productType = {
     productId?: string
     productSlug: string
@@ -5,6 +7,7 @@ export type productType = {
     longTitle: string,
     description: string,
     categoryId: string,
+    category?: CategoryType,
     brand: string,
     price: {
         original: number,
@@ -42,4 +45,19 @@ export type productType = {
         reviewCount: number
     },
     tags: string[]
+}
+
+
+export type ProductTypeFlat = {
+    productId?: string;
+    image: {
+        imageUrl: string,
+        altText: string,
+        blurData: string,
+        averageColor: string
+    };
+    title: string;
+    category: string;
+    stock: number;
+    productPath: string;
 }
