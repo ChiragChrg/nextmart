@@ -52,11 +52,10 @@ const NewProduct = () => {
         e.preventDefault()
         setIsPending(true)
 
-        const [categoryId, category] = productData.categoryId.split("<|>")
+        const [categoryId, _] = productData.categoryId.split("<|>")
         const formattedData = {
             ...productData,
             categoryId,
-            category
         }
 
         try {
@@ -106,6 +105,7 @@ const NewProduct = () => {
 
     const updateProductData = (fields: Partial<productType>) => {
         setProductData(prev => {
+            console.log({ ...prev, ...fields })
             return { ...prev, ...fields }
         })
     }

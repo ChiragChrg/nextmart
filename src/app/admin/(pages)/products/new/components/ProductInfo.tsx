@@ -47,7 +47,7 @@ const ProductInfo = ({ productData, updateProductData, categoryList, productList
                     {categoryList?.map((item, index) =>
                         <SelectItem
                             key={index}
-                            value={`${item.categoryId}<|>${item.categoryName}`}>
+                            value={item.categoryId}>
                             {item.categoryName}
                         </SelectItem>
                     )}
@@ -64,7 +64,7 @@ const ProductInfo = ({ productData, updateProductData, categoryList, productList
                     updateProductData({
                         title: e.target.value,
                         longTitle: e.target.value,
-                        productSlug: productData.title?.toLowerCase().replaceAll(" ", "-")
+                        productSlug: e.target.value?.toLowerCase().replaceAll(" ", "-")
                     })
                 }}
                 required />
@@ -76,7 +76,7 @@ const ProductInfo = ({ productData, updateProductData, categoryList, productList
                 defaultValue={productData.longTitle ?? productData.title}
                 onChange={e => updateProductData({
                     longTitle: e.target.value,
-                    productSlug: productData.longTitle?.toLowerCase().replaceAll(" ", "-")
+                    productSlug: e.target.value?.toLowerCase().replaceAll(" ", "-")
                 })}
                 placeholder='Enter Product Full Title'
                 required />
