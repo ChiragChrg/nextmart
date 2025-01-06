@@ -30,7 +30,7 @@ const CartIcon = ({ width = "100%", height = "100%", className = "", showText = 
                 if (!user.id) throw new Error('User ID is undefined');
 
                 const res = await getUserCart(user.id);
-                // console.log("CartFetch_Res", res)
+                console.log("CartFetch_Res", res)
                 return res.response as CartType
             } catch (error) {
                 console.error('Error fetching Cart:', error);
