@@ -261,6 +261,7 @@ const ProductDetails = () => {
               </Button>
               :
               <Button
+                onClick={handleAddToCart}
                 variant={'secondary'}
                 disabled={existsInCart}
                 className="sm:col-span-2 gap-3 bg-primaryClr hover:bg-primaryClr_Alt text-white w-full">
