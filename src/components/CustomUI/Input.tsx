@@ -14,7 +14,7 @@ interface InputProps {
     min?: number,
     max?: number,
     value?: string,
-    setValue?: Dispatch<SetStateAction<string>>
+    setValue?: Dispatch<SetStateAction<any>>
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
