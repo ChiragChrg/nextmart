@@ -9,7 +9,7 @@ type VariantsType = {
         [key: string]: string
     }[]
 }
-const Variants = ({ variants, activeVariant }: { variants: VariantsType, activeVariant: VariantsType }) => {
+const Variants = ({ variants, activeVariant }: { variants: VariantsType, activeVariant: any }) => {
     // console.log({ variants })
 
     return (

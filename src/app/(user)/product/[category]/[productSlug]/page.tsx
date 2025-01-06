@@ -6,12 +6,12 @@ import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Variants from './components/Variants'
-import { HeartIcon, MinusIcon, PlusIcon, Share2Icon, ShoppingCartIcon } from 'lucide-react'
+import { CheckCircleIcon, HeartIcon, MinusIcon, PlusIcon, Share2Icon, ShoppingCartIcon } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
-import { cartActions } from '@/store/cartSlice'
+import { cartActions, CartType } from '@/store/cartSlice'
 import { RootState } from '@/store'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { updateUserCart } from '@/app/actions/UserActions'
+import { addToCart } from '@/app/actions/UserActions'
 import toast from 'react-hot-toast'
 import { getProductBySlug } from '@/app/actions/ProductsAction'
 import { productType } from '@/types'
@@ -25,6 +25,7 @@ const ProductDetails = () => {
   const { items: cartItems } = useSelector((state: RootState) => state.cart)
   const { user } = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch()
+
   const queryClient = useQueryClient()
   const router = useRouter()
 
@@ -44,7 +45,6 @@ const ProductDetails = () => {
   })
 
   useEffect(() => {
-    console.log(status, !!productData?.productId)
     if (status === "error" || (status === "success" && !productData.productId)) {
       toast.error("Product not Found!")
       router.push("/notfound");
@@ -52,7 +52,8 @@ const ProductDetails = () => {
   }, [status, productData, router]);
 
   useEffect(() => {
-    setExistsInCart(cartItems.some(item => item.product.productId === productData?.productId))
+    console.log({ cartItems })
+    setExistsInCart(cartItems.some(item => item.productId === productData?.productId))
   }, [cartItems, productData?.productId])
 
   const updateQuantity = (type: "increment" | "decrement") => {
@@ -77,29 +78,21 @@ const ProductDetails = () => {
 
       const flatProductData = {
         userId: user.id,
-        items: {
-          productId: productData.productId,
-          quantity: quantity,
-          unitRate: productData.price.current,
-          price: productData.price.current * quantity
-        }
+        productId: productData.productId!,
+        quantity: quantity,
       }
-      const res = await updateUserCart(flatProductData)
-      return res
+      const res = await addToCart(flatProductData)
+      return res.response as CartType
     },
-    onSuccess: () => {
-      if (!productData) {
+    onSuccess: (data) => {
+      if (!data) {
         throw new Error('Product data is not available');
       }
 
+      setExistsInCart(true)
+
       // Update Cart Redux store
-      dispatch(cartActions.updateCart({
-        productId: productData.productId,
-        product: productData,
-        quantity: quantity,
-        unitRate: productData.price.current,
-        price: productData.price.current * quantity
-      }))
+      dispatch(cartActions.updateCart(data))
 
       queryClient.invalidateQueries({ queryKey: ['cart'] })
       toast.success('Product added to cart successfully')
@@ -130,7 +123,7 @@ const ProductDetails = () => {
   }
 
   return (
-    <main className='main_style'>
+    <main className='main_style mt-8'>
       <section className="flex justify-evenly gap-10">
         {/* Left section - Product Preview images */}
         <div className="w-1/2 flex justify-center items-start gap-4">
@@ -148,19 +141,24 @@ const ProductDetails = () => {
                 placeholder='blur'
                 blurDataURL={img.blurData}
                 onClick={() => setPreviewImageIndex(index)}
-                className='!relative rounded-md' />
+                className='!relative rounded-md cursor-pointer aspect-square' />
             })}
           </div>
 
-          {productData?.images[previewImageIndex]?.imageUrl && <Image
-            src={productData?.images[previewImageIndex]?.imageUrl}
-            alt={productData?.images[previewImageIndex]?.altText}
-            width={500}
-            height={500}
-            style={{ objectFit: "cover" }}
-            placeholder='blur'
-            blurDataURL={productData?.images[previewImageIndex]?.blurData}
-            className='!relative rounded-md' />}
+          {productData?.images[previewImageIndex]?.imageUrl &&
+            <div
+              style={{ backgroundColor: productData?.images[previewImageIndex].averageColor }}
+              className="flex_center rounded-md w-[800px] min-h-[500px] relative">
+              <Image
+                src={productData?.images[previewImageIndex]?.imageUrl}
+                alt={productData?.images[previewImageIndex]?.altText}
+                fill={true}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                style={{ objectFit: "cover" }}
+                placeholder='blur'
+                blurDataURL={productData?.images[previewImageIndex]?.blurData}
+                className='!relative rounded-md aspect-auto' />
+            </div>}
         </div>
 
         {/* Right section - Product Details */}
@@ -247,18 +245,29 @@ const ProductDetails = () => {
               <HeartIcon />
               <span>Add to WishList</span>
             </Button>
+
             <Button variant={'secondary'} className="flex_center gap-3 bg-secondaryClr hover:bg-secondaryClr_Alt w-full">
               <Share2Icon />
               <span>Share</span>
             </Button>
-            <Button
-              onClick={handleAddToCart}
-              variant={'secondary'}
-              disabled={existsInCart}
-              className="sm:col-span-2 gap-3 bg-primaryClr hover:bg-primaryClr_Alt text-white w-full">
-              <ShoppingCartIcon />
-              <span>Add to Cart</span>
-            </Button>
+
+            {existsInCart ?
+              <Button
+                variant={'secondary'}
+                disabled={existsInCart}
+                className="sm:col-span-2 gap-3 bg-primaryClr hover:bg-primaryClr_Alt text-white w-full">
+                <CheckCircleIcon />
+                <span>Added to Cart</span>
+              </Button>
+              :
+              <Button
+                variant={'secondary'}
+                disabled={existsInCart}
+                className="sm:col-span-2 gap-3 bg-primaryClr hover:bg-primaryClr_Alt text-white w-full">
+                <ShoppingCartIcon />
+                <span>Add to Cart</span>
+              </Button>
+            }
           </div>
         </div>
       </section>

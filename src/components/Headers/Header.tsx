@@ -1,9 +1,10 @@
 import Link from "next/link"
 import { SearchIcon } from "lucide-react"
-import { CartIcon, OrdersButton } from "../Buttons"
+import { OrdersButton } from "../Buttons"
 import { TextLogoSVG } from "@/assets/SVGs"
 import UserAvatar from "../UserAvatar"
 import Search from "../Search"
+import Cart from "../Cart"
 
 const Header = () => {
     return (
@@ -40,7 +41,7 @@ const Header = () => {
 
                 <div className="flex gap-3 items-center">
                     <OrdersButton className='header_btn' width="25px" height="25px" />
-                    <CartIcon className='header_btn' width="25px" height="25px" />
+                    <Cart className='header_btn' width="25px" height="25px" />
                     <UserAvatar />
                 </div>
             </header>

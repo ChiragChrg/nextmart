@@ -105,7 +105,6 @@ const NewProduct = () => {
 
     const updateProductData = (fields: Partial<productType>) => {
         setProductData(prev => {
-            console.log({ ...prev, ...fields })
             return { ...prev, ...fields }
         })
     }

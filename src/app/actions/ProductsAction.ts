@@ -49,7 +49,7 @@ export const getAllProducts = async () => {
             throw new Error("No products found");
         }
 
-        console.log("Products_Data", products)
+        // console.log("Products_Data", products)
         const formattedProducts = products?.map(prod => {
             const { id, category, ...restProduct } = prod
             const formattedCategory = category ? {
@@ -77,8 +77,7 @@ export const getAllProducts = async () => {
 }
 
 export const getProductBySlug = async (productSlug: string) => {
-    console.log("productSlug", productSlug)
-
+    // console.log("productSlug", productSlug)
     try {
         if (!productSlug) {
             return { status: 422, message: "Invalid Product Slug!" } as ResponseType
@@ -98,7 +97,7 @@ export const getProductBySlug = async (productSlug: string) => {
             ...restProduct
         }
 
-        console.log("\nProduct : ", product)
+        // console.log("\nProduct : ", product)
 
 
         return { status: 200, message: "Product fetched successfully!", response: formattedProduct as productType } as ResponseType
