@@ -24,14 +24,13 @@ import Link from "next/link"
 import toast from "react-hot-toast"
 
 type Props = {
-    width?: string,
-    height?: string,
     className?: string,
     showText?: boolean
 }
 
-const Cart = ({ width = "100%", height = "100%", className = "", showText = false }: Props) => {
+const Cart = ({ className = "", showText = false }: Props) => {
     const [cartCount, setCartCount] = useState<number>(0)
+    const [showCart, setShowCart] = useState<boolean>(false)
 
     const { user } = useSelector((state: RootState) => state.user)
     const cart = useSelector((state: RootState) => state.cart)
@@ -48,18 +47,20 @@ const Cart = ({ width = "100%", height = "100%", className = "", showText = fals
                 if (!user.id) throw new Error('User ID is undefined');
 
                 const res = await getUserCart(user.id);
+
                 // console.log("CartFetch_Res", res)
-                return res.response as CartType
+                if (res.status === 200)
+                    return res.response as CartType
             } catch (error) {
                 console.error('Error fetching Cart:', error);
-                throw new Error('Failed to fetch Cart data');
             }
+            return null;
         },
         enabled: !!user?.id
     })
 
     useEffect(() => {
-        if (cartFetchStatus === "success") {
+        if (cartFetchStatus === "success" && cartData) {
             dispatch(cartActions.updateCart(cartData));
         }
     }, [cartData, cartFetchStatus, dispatch])
@@ -79,7 +80,7 @@ const Cart = ({ width = "100%", height = "100%", className = "", showText = fals
     }
 
     return (
-        <Sheet>
+        <Sheet open={showCart} onOpenChange={setShowCart}>
             <SheetTrigger asChild>
                 <Button variant={"secondary"} size={"icon"} className={cn(`relative flex_center flex-col bg-secondaryClr hover:bg-secondaryClr_Alt cursor-pointer rounded-full w-12 h-12`, className)}>
                     {cartCount > 0 &&
@@ -115,8 +116,8 @@ const Cart = ({ width = "100%", height = "100%", className = "", showText = fals
 
                                 <div className="flex justify-center items-start flex-col">
                                     <span className="font-bold overflow-ellipsis">{item.product.title}</span>
-                                    <div className="">
-                                        <span>{new Intl.NumberFormat("en-US", {
+                                    <div>
+                                        <span className="font-sans">{new Intl.NumberFormat("en-US", {
                                             style: "currency",
                                             currency: "INR",
                                         }).format(item.unitRate)}</span>
@@ -125,7 +126,7 @@ const Cart = ({ width = "100%", height = "100%", className = "", showText = fals
                                 </div>
                             </Link>
 
-                            <span className="font-bold">{new Intl.NumberFormat("en-US", {
+                            <span className="font-sans font-bold">{new Intl.NumberFormat("en-US", {
                                 style: "currency",
                                 currency: "INR",
                             }).format(item.price)}</span>
@@ -140,14 +141,20 @@ const Cart = ({ width = "100%", height = "100%", className = "", showText = fals
                 <SheetFooter className="w-full flex !justify-between items-center gap-4 p-4 border-t border-secondaryClr">
                     <div className="flex_center flex-col">
                         <span>Grand Total</span>
-                        <span className="font-bold text-[1.4em]">{new Intl.NumberFormat("en-US", {
+                        <span className="font-sans font-bold text-[1.4em]">{new Intl.NumberFormat("en-US", {
                             style: "currency",
                             currency: "INR",
                         }).format(cart?.totalAmount ?? 0)}</span>
                     </div>
-                    <Button className="flex_center gap-4 bg-primaryClr hover:bg-primaryClr_Alt">
-                        <ShoppingCartIcon />
-                        <span>Checkout</span>
+
+                    <Button
+                        className="flex_center gap-4 bg-primaryClr hover:bg-primaryClr_Alt"
+                        onClick={() => setShowCart(false)}
+                        asChild>
+                        <Link href={"/checkout"}>
+                            <ShoppingCartIcon />
+                            <span className="text-[1.1em]">Proceed to Checkout</span>
+                        </Link>
                     </Button>
                 </SheetFooter>
             </SheetContent>

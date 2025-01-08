@@ -14,13 +14,13 @@ const ProductCard = ({ data }: Props) => {
             href={`product/${data?.category?.categorySlug}/${data?.productSlug}`}
             className="relative flex_center flex-col rounded-md overflow-hidden cursor-pointer">
             <Image
-                src={data?.images[0].imageUrl as string}
-                alt={data?.images[0].altText as string}
+                src={data?.images[0]?.imageUrl ?? "http://via.placeholder.com/400x400"}
+                alt={data?.images[0]?.altText ?? "Product_Image"}
                 fill={true}
                 sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                 style={{ objectFit: "cover" }}
                 placeholder='blur'
-                blurDataURL={data?.images[0].blurData as string}
+                blurDataURL={data?.images[0]?.blurData ?? "http://via.placeholder.com/400x400"}
                 className='!relative rounded-md' />
 
             {/* <HeartIcon width='25px' height='25px' className='absolute top-2 right-2' /> */}

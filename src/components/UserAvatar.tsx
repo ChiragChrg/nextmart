@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import LoaderIcon from "./CustomUI/LoaderIcon"
 import { signOut, useSession } from "next-auth/react"
-import { ChevronDownIcon, HelpCircleIcon, LogOutIcon, User2Icon } from "lucide-react"
+import { ChevronDownIcon, HelpCircleIcon, LogInIcon, LogOutIcon, User2Icon } from "lucide-react"
 
 import {
     DropdownMenu,
@@ -124,23 +124,7 @@ const UserAvatar = () => {
             <>
                 {!loading ?
                     <Link href="/login" className="bg-primaryClr flex_center gap-2 text-white px-4 py-[0.5em] rounded cursor-pointer">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="32"
-                            height="50"
-                            fill="none"
-                            viewBox="0 0 32 50"
-                            className="w-5 h-5"
-                        >
-                            <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="4"
-                                d="M30 17V7L2 2v46l28-5V33M18 17l-8 8m0 0l8 8m-8-8h20"
-                            ></path>
-                        </svg>
-
+                        <LogInIcon size={22} />
                         <span>Login</span>
                     </Link>
                     :

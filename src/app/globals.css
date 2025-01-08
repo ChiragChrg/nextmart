@@ -85,7 +85,7 @@
   }
 
   .main_style {
-    @apply min-h-screen flex flex-col max-w-[1600px] mx-auto
+    @apply min-h-[90vh] flex flex-col max-w-[1600px] mx-auto
   }
 
   .section_style {

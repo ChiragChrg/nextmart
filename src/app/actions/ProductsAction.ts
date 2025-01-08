@@ -121,6 +121,21 @@ export const deleteProductById = async (productId: string) => {
             return { status: 404, message: "Product not found!" } as ResponseType;
         }
 
+        const cartItems = await prisma.cartItem.findMany({
+            where: { productId },
+        });
+
+        for (const cartItem of cartItems) {
+            await prisma.cart.update({
+                where: { id: cartItem.cartId },
+                data: {
+                    totalAmount: {
+                        decrement: cartItem.price * cartItem.quantity,
+                    },
+                },
+            });
+        }
+
         await prisma.cartItem.deleteMany({
             where: { productId },
         });
