@@ -41,7 +41,7 @@ const Header = () => {
 
                 <div className="flex gap-3 items-center">
                     <OrdersButton className='header_btn' width="25px" height="25px" />
-                    <Cart className='header_btn' width="25px" height="25px" />
+                    <Cart className='header_btn' />
                     <UserAvatar />
                 </div>
             </header>
