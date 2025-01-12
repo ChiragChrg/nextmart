@@ -7,8 +7,9 @@ import { useDispatch, useSelector } from "react-redux"
 import { Button } from "./ui/button"
 import { useEffect, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { getUserCart, removeItemFromCart } from "@/app/actions/UserActions"
+import { getUserCart } from "@/app/actions/CartActions"
 import { cartActions, CartType } from "@/store/cartSlice"
+import { useHandleRemoveCartItem } from "@/hooks/useCart"
 
 import {
     Sheet,
@@ -35,6 +36,7 @@ const Cart = ({ className = "", showText = false }: Props) => {
     const { user } = useSelector((state: RootState) => state.user)
     const cart = useSelector((state: RootState) => state.cart)
     const dispatch = useDispatch()
+    const handleRemoveCartItem = useHandleRemoveCartItem()
 
     useEffect(() => {
         setCartCount(cart.items.length)
@@ -65,19 +67,19 @@ const Cart = ({ className = "", showText = false }: Props) => {
         }
     }, [cartData, cartFetchStatus, dispatch])
 
-    const handleRemoveCartItem = async (productId: string) => {
-        try {
-            const userId = user.id as string
-            const res = await removeItemFromCart(userId, productId)
-            if (res.status === 204) {
-                toast.success("Item removed from cart!")
-                dispatch(cartActions.removeItem(productId))
-            }
-        } catch (error) {
-            console.log("Cart_Item_Remove_Error : ", error)
-            toast.error("Failed to remove cart item")
-        }
-    }
+    // const handleRemoveCartItem = async (productId: string) => {
+    //     try {
+    //         const userId = user.id as string
+    //         const res = await removeItemFromCart(userId, productId)
+    //         if (res.status === 204) {
+    //             toast.success("Item removed from cart!")
+    //             dispatch(cartActions.removeItem(productId))
+    //         }
+    //     } catch (error) {
+    //         console.log("Cart_Item_Remove_Error : ", error)
+    //         toast.error("Failed to remove cart item")
+    //     }
+    // }
 
     return (
         <Sheet open={showCart} onOpenChange={setShowCart}>
@@ -103,19 +105,19 @@ const Cart = ({ className = "", showText = false }: Props) => {
                 <div className="w-full h-full max-h-[80dvh] my-4 pr-2 overflow-y-auto">
                     {cart?.items?.map((item, index) => (
                         <div key={index} className="flex justify-between items-center gap-4 py-4 border-t border-secondaryClr">
-                            <Link href={`product/${item.product.category?.categorySlug}/${item.product.productSlug}`} className="flex_center gap-4">
+                            <Link href={`product/${item.product?.category?.categorySlug}/${item.product?.productSlug}`} className="flex_center gap-4">
                                 <Image
-                                    src={item.product.images[0]?.imageUrl ?? "http://via.placeholder.com/400x400"}
-                                    alt={item.product.images[0]?.altText ?? "Product_Image"}
+                                    src={item.product?.images[0]?.imageUrl ?? "http://via.placeholder.com/400x400"}
+                                    alt={item.product?.images[0]?.altText ?? "Product_Image"}
                                     placeholder="blur"
-                                    blurDataURL={item.product.images[0]?.blurData ?? "http://via.placeholder.com/400x400"}
+                                    blurDataURL={item.product?.images[0]?.blurData ?? "http://via.placeholder.com/400x400"}
                                     width={100}
                                     height={100}
                                     className="rounded-md"
                                 />
 
                                 <div className="flex justify-center items-start flex-col">
-                                    <span className="font-bold overflow-ellipsis">{item.product.title}</span>
+                                    <span className="font-bold overflow-ellipsis">{item.product?.title}</span>
                                     <div>
                                         <span className="font-sans">{new Intl.NumberFormat("en-US", {
                                             style: "currency",
@@ -131,7 +133,7 @@ const Cart = ({ className = "", showText = false }: Props) => {
                                 currency: "INR",
                             }).format(item.price)}</span>
 
-                            <Button onClick={() => handleRemoveCartItem(item.productId)} variant={"destructive"} size={"icon"}>
+                            <Button onClick={() => user.id && handleRemoveCartItem({ productId: item.productId, userId: user.id })} variant={"destructive"} size={"icon"}>
                                 <Trash2Icon />
                             </Button>
                         </div>

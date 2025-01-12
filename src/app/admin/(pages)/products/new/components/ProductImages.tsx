@@ -47,8 +47,10 @@ const ProductImages = ({ productData, updateProductData }: Props) => {
                 try {
                     if (fileState.progress !== 'PENDING') return;
 
+                    const file = fileState.file instanceof File ? fileState.file : new File([], "")
+
                     const res = await edgestore.publicImages.upload({
-                        file: fileState.file instanceof File ? fileState.file : new File([], ""),
+                        file: file,
                         onProgressChange: async (progress) => {
                             updateFileProgress(fileState.key, progress);
                             if (progress === 100) {
@@ -58,9 +60,22 @@ const ProductImages = ({ productData, updateProductData }: Props) => {
                                 updateFileProgress(fileState.key, 'COMPLETE');
                             }
                         },
+                        options: {
+                            temporary: true,
+                            manualFileName: file.name,
+                        },
                     });
 
-                    const file = fileState?.file as File
+                    if (!res.url) {
+                        toast.error("Failed to Upload " + file.name)
+                        setFileStates([])
+                        return
+                    } else {
+                        await edgestore.publicImages.confirmUpload({
+                            url: res.url,
+                        });
+                    }
+
                     const averageColor = await fac.getColorAsync(res.thumbnailUrl ?? res.url);
 
                     uploadMeta.push({

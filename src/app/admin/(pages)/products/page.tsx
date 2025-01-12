@@ -21,9 +21,12 @@ import { ColumnDef } from "@tanstack/react-table"
 import Image from "next/image"
 import { ArrowUpDown, MoreHorizontal, Trash2Icon } from "lucide-react"
 import toast from 'react-hot-toast'
+import { useEdgeStore } from '@/lib/edgestore'
 
 const Products = () => {
     const queryclient = useQueryClient()
+    const { edgestore } = useEdgeStore()
+
     const { data: productData } = useQuery({
         queryKey: ["fetch-admin-products"],
         queryFn: async () => {
@@ -205,6 +208,15 @@ const Products = () => {
                                             console.log(res)
 
                                             if (res.status === 204) {
+                                                const deletedProduct = await res.response as productType
+                                                console.log({ deletedProduct })
+
+                                                deletedProduct.images.forEach(async image => {
+                                                    // Delteing images from edgeStore
+                                                    const deleteRes = await edgestore.publicImages.delete({ url: image.imageUrl })
+                                                    console.log({ image, deleteRes, deletedProduct })
+                                                })
+
                                                 toast.success("Product Deleted Successfully!")
                                                 queryclient.invalidateQueries({ queryKey: ["fetch-admin-products"] })
                                             }

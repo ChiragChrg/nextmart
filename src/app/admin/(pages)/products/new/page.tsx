@@ -3,7 +3,7 @@
 import { createProduct } from '@/app/actions/AdminActions'
 import { Button } from '@/components/ui/button'
 import { CategoryType } from '@/store/categorySlice'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChevronLeftIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -47,6 +47,7 @@ const NewProduct = () => {
     const [productData, setProductData] = useState<productType>(INITIAL_PRODUCT_DATA)
     const [isPending, setIsPending] = useState<boolean>(false)
     const router = useRouter()
+    const queryclient = useQueryClient()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -62,6 +63,7 @@ const NewProduct = () => {
             const response = await createProduct(formattedData);
             if (response.status === 201) {
                 toast.success("Product created successfully!");
+                queryclient.invalidateQueries({ queryKey: ["fetch-admin-products"] })
                 router.push("/admin/products");
             } else {
                 toast.error("Failed to create product");

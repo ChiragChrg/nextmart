@@ -160,7 +160,7 @@ export const deleteProductById = async (productId: string) => {
         return {
             status: 204,
             message: "Product deleted successfully!",
-            response: deletedProduct,
+            response: deletedProduct as productType,
         } as ResponseType;
     } catch (error: any) {
         console.error("Product_Delete_Error:", error);

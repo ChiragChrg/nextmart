@@ -2,7 +2,6 @@
 
 import { prisma } from "@/prisma";
 import { CartType } from "@/store/cartSlice";
-import { CategoryType } from "@/store/categorySlice";
 
 type ResponseType = {
     status: number;
@@ -70,7 +69,7 @@ export const getUserCart = async (userId: string) => {
 }
 
 export const addToCart = async (cart: AddToCartType): Promise<ResponseType> => {
-    console.log("CartUpdate", cart);
+    console.log("addToCart", cart);
 
     try {
         if (!cart || !cart.productId || cart.quantity <= 0) {
@@ -210,9 +209,65 @@ export const removeItemFromCart = async (userId: string, productId: string): Pro
             include: { items: true }
         });
 
+        const formattedCart = {
+            ...updatedCart,
+            createdAt: updatedCart.createdAt.toISOString(),
+            updatedAt: updatedCart.updatedAt.toISOString(),
+        };
+
         console.log({ remove: updatedCart })
 
-        return { status: 204, message: "Item removed successfully!", response: updatedCart as unknown as CartType } as ResponseType;
+        return { status: 204, message: "Item removed successfully!", response: formattedCart as CartType } as ResponseType;
+    } catch (error: any) {
+        console.log("Remove_Item_Error:", error);
+        return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
+    }
+};
+
+export const updateCartItems = async (cartData: CartType): Promise<ResponseType> => {
+    try {
+        if (!cartData || !cartData.userId) {
+            return { status: 422, message: "Invalid Cart Data!" } as ResponseType;
+        }
+
+        const cart = await prisma.cart.findUnique({
+            where: { userId: cartData.userId },
+        });
+
+        if (!cart) {
+            return { status: 404, message: "Cart not found!" } as ResponseType;
+        }
+
+        const updatedCart = await prisma.cart.update({
+            where: { id: cart.id },
+            data: {
+                items: {
+                    deleteMany: {},
+                    create: cartData.items.map(item => ({
+                        productId: item.productId,
+                        quantity: item.quantity,
+                        unitRate: item.unitRate,
+                        price: item.price,
+                    })),
+                },
+                totalAmount: cartData.totalAmount,
+            },
+            include: {
+                items: {
+                    include: {
+                        product: true
+                    }
+                }
+            }
+        });
+
+        const formattedCart = {
+            ...updatedCart,
+            createdAt: updatedCart.createdAt.toISOString(),
+            updatedAt: updatedCart.updatedAt.toISOString(),
+        };
+
+        return { status: 200, message: "Updated Cart Successfully!", response: formattedCart as CartType } as ResponseType;
     } catch (error: any) {
         console.log("Remove_Item_Error:", error);
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;

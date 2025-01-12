@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { cartActions, CartType } from '@/store/cartSlice'
 import { RootState } from '@/store'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { addToCart } from '@/app/actions/UserActions'
+import { addToCart } from '@/app/actions/CartActions'
 import toast from 'react-hot-toast'
 import { getProductBySlug } from '@/app/actions/ProductsAction'
 import { productType } from '@/types'
@@ -276,6 +276,7 @@ const ProductDetails = () => {
       {/* Product Description */}
       <section className="pt-8">
         <h2 className='font-bold text-[1.4em]'>Product Description</h2>
+        <p>{productData.description}</p>
       </section>
     </main>
   )
