@@ -85,7 +85,7 @@
   }
 
   .main_style {
-    @apply min-h-[90vh] flex flex-col max-w-[1600px] mx-auto
+    @apply min-h-[85vh] flex flex-col max-w-[1600px] mx-auto
   }
 
   .section_style {
@@ -180,12 +180,30 @@
 
 /* SVG Loader Animation */
 
-@layer base {
-  * {
-    @apply border-border;
+
+/* Skeleton Animations */
+.SkeletonLoader-wave {
+  background: linear-gradient(to right,
+      hsl(var(--secondaryClr)),
+      hsl(var(--secondaryClr_Alt)),
+      hsl(var(--secondaryClr_Alt)),
+      hsl(var(--secondaryClr)));
+  background-size: 300%;
+  animation: LoaderAnimation 3s linear infinite;
+}
+
+.SkeletonLoader-pulse {
+  background: hsl(var(--secondaryClr_Alt));
+}
+
+@keyframes LoaderAnimation {
+  from {
+    background-position: 0% center;
   }
 
-  body {
-    @apply bg-background text-foreground;
+  to {
+    background-position: -300% center;
   }
 }
+
+/* Skeleton Animations */

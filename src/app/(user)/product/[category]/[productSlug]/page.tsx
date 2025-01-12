@@ -3,7 +3,7 @@ import BreadCrumbs from '@/components/CustomUI/BreadCrumbs'
 import StarRating from '@/components/CustomUI/StarRating'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Variants from './components/Variants'
 import { CheckCircleIcon, HeartIcon, MinusIcon, PlusIcon, Share2Icon, ShoppingCartIcon } from 'lucide-react'
@@ -15,6 +15,7 @@ import { addToCart } from '@/app/actions/CartActions'
 import toast from 'react-hot-toast'
 import { getProductBySlug } from '@/app/actions/ProductsAction'
 import { productType } from '@/types'
+import Loading from './components/Loading'
 
 const ProductDetails = () => {
   const { category, productSlug } = useParams<{ category: string, productSlug: string }>()
@@ -28,6 +29,7 @@ const ProductDetails = () => {
 
   const queryClient = useQueryClient()
   const router = useRouter()
+  const pathname = usePathname()
 
   const { data: productData, status } = useQuery({
     queryKey: ["fetch-product", productSlug],
@@ -104,9 +106,9 @@ const ProductDetails = () => {
   })
 
   const handleAddToCart = () => {
-    if (!user) {
-      console.log({ user })
-      router.push("/login")
+    if (!user.id || typeof user.id === undefined) {
+      toast.error("User must be Logged in to Continue")
+      router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`)
       return
     }
 
@@ -114,7 +116,7 @@ const ProductDetails = () => {
   }
 
   if (status === 'pending') {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   if (status === 'error' && !productData?.productId) {
@@ -166,8 +168,8 @@ const ProductDetails = () => {
           <BreadCrumbs
             className='text-[0.9em]'
             routes={[
-              `${category}`,
-              `${category}/${productSlug}`
+              `product/${category}`,
+              `product/${category}/${productSlug}`
             ]} />
 
           <h1 className='text-[1.5em]'>{productData.longTitle}</h1>

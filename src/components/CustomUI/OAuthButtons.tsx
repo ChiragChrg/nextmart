@@ -5,23 +5,21 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 const OAuthButtons = () => {
-    const router = useRouter()
-    const params = useSearchParams().get("callbackUrl")
-    const callback = params ? params as string : ""
+    const searchParams = useSearchParams()
+    const callbackUrl = searchParams.get('callbackUrl')
 
     const handleOAuthLogin = async (provider: "google" | "github") => {
         const OAuthTostID = toast.loading(`Connecting to ${provider.charAt(0).toUpperCase() + provider.slice(1)}...`)
 
         try {
             const res = await signIn(provider, {
-                callbackUrl: callback || "/"
+                callbackUrl: callbackUrl ? decodeURIComponent(callbackUrl) : '/'
             })
 
             if (res?.status === 200) {
                 toast.success("Logged in Successfully!", {
                     id: OAuthTostID
                 })
-                router.push("/")
             }
         } catch (err) {
             toast.error(err || "Something went wrong!", {

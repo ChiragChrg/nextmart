@@ -1,7 +1,7 @@
 "use client"
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Input from '../CustomUI/Input';
 import SubmitButton from '../CustomUI/SubmitButton';
 import toast from 'react-hot-toast';
@@ -14,6 +14,8 @@ const LoginForm = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const callbackUrl = searchParams.get('callbackUrl')
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -34,7 +36,7 @@ const LoginForm = () => {
                     id: LoginToastID
                 })
 
-                router.push("/")
+                router.push(callbackUrl ? decodeURIComponent(callbackUrl) : '/')
             } else {
                 throw new Error()
             }
