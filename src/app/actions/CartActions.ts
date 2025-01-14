@@ -120,12 +120,22 @@ export const addToCart = async (cart: AddToCartType): Promise<ResponseType> => {
                 }
             });
 
-
             const formattedNewCart = {
-                ...newCart,
+                cartId: newCart.id,
+                userId: newCart.userId,
+                items: newCart.items &&
+                    newCart.items.map(item => ({
+                        ...item,
+                        product: item.product && {
+                            ...item.product,
+                            productId: item.product.id
+                        },
+                    })),
+                totalAmount: newCart.totalAmount,
                 createdAt: newCart.createdAt.toISOString(),
                 updatedAt: newCart.updatedAt.toISOString(),
-            };
+            }
+
             console.log("New_Cart", formattedNewCart)
             return { status: 201, message: "Cart created successfully!", response: formattedNewCart as CartType } as ResponseType;
         }
@@ -157,14 +167,23 @@ export const addToCart = async (cart: AddToCartType): Promise<ResponseType> => {
                 }
             }
         });
-
-        const formattedCart = {
-            ...updatedCart,
+        const formattedUpdatedCart = {
+            cartId: updatedCart.id,
+            userId: updatedCart.userId,
+            items: updatedCart.items &&
+                updatedCart.items.map(item => ({
+                    ...item,
+                    product: item.product && {
+                        ...item.product,
+                        productId: item.product.id
+                    },
+                })),
+            totalAmount: updatedCart.totalAmount,
             createdAt: updatedCart.createdAt.toISOString(),
             updatedAt: updatedCart.updatedAt.toISOString(),
-        };
+        }
 
-        return { status: 200, message: "Cart updated successfully!", response: formattedCart as CartType } as ResponseType;
+        return { status: 200, message: "Cart updated successfully!", response: formattedUpdatedCart as CartType } as ResponseType;
     } catch (error: any) {
         console.log("Cart_Update_Error:", error);
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
@@ -205,19 +224,28 @@ export const removeItemFromCart = async (userId: string, productId: string): Pro
                     }
                     return total;
                 }, 0),
-            },
-            include: { items: true }
+            }
         });
 
-        const formattedCart = {
-            ...updatedCart,
-            createdAt: updatedCart.createdAt.toISOString(),
-            updatedAt: updatedCart.updatedAt.toISOString(),
-        };
+        // const formattedCart = {
+        //     cartId: updatedCart.id,
+        //     userId: updatedCart.userId,
+        //     items: updatedCart.items &&
+        //         updatedCart.items.map(item => ({
+        //             ...item,
+        //             product: item.product && {
+        //                 ...item.product,
+        //                 productId: item.product.id
+        //             },
+        //         })),
+        //     totalAmount: updatedCart.totalAmount,
+        //     createdAt: updatedCart.createdAt.toISOString(),
+        //     updatedAt: updatedCart.updatedAt.toISOString(),
+        // }
 
-        console.log({ remove: updatedCart })
 
-        return { status: 204, message: "Item removed successfully!", response: formattedCart as CartType } as ResponseType;
+        // return { status: 204, message: "Item removed successfully!", response: formattedCart as CartType } as ResponseType;
+        return { status: 204, message: "Item removed successfully!" } as ResponseType;
     } catch (error: any) {
         console.log("Remove_Item_Error:", error);
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
@@ -262,10 +290,20 @@ export const updateCartItems = async (cartData: CartType): Promise<ResponseType>
         });
 
         const formattedCart = {
-            ...updatedCart,
+            cartId: updatedCart.id,
+            userId: updatedCart.userId,
+            items: updatedCart.items &&
+                updatedCart.items.map(item => ({
+                    ...item,
+                    product: item.product && {
+                        ...item.product,
+                        productId: item.product.id
+                    },
+                })),
+            totalAmount: updatedCart.totalAmount,
             createdAt: updatedCart.createdAt.toISOString(),
             updatedAt: updatedCart.updatedAt.toISOString(),
-        };
+        }
 
         return { status: 200, message: "Updated Cart Successfully!", response: formattedCart as CartType } as ResponseType;
     } catch (error: any) {
