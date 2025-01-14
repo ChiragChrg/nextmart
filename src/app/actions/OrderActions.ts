@@ -28,7 +28,11 @@ export const getUserOrder = async (userId: string) => {
             include: {
                 items: {
                     include: {
-                        product: true
+                        product: {
+                            include: {
+                                category: true
+                            }
+                        }
                     }
                 }
             }

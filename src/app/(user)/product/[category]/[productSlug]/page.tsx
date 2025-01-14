@@ -16,6 +16,7 @@ import toast from 'react-hot-toast'
 import { getProductBySlug } from '@/app/actions/ProductsAction'
 import { productType } from '@/types'
 import Loading from './components/Loading'
+import { useAddToCart } from '@/hooks/useCart'
 
 const ProductDetails = () => {
   const { category, productSlug } = useParams<{ category: string, productSlug: string }>()
@@ -68,42 +69,12 @@ const ProductDetails = () => {
     }
   }
 
-  const addToCartMutation = useMutation({
-    mutationFn: async () => {
-      if (!productData) {
-        throw new Error('Product data is not available');
-      }
+  const { mutate: AddToCart, status: AddToCartStatus } = useAddToCart()
 
-      if (!user?.id) {
-        throw new Error('User ID is not available');
-      }
-
-      const flatProductData = {
-        userId: user.id,
-        productId: productData.productId!,
-        quantity: quantity,
-      }
-      const res = await addToCart(flatProductData)
-      return res.response as CartType
-    },
-    onSuccess: (data) => {
-      if (!data) {
-        throw new Error('Product data is not available');
-      }
-
+  useEffect(() => {
+    if (AddToCartStatus === 'success')
       setExistsInCart(true)
-
-      // Update Cart Redux store
-      dispatch(cartActions.updateCart(data))
-
-      queryClient.invalidateQueries({ queryKey: ['cart'] })
-      toast.success('Product added to cart successfully')
-    },
-    onError: (error) => {
-      console.log("Cart_Update_Error:", error)
-      toast.error('Failed to add product to cart')
-    }
-  })
+  }, [AddToCartStatus])
 
   const handleAddToCart = () => {
     if (!user.id || typeof user.id === undefined) {
@@ -112,7 +83,11 @@ const ProductDetails = () => {
       return
     }
 
-    addToCartMutation.mutate()
+    if (productData) {
+      AddToCart({ productData, userId: user.id, quantity });
+    } else {
+      toast.error("Product data is not available");
+    }
   }
 
   if (status === 'pending') {
