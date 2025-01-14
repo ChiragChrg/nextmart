@@ -21,7 +21,7 @@ export interface OrderType {
     razorpaySignature: string;
     createdAt?: string;
     updatedAt?: string;
-}[]
+}
 
 const initialState: OrderType[] = [];
 

@@ -145,7 +145,7 @@ export const createOrder = async ({ cartId, razorpayOrderId, razorpayPaymentId, 
                     }))
                 },
                 totalAmount: cart.totalAmount,
-                status: "Processing",
+                status: "Success",
                 razorpayOrderId,
                 razorpayPaymentId,
                 razorpaySignature,

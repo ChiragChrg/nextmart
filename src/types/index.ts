@@ -69,3 +69,12 @@ export type OrderTableType = {
     status: string;
     totalAmount: number;
 }
+
+export type CustomerTableType = {
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: boolean;
+    image: string;
+    createdAt: string;
+}

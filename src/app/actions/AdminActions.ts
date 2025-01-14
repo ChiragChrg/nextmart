@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { SignToken } from '@/lib/jwt';
 import { prisma } from '@/prisma';
 import { productType } from '@/types';
+import { UserType } from '@/store/userSlice';
 
 type ResponseType = {
     status: number;
@@ -106,6 +107,27 @@ export const createProduct = async (productData: productType) => {
         return { status: 201, message: "Product Created Successfully!" } as ResponseType
     } catch (error: any) {
         console.log("Create_Product_Error : ", error)
+        return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
+    }
+}
+
+export const getCustomers = async () => {
+    try {
+        const customers = await prisma.user.findMany({
+            where: { role: "USER" }
+        })
+
+        const formattedCustomers = customers.map(customer => ({
+            ...customer,
+            emailVerified: customer.emailVerified ? true : false,
+            createdAt: customer.createdAt.toISOString(),
+            updatedAt: customer.updatedAt.toISOString()
+        }))
+
+        // console.log("customers", customers)
+        return { status: 200, message: "Customers fetched Successfully!", response: formattedCustomers as UserType[] } as ResponseType
+    } catch (error: any) {
+        console.log("Fetch_Customers_Error : ", error)
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
     }
 }
