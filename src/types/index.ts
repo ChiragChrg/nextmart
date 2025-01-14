@@ -48,7 +48,7 @@ export type productType = {
 }
 
 
-export type ProductTypeFlat = {
+export type ProductTableType = {
     productId?: string;
     image: {
         imageUrl: string,
@@ -60,4 +60,12 @@ export type ProductTypeFlat = {
     category: string;
     stock: number;
     productPath: string;
+}
+
+export type OrderTableType = {
+    orderId: string;
+    razorpayId: string;
+    orderDate: string;
+    status: string;
+    totalAmount: number;
 }

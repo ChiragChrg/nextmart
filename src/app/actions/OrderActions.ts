@@ -17,6 +17,53 @@ type CreateOrderType = {
     razorpaySignature: string;
 }
 
+export const getAllOrders = async () => {
+    try {
+        const orderList = await prisma.order.findMany({
+            include: {
+                items: {
+                    include: {
+                        product: {
+                            include: {
+                                category: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        if (orderList.length <= 0) {
+            return { status: 404, message: "Orders not found!" } as ResponseType;
+        }
+
+        const formattedOrderList = orderList.map((order: any) => ({
+            orderId: order.id,
+            userId: order.userId,
+            items: order?.items?.map((item: any) => ({
+                ...item,
+                product: {
+                    ...item.product,
+                    productId: item.product.id
+                },
+            })),
+            totalAmount: order.totalAmount,
+            status: order.status,
+            razorpayOrderId: order.razorpayOrderId,
+            razorpayPaymentId: order.razorpayPaymentId,
+            razorpaySignature: order.razorpaySignature,
+            createdAt: order.createdAt.toISOString(),
+            updatedAt: order.updatedAt.toISOString(),
+        }))
+
+        console.log("order_Data", formattedOrderList)
+        return { status: 200, message: "Order fetched successfully!", response: formattedOrderList as OrderType[] } as ResponseType
+    } catch (error: any) {
+        console.log("Product_Fetch_Error : ", error)
+        return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
+    }
+}
+
 export const getUserOrder = async (userId: string) => {
     try {
         if (!userId) {

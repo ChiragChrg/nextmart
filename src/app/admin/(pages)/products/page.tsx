@@ -6,7 +6,7 @@ import Link from 'next/link'
 import React from 'react'
 import { DataTable } from '@/components/ui/data-table'
 import { deleteProductById, getAllProducts } from '@/app/actions/ProductsAction'
-import { productType, ProductTypeFlat } from '@/types'
+import { productType, ProductTableType } from '@/types'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
@@ -42,7 +42,7 @@ const Products = () => {
         },
     })
 
-    const formattedData: ProductTypeFlat[] = productData?.map(product => ({
+    const formattedData: ProductTableType[] = productData?.map(product => ({
         productId: product.productId,
         image: product.images[0],
         title: product.title,
@@ -53,7 +53,7 @@ const Products = () => {
         productPath: `/product/${product.category?.categorySlug}/${product.productSlug}`
     })) ?? []
 
-    const columns: ColumnDef<ProductTypeFlat>[] = [
+    const columns: ColumnDef<ProductTableType>[] = [
         {
             id: "select",
             header: ({ table }) => (
@@ -249,7 +249,7 @@ const Products = () => {
                 </Button>
             </div>
 
-            <DataTable columns={columns} data={formattedData} />
+            <DataTable columns={columns} data={formattedData} filterColumn='title' filterPlaceholder='Filter Products...' />
         </section>
     )
 }

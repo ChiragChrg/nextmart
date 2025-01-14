@@ -96,6 +96,10 @@ export const addToCart = async (cart: AddToCartType): Promise<ResponseType> => {
             return { status: 404, message: "Product not found!" } as ResponseType;
         }
 
+        if (product.stock.quantity < cart.quantity) {
+            return { status: 409, message: `Insufficient Stock! Available: ${product.stock.quantity}` } as ResponseType;
+        }
+
         // Create New Cart
         if (!existingCart) {
             const newCart = await prisma.cart.create({
@@ -183,7 +187,7 @@ export const addToCart = async (cart: AddToCartType): Promise<ResponseType> => {
             updatedAt: updatedCart.updatedAt.toISOString(),
         }
 
-        return { status: 200, message: "Cart updated successfully!", response: formattedUpdatedCart as CartType } as ResponseType;
+        return { status: 201, message: "Cart updated successfully!", response: formattedUpdatedCart as CartType } as ResponseType;
     } catch (error: any) {
         console.log("Cart_Update_Error:", error);
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
@@ -252,7 +256,7 @@ export const removeItemFromCart = async (userId: string, productId: string): Pro
     }
 };
 
-export const updateCartItems = async (cartData: CartType): Promise<ResponseType> => {
+export const updateCartItems = async (cartData: CartType, productId?: string): Promise<ResponseType> => {
     try {
         if (!cartData || !cartData.userId) {
             return { status: 422, message: "Invalid Cart Data!" } as ResponseType;
@@ -264,6 +268,21 @@ export const updateCartItems = async (cartData: CartType): Promise<ResponseType>
 
         if (!cart) {
             return { status: 404, message: "Cart not found!" } as ResponseType;
+        }
+
+        if (productId) {
+            const product = await prisma.product.findUnique({
+                where: { id: productId }
+            })
+
+            if (!product) {
+                return { status: 404, message: "Product not found!" } as ResponseType;
+            }
+
+            const item = cartData.items.find(i => i.productId === productId);
+            if (item && product.stock.quantity < item.quantity) {
+                return { status: 409, message: `Insufficient Stock! Available: ${product.stock.quantity}` } as ResponseType;
+            }
         }
 
         const updatedCart = await prisma.cart.update({

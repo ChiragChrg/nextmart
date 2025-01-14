@@ -1,6 +1,6 @@
 "use client"
 
-import { useFetchOrders } from '@/hooks/useFetchData'
+import { useFetchUserOrders } from '@/hooks/useFetchData'
 import { cn } from '@/lib/utils'
 import { RootState } from '@/store'
 import { BadgeIndianRupeeIcon, CheckCircleIcon, CircleXIcon, PackageSearchIcon, ReceiptTextIcon, RefreshCcwIcon, ShoppingCartIcon, TimerIcon } from 'lucide-react'
@@ -12,7 +12,7 @@ import Link from 'next/link'
 
 const Orders = () => {
     const userId = useSelector<RootState>(state => state.user.user?.id) as string
-    const { data: orderList, status: orderStatus } = useFetchOrders(userId)
+    const { data: orderList, status: orderStatus } = useFetchUserOrders(userId)
 
 
     return (

@@ -1,10 +1,25 @@
 import { getUserCart } from '@/app/actions/CartActions';
-import { getUserOrder } from '@/app/actions/OrderActions';
+import { getAllOrders, getUserOrder } from '@/app/actions/OrderActions';
 import { CartType } from '@/store/cartSlice';
 import { OrderType } from '@/store/orderSlice';
 import { useQuery } from '@tanstack/react-query';
 
-export const useFetchOrders = (userId: string) => useQuery({
+export const useFetchAllOrders = () => useQuery({
+    queryKey: ['fetch-all-orders'],
+    queryFn: async () => {
+        try {
+            const res = await getAllOrders();
+            console.log("OrderFetch_Res", res)
+            if (res.status === 200)
+                return res.response as OrderType[];
+        } catch (error) {
+            console.error('Error fetching Cart:', error);
+        }
+        return null;
+    }
+});
+
+export const useFetchUserOrders = (userId: string) => useQuery({
     queryKey: ['fetch-orders'],
     queryFn: async () => {
         try {

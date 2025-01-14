@@ -45,10 +45,15 @@ export const useAddToCart = () => {
                 quantity: quantity,
             }
             const res = await addToCart(flatProductData)
+            if (res.status !== 201) {
+                console.log({ res })
+                throw new Error(res.message)
+            }
             return res.response as CartType
         },
         onSuccess: (data) => {
             if (!data) {
+                console.log(data)
                 throw new Error('Product data is not available');
             }
 
@@ -62,7 +67,7 @@ export const useAddToCart = () => {
         },
         onError: (error) => {
             console.log("Cart_Update_Error:", error)
-            toast.error('Failed to add product to cart')
+            toast.error(error.message || 'Failed to add product to cart')
         }
     })
 }

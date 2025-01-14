@@ -99,6 +99,20 @@ const ProductDetails = () => {
     return null
   }
 
+  const shareProduct = async () => {
+    if (navigator.share) {
+      await navigator.share({
+        title: productData.longTitle,
+        text: productData.description,
+        url: window.location.href
+      });
+      console.log('Thanks for sharing!');
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success('Product URL copied to clipboard!');
+    }
+  }
+
   return (
     <main className='main_style mt-8'>
       <section className="flex justify-evenly gap-10">
@@ -223,7 +237,10 @@ const ProductDetails = () => {
               <span>Add to WishList</span>
             </Button>
 
-            <Button variant={'secondary'} className="flex_center gap-3 bg-secondaryClr hover:bg-secondaryClr_Alt w-full">
+            <Button
+              variant={'secondary'}
+              onClick={shareProduct}
+              className="flex_center gap-3 bg-secondaryClr hover:bg-secondaryClr_Alt w-full">
               <Share2Icon />
               <span>Share</span>
             </Button>

@@ -183,13 +183,14 @@ const Checkout = () => {
         }
     }
 
-    const updateUserCart = async () => {
+    const updateUserCart = async (productId: string) => {
         try {
-            const res = await updateCartItems(cart)
+            const res = await updateCartItems(cart, productId)
             console.log("UpdateCart_Res", res)
 
             if (res.status !== 200) {
-                throw new Error('Failed to Generate RazorPay OrderID');
+                toast.error(res.message)
+                return
             }
 
             const cartRes = res.response as CartType
@@ -278,7 +279,7 @@ const Checkout = () => {
 
                                             {isQuantityUpdated && <Button
                                                 variant={'secondary'}
-                                                onClick={updateUserCart}
+                                                onClick={() => updateUserCart(item.productId)}
                                                 className='w-full bg-secondaryClr_Alt border border-primaryClr'>
                                                 Update
                                             </Button>}
