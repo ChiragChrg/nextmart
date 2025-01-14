@@ -32,9 +32,8 @@ declare global {
 }
 
 type OrderResponseType = {
-    orderCreationId: string;
-    razorpayPaymentId: string;
     razorpayOrderId: string;
+    razorpayPaymentId: string;
     razorpaySignature: string;
 }
 
@@ -55,15 +54,13 @@ const Checkout = () => {
         razorpayOrderId,
         razorpayPaymentId,
         razorpaySignature,
-    }: OrderResponseType) => {
+    }: OrderResponseType, cartId: string) => {
         try {
-            const userId = user.id as string
             const orderParams = {
-                userId,
+                cartId,
                 razorpayOrderId,
                 razorpayPaymentId,
                 razorpaySignature,
-                cartId: cart.cartId as string
             }
             const res = await createOrder(orderParams)
             console.log("Create_Order_Res:", res)
@@ -72,10 +69,12 @@ const Checkout = () => {
                 await queryClient.invalidateQueries({ queryKey: ['fetch-cart'] })
                 dispatch(cartActions.clearCart())
                 router.push("/orders")
+            } else {
+                toast.error("Something went Wrong. Try Again Later!")
             }
         } catch (error) {
             console.log("Create_Order_Error : ", error)
-            toast.error("Failed to remove cart item")
+            toast.error("Failed to Update Order")
         }
     }
 
@@ -106,6 +105,8 @@ const Checkout = () => {
     };
 
     const handlePayment = async () => {
+        await queryClient.invalidateQueries({ queryKey: ['fetch-cart'] })
+
         if (cart.items.length <= 0) {
             toast.error("Cart is Empty")
             return
@@ -114,7 +115,6 @@ const Checkout = () => {
         try {
             setIsPending(true)
 
-            await queryClient.invalidateQueries({ queryKey: ['fetch-cart'] })
             cart.items.forEach((item) => {
                 if (!item.product?.stock.isInStock) {
                     throw new Error(item.product?.title + " is Out of Stock!");
@@ -151,7 +151,11 @@ const Checkout = () => {
                     console.log("Payment_Verify_Res", res)
 
                     if (res.status === 200) {
-                        await updateOrder(data)
+                        if (cart.cartId) {
+                            await updateOrder(data, cart.cartId)
+                        } else {
+                            toast.error("Cart ID is missing")
+                        }
                         toast.success("Payment Completed!");
                     } else
                         toast.error(res.message);

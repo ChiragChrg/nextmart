@@ -29,15 +29,6 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ message: 'Payment Verification Failed', status: 400 });
         }
 
-        // const updatedOrder = await prisma.order.update({
-        //     where: {  },
-        //     data: {
-        //         razorpayPaymentId,
-        //         razorpaysignature: razorpaySignature,
-        //         status: 'Completed',
-        //     },
-        // });
-
         return NextResponse.json({ message: 'Payment Verified Successfully', status: 200 });
     } catch (error) {
         return NextResponse.json({ message: 'An error occurred during payment verification', status: 500 });
