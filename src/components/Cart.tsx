@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sheet"
 import Image from "next/image"
 import Link from "next/link"
-import toast from "react-hot-toast"
+import { useFetchCart } from "@/hooks/useFetchData"
 
 type Props = {
     className?: string,
@@ -42,44 +42,13 @@ const Cart = ({ className = "", showText = false }: Props) => {
         setCartCount(cart.items.length)
     }, [cart])
 
-    const { data: cartData, status: cartFetchStatus } = useQuery({
-        queryKey: ["fetch-cart"],
-        queryFn: async () => {
-            try {
-                if (!user.id) throw new Error('User ID is undefined');
-
-                const res = await getUserCart(user.id);
-
-                // console.log("CartFetch_Res", res)
-                if (res.status === 200)
-                    return res.response as CartType
-            } catch (error) {
-                console.error('Error fetching Cart:', error);
-            }
-            return null;
-        },
-        enabled: !!user?.id
-    })
+    const { data: cartData, status: cartFetchStatus } = useFetchCart(user?.id as string)
 
     useEffect(() => {
         if (cartFetchStatus === "success" && cartData) {
             dispatch(cartActions.updateCart(cartData));
         }
     }, [cartData, cartFetchStatus, dispatch])
-
-    // const handleRemoveCartItem = async (productId: string) => {
-    //     try {
-    //         const userId = user.id as string
-    //         const res = await removeItemFromCart(userId, productId)
-    //         if (res.status === 204) {
-    //             toast.success("Item removed from cart!")
-    //             dispatch(cartActions.removeItem(productId))
-    //         }
-    //     } catch (error) {
-    //         console.log("Cart_Item_Remove_Error : ", error)
-    //         toast.error("Failed to remove cart item")
-    //     }
-    // }
 
     return (
         <Sheet open={showCart} onOpenChange={setShowCart}>
