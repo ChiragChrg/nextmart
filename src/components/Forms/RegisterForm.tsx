@@ -21,7 +21,7 @@ const RegisterForm = () => {
     }, [state]);
 
     return (
-        <form action={action} className='bg-background py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full'>
+        <form action={action} className='bg-background py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full sm:max-w-md'>
             <Input type='text' label='Username' name='username' placeholder='Enter your name' defaultValue={state?.formFields?.username} />
             <Input type='email' label='Email' name='email' placeholder='example@email.com' defaultValue={state?.formFields?.email} />
             <Input type='password' label='Password' name='password' placeholder='Enter Password' defaultValue={state?.formFields?.password} />

@@ -2,7 +2,7 @@
 import { TextLogoSVG } from '@/assets/SVGs'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { LayoutGridIcon, LogOutIcon, PackageIcon, ShoppingBagIcon, SwatchBookIcon, User2Icon, UsersRoundIcon } from 'lucide-react'
+import { GalleryHorizontalIcon, LayoutGridIcon, LogOutIcon, PackageIcon, ShoppingBagIcon, SwatchBookIcon, User2Icon, UsersRoundIcon } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -38,6 +38,11 @@ const Sidebar = () => {
             title: "Customers",
             path: "/admin/customers",
             icon: <UsersRoundIcon />,
+        },
+        {
+            title: "Carousel",
+            path: "/admin/carousel",
+            icon: <GalleryHorizontalIcon />,
         },
     ]
 

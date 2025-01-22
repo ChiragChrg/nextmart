@@ -2,6 +2,7 @@
 
 import LoaderIcon from '@/components/CustomUI/LoaderIcon';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { formatFileSize } from '@edgestore/react/utils';
 import { CheckCircleIcon, ImageUpIcon, UploadCloudIcon, X } from 'lucide-react';
 import Image from 'next/image';
@@ -157,7 +158,10 @@ const MultiImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
 
         return (
             <div className='w-full'>
-                <div className="grid grid-cols-[repeat(1,1fr)] gap-4 sm:grid-cols-[repeat(2,1fr)] lg:grid-cols-[repeat(3,1fr)] xl:grid-cols-[repeat(3,1fr)] mb-4">
+                <div className={cn((dropzoneOptions?.maxFiles ?? 0) > 1 ?
+                    "grid grid-cols-[repeat(1,1fr)] gap-4 sm:grid-cols-[repeat(2,1fr)] lg:grid-cols-[repeat(3,1fr)] xl:grid-cols-[repeat(3,1fr)] mb-4"
+                    :
+                    "flex_center mb-4")}>
                     {/* Images */}
                     {value?.map(({ file, progress }, index) => (
                         <div key={index} className={variants.image + ' aspect-video'}>

@@ -91,7 +91,7 @@ const NewProduct = () => {
     })
 
     const { data: productList } = useQuery({
-        queryKey: ["fetch-all-roducts"],
+        queryKey: ["fetch-all-products"],
         queryFn: async () => {
             try {
                 const res = await getAllProducts()

@@ -2,7 +2,7 @@
 import { cookies } from 'next/headers';
 import { SignToken } from '@/lib/jwt';
 import { prisma } from '@/prisma';
-import { productType } from '@/types';
+import { CarouselType, productType } from '@/types';
 import { UserType } from '@/store/userSlice';
 
 type ResponseType = {
@@ -128,6 +128,60 @@ export const getCustomers = async () => {
         return { status: 200, message: "Customers fetched Successfully!", response: formattedCustomers as UserType[] } as ResponseType
     } catch (error: any) {
         console.log("Fetch_Customers_Error : ", error)
+        return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
+    }
+}
+
+export const getAllCarousel = async () => {
+    try {
+        const carousel = await prisma.carousel.findMany()
+        return { status: 200, message: "Carousel fetched Successfully!", response: carousel as CarouselType[] } as ResponseType
+    } catch (error: any) {
+        console.log("Fetch_Carousel_Error : ", error)
+        return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
+    }
+}
+
+export const createCarouselPoster = async (posterData: {
+    posterTitle: string;
+    posterSubtitle: string;
+    posterDescription: string;
+    productUrl: string;
+    posterImage: string;
+}) => {
+    try {
+        const newCarousel = await prisma.carousel.create({
+            data: {
+                title: posterData.posterTitle,
+                subtitle: posterData.posterSubtitle,
+                description: posterData.posterDescription,
+                poster: posterData.posterImage,
+                productUrl: posterData.productUrl,
+                status: "inactive"
+            }
+        });
+
+        // console.log("customers", customers)
+        return { status: 201, message: "Poster Created Successfully!", response: newCarousel as CarouselType } as ResponseType
+    } catch (error: any) {
+        console.log("Create_Carousel_Error : ", error)
+        return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
+    }
+}
+
+export const updateCarouselStatus = async (carouselId: string, status: "active" | "inactive") => {
+    try {
+        const updatedCarousel = await prisma.carousel.update({
+            where: { id: carouselId },
+            data: {
+                status: status,
+            }
+        });
+
+        // console.log("customers", customers)
+        return { status: 200, message: "Carousel Updated Successfully!", response: updatedCarousel as CarouselType } as ResponseType
+    } catch (error: any) {
+        console.log("Update_Carousel_Error : ", error)
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
     }
 }

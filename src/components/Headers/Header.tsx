@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { SearchIcon } from "lucide-react"
+import { PackageIcon, SearchIcon } from "lucide-react"
 import { OrdersButton } from "../Buttons"
 import { TextLogoSVG } from "@/assets/SVGs"
 import UserAvatar from "../UserAvatar"
@@ -40,7 +40,9 @@ const Header = () => {
                 <Search />
 
                 <div className="flex gap-3 items-center">
-                    <OrdersButton className='header_btn' width="25px" height="25px" />
+                    <Link href="/orders">
+                        <PackageIcon />
+                    </Link>
                     <Cart className='header_btn' />
                     <UserAvatar />
                 </div>

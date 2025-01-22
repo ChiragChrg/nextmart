@@ -78,3 +78,13 @@ export type CustomerTableType = {
     image: string;
     createdAt: string;
 }
+
+export type CarouselType = {
+    id: string;
+    title: string;
+    subtitle: string;
+    description: string;
+    poster: string;
+    productUrl: string;
+    status: "active" | "inactive";
+}

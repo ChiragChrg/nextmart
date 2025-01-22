@@ -80,7 +80,7 @@ const ProductPrice = (props: Props) => {
             <Input
                 type='number'
                 name='discountPercentage'
-                label='Product Discount'
+                label='Product Discount (in % Percentage)'
                 placeholder='Enter Discount (in % Percentage)'
                 min={0}
                 max={100}

@@ -1,0 +1,10 @@
+model Carousel {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    title       String
+    subtitle    String
+    description String
+    poster      String
+    productUrl  String
+    status      String
+    slotId      Int
+}

@@ -64,7 +64,7 @@ const OAuthButtons = () => {
             </button>
 
             {/* GitHUb Login Button */}
-            <button
+            {/* <button
                 className='bg-secondary text-textClr w-full flex_center gap-4 p-2 rounded disabled:cursor-default'
                 onClick={() => handleOAuthLogin("github")}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className='w-[30px] h-[30px]'>
@@ -75,7 +75,7 @@ const OAuthButtons = () => {
                     ></path>
                 </svg>
                 <span className='text-[1.2em] font-medium'>GitHub</span>
-            </button>
+            </button> */}
         </div>
     )
 }

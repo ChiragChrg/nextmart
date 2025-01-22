@@ -114,7 +114,7 @@ const ProductDetails = () => {
   }
 
   return (
-    <main className='main_style mt-8'>
+    <main className='main_style mt-8 flex_center'>
       <section className="flex justify-evenly gap-10">
         {/* Left section - Product Preview images */}
         <div className="w-1/2 flex justify-center items-start gap-4">
@@ -268,10 +268,10 @@ const ProductDetails = () => {
       </section>
 
       {/* Product Description */}
-      <section className="pt-8">
+      {/* <section className="pt-8">
         <h2 className='font-bold text-[1.4em]'>Product Description</h2>
         <p>{productData.description}</p>
-      </section>
+      </section> */}
     </main>
   )
 }
