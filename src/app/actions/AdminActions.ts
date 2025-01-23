@@ -12,6 +12,7 @@ type ResponseType = {
     response?: unknown;
 }
 
+// #region Admin Actions
 export const adminLogin = async (previousState: unknown, formData: FormData) => {
     const email = process.env.ADMIN_EMAIL;
     const password = formData.get("password") as string;
@@ -45,7 +46,9 @@ export const adminLogin = async (previousState: unknown, formData: FormData) => 
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
     }
 }
+//#endregion Admin Actions
 
+//#region Category Actions
 export const createCategory = async (previousState: unknown, formData: FormData) => {
     const parentCategoryId = formData.get("parentCategoryID") as string;
     const categoryName = formData.get("categoryName") as string;
@@ -74,7 +77,9 @@ export const createCategory = async (previousState: unknown, formData: FormData)
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
     }
 }
+//#endregion Category Actions
 
+//#region Product Actions
 export const createProduct = async (productData: productType) => {
     const { productSlug, title, longTitle, description, categoryId, brand, price, stock, images, features, variants, ratings, tags } = productData
     console.log("createProduct", productData)
@@ -110,7 +115,9 @@ export const createProduct = async (productData: productType) => {
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
     }
 }
+//#endregion Product Actions
 
+//#region Customer Actions
 export const getCustomers = async () => {
     try {
         const customers = await prisma.user.findMany({
@@ -131,7 +138,9 @@ export const getCustomers = async () => {
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
     }
 }
+// #endregion Customer Actions
 
+// #region Carousel Actions
 export const getAllCarousel = async () => {
     try {
         const carousel = await prisma.carousel.findMany()
@@ -148,6 +157,7 @@ export const createCarouselPoster = async (posterData: {
     posterDescription: string;
     productUrl: string;
     posterImage: string;
+    posterSlot: number;
 }) => {
     try {
         const newCarousel = await prisma.carousel.create({
@@ -157,7 +167,8 @@ export const createCarouselPoster = async (posterData: {
                 description: posterData.posterDescription,
                 poster: posterData.posterImage,
                 productUrl: posterData.productUrl,
-                status: "inactive"
+                status: "inactive",
+                slotId: posterData.posterSlot
             }
         });
 
@@ -185,3 +196,4 @@ export const updateCarouselStatus = async (carouselId: string, status: "active" 
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
     }
 }
+// #endregion Carousel Actions

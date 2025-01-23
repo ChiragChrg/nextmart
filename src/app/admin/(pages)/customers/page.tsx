@@ -142,9 +142,9 @@ const Customers = () => {
                 )
             },
             cell: ({ row }) => {
-                const date = Date.parse(row.getValue("registerDate"))
+                const { createdAt } = row.original
 
-                return new Date(date).toLocaleString('en-IN', {
+                return new Date(createdAt).toLocaleString('en-IN', {
                     day: '2-digit',
                     month: 'long',
                     year: 'numeric'

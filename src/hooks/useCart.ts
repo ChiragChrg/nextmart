@@ -14,6 +14,7 @@ export const useHandleRemoveCartItem = () => {
     return useCallback(async ({ productId, userId }: { productId: string, userId: string }) => {
         try {
             const res = await removeItemFromCart(userId, productId)
+
             if (res.status === 204) {
                 toast.success("Item removed from cart!")
                 dispatch(cartActions.removeItem(productId))
