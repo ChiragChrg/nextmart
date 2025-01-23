@@ -205,16 +205,16 @@ const Products = () => {
                                             }
 
                                             const res = await deleteProductById(product.productId)
-                                            console.log(res)
+                                            // console.log(res)
 
                                             if (res.status === 204) {
                                                 const deletedProduct = await res.response as productType
-                                                console.log({ deletedProduct })
+                                                // console.log({ deletedProduct })
 
                                                 deletedProduct.images.forEach(async image => {
                                                     // Delteing images from edgeStore
                                                     const deleteRes = await edgestore.publicImages.delete({ url: image.imageUrl })
-                                                    console.log({ image, deleteRes, deletedProduct })
+                                                    // console.log({ image, deleteRes, deletedProduct })
                                                 })
 
                                                 toast.success("Product Deleted Successfully!")

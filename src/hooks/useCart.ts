@@ -47,14 +47,14 @@ export const useAddToCart = () => {
             }
             const res = await addToCart(flatProductData)
             if (res.status !== 201) {
-                console.log({ res })
+                // console.log({ res })
                 throw new Error(res.message)
             }
             return res.response as CartType
         },
         onSuccess: (data) => {
             if (!data) {
-                console.log(data)
+                // console.log(data)
                 throw new Error('Product data is not available');
             }
 

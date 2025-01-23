@@ -15,7 +15,7 @@ const Carousel = () => {
         queryFn: async () => {
             try {
                 const res = await getAllCarousel();
-                console.log("OrderFetch_Res", res)
+                // console.log("OrderFetch_Res", res)
                 if (res.status === 200)
                     return res.response as CarouselType[];
             } catch (error) {

@@ -56,7 +56,7 @@ export const getAllOrders = async () => {
             updatedAt: order.updatedAt.toISOString(),
         }))
 
-        console.log("order_Data", formattedOrderList)
+        // console.log("order_Data", formattedOrderList)
         return { status: 200, message: "Order fetched successfully!", response: formattedOrderList as OrderType[] } as ResponseType
     } catch (error: any) {
         console.log("Product_Fetch_Error : ", error)
@@ -85,7 +85,7 @@ export const getUserOrder = async (userId: string) => {
             }
         });
 
-        console.log({ orderList })
+        // console.log({ orderList })
 
         if (orderList.length <= 0) {
             return { status: 404, message: "order not found!" } as ResponseType;
@@ -110,7 +110,7 @@ export const getUserOrder = async (userId: string) => {
             updatedAt: order.updatedAt.toISOString(),
         }))
 
-        console.log("order_Data", formattedOrderList)
+        // console.log("order_Data", formattedOrderList)
         return { status: 200, message: "Order fetched successfully!", response: formattedOrderList as OrderType[] } as ResponseType
     } catch (error: any) {
         console.log("Product_Fetch_Error : ", error)

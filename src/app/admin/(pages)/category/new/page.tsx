@@ -34,7 +34,7 @@ const NewCategory = () => {
         queryFn: async () => {
             try {
                 const res = await getAllCategories()
-                console.log("Category_res:", res)
+                // console.log("Category_res:", res)
                 return res.response as CategoryType[]
             } catch (error) {
                 console.error('Error fetching Category:', error);

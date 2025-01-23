@@ -16,7 +16,7 @@ type ResponseType = {
 export const adminLogin = async (previousState: unknown, formData: FormData) => {
     const email = process.env.ADMIN_EMAIL;
     const password = formData.get("password") as string;
-    console.log("ADminLogin", { email, password })
+    // console.log("ADminLogin", { email, password })
 
     try {
         if (!email || !password) {
@@ -82,7 +82,7 @@ export const createCategory = async (previousState: unknown, formData: FormData)
 //#region Product Actions
 export const createProduct = async (productData: productType) => {
     const { productSlug, title, longTitle, description, categoryId, brand, price, stock, images, features, variants, ratings, tags } = productData
-    console.log("createProduct", productData)
+    // console.log("createProduct", productData)
 
 
     try {
@@ -108,7 +108,7 @@ export const createProduct = async (productData: productType) => {
             }
         })
 
-        console.log("newProduct", newProduct)
+        // console.log("newProduct", newProduct)
         return { status: 201, message: "Product Created Successfully!" } as ResponseType
     } catch (error: any) {
         console.log("Create_Product_Error : ", error)

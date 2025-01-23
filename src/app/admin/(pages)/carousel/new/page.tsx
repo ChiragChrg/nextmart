@@ -52,7 +52,7 @@ const NewCarousel = () => {
         queryFn: async () => {
             try {
                 const res = await getAllProducts()
-                console.log("All_Products_res:", res)
+                // console.log("All_Products_res:", res)
                 return res.response as productType[]
             } catch (error) {
                 console.error('Error fetching Products:', error);
@@ -129,19 +129,20 @@ const NewCarousel = () => {
                 posterSubtitle,
                 posterDescription,
                 productUrl,
-                posterImage
+                posterImage,
+                posterSlot: 1 // Default Slot (Temporary) to be made dynamic
             }
 
             const res = await createCarouselPoster(posterData)
             if (res.status !== 201) {
-                console.log({ res })
+                // console.log({ res })
                 throw new Error(res.message)
             }
             return res.response as CarouselType
         },
         onSuccess: (data) => {
             if (!data) {
-                console.log(data)
+                // console.log(data)
                 throw new Error('Product data is not available');
             }
 

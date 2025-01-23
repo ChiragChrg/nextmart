@@ -26,7 +26,7 @@ const Customers = () => {
         queryFn: async () => {
             try {
                 const res = await getCustomers();
-                console.log("CustomersFetch_Res", res)
+                // console.log("CustomersFetch_Res", res)
                 if (res.status === 200)
                     return res.response as UserType[];
             } catch (error) {

@@ -69,7 +69,7 @@ export const getUserCart = async (userId: string) => {
 }
 
 export const addToCart = async (cart: AddToCartType): Promise<ResponseType> => {
-    console.log("addToCart", cart);
+    // console.log("addToCart", cart);
 
     try {
         if (!cart || !cart.productId || cart.quantity <= 0) {
@@ -140,7 +140,7 @@ export const addToCart = async (cart: AddToCartType): Promise<ResponseType> => {
                 updatedAt: newCart.updatedAt.toISOString(),
             }
 
-            console.log("New_Cart", formattedNewCart)
+            // console.log("New_Cart", formattedNewCart)
             return { status: 201, message: "Cart created successfully!", response: formattedNewCart as CartType } as ResponseType;
         }
 

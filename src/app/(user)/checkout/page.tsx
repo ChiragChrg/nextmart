@@ -63,7 +63,7 @@ const Checkout = () => {
                 razorpaySignature,
             }
             const res = await createOrder(orderParams)
-            console.log("Create_Order_Res:", res)
+            // console.log("Create_Order_Res:", res)
 
             if (res.status === 201) {
                 await queryClient.invalidateQueries({ queryKey: ['fetch-cart'] })
@@ -91,7 +91,7 @@ const Checkout = () => {
                     receipt: `${user.name}_${cart.cartId}`,
                 })
             });
-            console.log("Payment_OrderID_Res", res)
+            // console.log("Payment_OrderID_Res", res)
             const data = await res.json();
 
             if (data.status !== 201) {
@@ -148,7 +148,7 @@ const Checkout = () => {
                         body: JSON.stringify(data),
                     });
                     const res = await result.json();
-                    console.log("Payment_Verify_Res", res)
+                    // console.log("Payment_Verify_Res", res)
 
                     if (res.status === 200) {
                         if (cart.cartId) {
@@ -186,7 +186,7 @@ const Checkout = () => {
     const updateUserCart = async (productId: string) => {
         try {
             const res = await updateCartItems(cart, productId)
-            console.log("UpdateCart_Res", res)
+            // console.log("UpdateCart_Res", res)
 
             if (res.status !== 200) {
                 toast.error(res.message)

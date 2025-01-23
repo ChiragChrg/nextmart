@@ -10,7 +10,7 @@ export let deferredPrompt: DeferredPrompt | null = null;
 // Show PWA install alert triggered by user button click
 export const HandlePWAInstall = async () => {
     if (deferredPrompt) {
-        console.log(deferredPrompt)
+        // console.log(deferredPrompt)
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         console.log("PWA Install prompt choice:", outcome)

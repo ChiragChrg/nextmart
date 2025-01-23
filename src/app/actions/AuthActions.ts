@@ -37,7 +37,7 @@ export const registerUser = async (previousState: unknown, formData: FormData) =
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirm_password") as string;
-    console.log("User_Reg_Init", { username, email, password, confirmPassword })
+    // console.log("User_Reg_Init", { username, email, password, confirmPassword })
 
     const formFields = { username, email, password, confirmPassword }
 
@@ -64,7 +64,7 @@ export const registerUser = async (previousState: unknown, formData: FormData) =
             }
         })
 
-        console.log("New_User", newUser)
+        // console.log("New_User", newUser)
 
         return { status: 201, message: "User Registered Successfully!" } as ResponseType
     } catch (error: any) {

@@ -81,7 +81,7 @@ const NewProduct = () => {
         queryFn: async () => {
             try {
                 const res = await getAllCategories()
-                console.log("Category_res:", res)
+                // console.log("Category_res:", res)
                 return res.response as CategoryType[]
             } catch (error) {
                 console.error('Error fetching Category:', error);
@@ -95,7 +95,7 @@ const NewProduct = () => {
         queryFn: async () => {
             try {
                 const res = await getAllProducts()
-                console.log("All_Products_res:", res)
+                // console.log("All_Products_res:", res)
                 return res.response as productType[]
             } catch (error) {
                 console.error('Error fetching Products:', error);

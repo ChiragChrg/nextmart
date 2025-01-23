@@ -9,7 +9,7 @@ const edgeStoreRouter = es.router({
         accept: ["image/png", "image/jpeg", "image/jpg", "image/webp"]
     })
         .beforeDelete(({ ctx, fileInfo }) => {
-            console.log('beforeDelete', ctx, fileInfo);
+            // console.log('beforeDelete', ctx, fileInfo);
             return true;
         }),
 });

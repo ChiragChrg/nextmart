@@ -37,7 +37,7 @@ const ProductDetails = () => {
     queryFn: async () => {
       try {
         const res = await getProductBySlug(productSlug);
-        console.log("Fetch_Res", res)
+        // console.log("Fetch_Res", res)
         return res.response as productType
       } catch (error) {
         console.error('Error fetching Product:', error);
@@ -55,7 +55,7 @@ const ProductDetails = () => {
   }, [status, productData, router]);
 
   useEffect(() => {
-    console.log({ cartItems })
+    // console.log({ cartItems })
     setExistsInCart(cartItems.some(item => item.productId === productData?.productId))
   }, [cartItems, productData?.productId])
 
@@ -106,7 +106,6 @@ const ProductDetails = () => {
         text: productData.description,
         url: window.location.href
       });
-      console.log('Thanks for sharing!');
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast.success('Product URL copied to clipboard!');

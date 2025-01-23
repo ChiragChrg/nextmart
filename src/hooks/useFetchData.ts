@@ -12,7 +12,7 @@ export const useFetchAllOrders = () => useQuery({
     queryFn: async () => {
         try {
             const res = await getAllOrders();
-            console.log("OrderFetch_Res", res)
+            // console.log("OrderFetch_Res", res)
             if (res.status === 200)
                 return res.response as OrderType[];
         } catch (error) {
@@ -27,7 +27,7 @@ export const useFetchAllProducts = () => useQuery({
     queryFn: async () => {
         try {
             const res = await getAllProducts();
-            console.log("OrderFetch_Res", res)
+            // console.log("OrderFetch_Res", res)
             if (res.status === 200)
                 return res.response as productType[];
         } catch (error) {

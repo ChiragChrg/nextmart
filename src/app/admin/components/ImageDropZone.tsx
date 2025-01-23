@@ -94,7 +94,7 @@ const MultiImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
             disabled,
             onDrop: (acceptedFiles) => {
                 const files = acceptedFiles;
-                console.log({ files });
+                // console.log({ files });
                 setCustomError(undefined);
                 if (
                     dropzoneOptions?.maxFiles &&
