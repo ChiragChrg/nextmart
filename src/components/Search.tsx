@@ -1,73 +1,55 @@
 "use client"
 import { useState, useRef, FormEvent } from "react"
+import Fuse, { FuseResult } from 'fuse.js'
+import Link from "next/link"
+import { useQuery } from "@tanstack/react-query"
+import { getFlatProducts } from "@/app/actions/UserActions"
+import { FlatProductType } from "@/types"
+import Image from "next/image"
 
-type SugestList = {
-    name: string,
-    link: string
-}
 
 const Search = () => {
-    const [suggestionList, setSuggestionList] = useState<SugestList[] | null>(null)
-    const SeachInputRef = useRef<HTMLInputElement>(null)
+    const [suggestionList, setSuggestionList] = useState<FuseResult<FlatProductType>[]>([])
 
-    const MockData = [
-        {
-            name: "Cat",
-            link: "www.testGanjaMock.com"
-        },
-        {
-            name: "Can",
-            link: "www.testGanjaMock.com"
-        },
-        {
-            name: "carrot",
-            link: "www.testGanjaMock.com"
-        },
-        {
-            name: "catering",
-            link: "www.testGanjaMock.com"
-        },
-        {
-            name: "fish",
-            link: "www.testGanjaMock.com"
-        },
-        {
-            name: "fire",
-            link: "www.testGanjaMock.com"
-        },
-        {
-            name: "fill",
-            link: "www.testGanjaMock.com"
-        },
-    ]
+    const { data: FlatProductList } = useQuery({
+        queryKey: ['fetch-flat-products'],
+        queryFn: async () => {
+            try {
+                const res = await getFlatProducts();
+                console.log("FlatProductFetch_Res", res)
+                if (res.status === 200)
+                    return res.response as FlatProductType[];
+            } catch (error) {
+                console.error('Error fetching FlatProducts:', error);
+            }
+            return null;
+        }
+    });
 
-    const GetSuggestions = (value: string) => {
-        // console.log(value)
+
+    const fuse = new Fuse(FlatProductList ?? [], {
+        keys: ['title', 'productSlug'],
+        shouldSort: true,
+    })
+
+    const handleUserInput = (value: string) => {
         const inputValue = value.trim().toLowerCase()
         const inputLength = inputValue.length
-        const newSuggestion = MockData.filter((data) => data.name.toLowerCase().slice(0, inputLength) == inputValue)
+        const newSuggestion = fuse.search(inputValue)
+
+        console.log(newSuggestion)
 
         if (inputLength !== 0 && newSuggestion.length !== 0)
             setSuggestionList(newSuggestion)
         else
-            setSuggestionList(null)
-    }
-
-    const HandleSuggestionClick = (suggestion: string) => {
-        // Show results for seelcted suggestion
-
-        if (SeachInputRef.current) {
-            SeachInputRef.current.value = suggestion
-        }
-        setSuggestionList(null)
+            setSuggestionList([])
     }
 
     const HandleSearch = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         // Show results for seelcted suggestion
 
-        setSuggestionList(null)
-        console.log(SeachInputRef.current?.value)
+        setSuggestionList([])
     }
 
     return (
@@ -90,19 +72,39 @@ const Search = () => {
                 <input
                     type="text"
                     className="w-full sm:min-w-[300px] bg-background p-1 px-2 outline-none"
-                    onChange={(e) => GetSuggestions(e.currentTarget.value)}
-                    onBlur={() => setSuggestionList(null)}
-                    ref={SeachInputRef}
+                    onChange={(e) => handleUserInput(e.currentTarget.value)}
                     placeholder="Search for Products" />
 
-                {suggestionList && <div className="absolute bg-background/25 backdrop-blur-sm w-full flex flex-col gap-2 top-11 p-2 border border-secondaryClr rounded z-10">
-                    {suggestionList.map((obj, index) => {
-                        return <div
+                {suggestionList.length > 0 && <div
+                    onBlur={() => setSuggestionList([])}
+                    className="absolute bg-secondaryClr_Alt/25 backdrop-blur-sm w-full flex flex-col gap-2 top-11 p-2 border border-primaryClr_Lite rounded z-10">
+                    {suggestionList.map((product, index) => {
+                        return <Link
                             key={index}
-                            onClick={(e) => HandleSuggestionClick(e.currentTarget.innerText)}
-                            className="bg-background p-2 rounded cursor-pointer hover:bg-secondaryClr">
-                            {obj.name}
-                        </div>
+                            href={`/product/${product.item.category}/${product.item.productSlug}`}
+                            onClick={() => setSuggestionList([])}
+                            className="flex justify-between items-center bg-secondaryClr p-2 rounded cursor-pointer hover:bg-secondaryClr_Alt">
+                            <div className="flex_center gap-4">
+                                <Image
+                                    src={product.item.imageUrl ?? "http://via.placeholder.com/400x400"}
+                                    alt={`${product.item.title} Image`}
+                                    placeholder="blur"
+                                    blurDataURL={"http://via.placeholder.com/400x400"}
+                                    width={50}
+                                    height={50}
+                                    className="rounded-md object-cover max-w-[50px] max-h-[50px]"
+                                />
+                                <div className='flex flex-col justify-center place-items-start'>
+                                    <span className='font-bold text-[1em] capitalize'>{product.item.title}</span>
+                                    <span className="capitalize text-[0.8em]">{product.item.category.replaceAll("-", " ")}</span>
+                                </div>
+                            </div>
+                            <div className="font-sans font-bold text-[1em]">
+                                {new Intl.NumberFormat("en-US", {
+                                    style: "currency",
+                                    currency: "INR",
+                                }).format(product.item.price)}</div>
+                        </Link>
                     })}
                 </div>}
             </form>
