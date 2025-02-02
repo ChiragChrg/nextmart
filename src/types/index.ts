@@ -103,4 +103,31 @@ export type CarouselType = {
     productUrl: string;
     status: "active" | "inactive";
 }
+
+export type AnalyticsType = {
+    orders: {
+        totalOrders: number;
+        thisMonth: number;
+        percentage: number;
+        chartData: { date: string; value: number }[];
+    },
+    revenue: {
+        totalRevenue: number;
+        thisMonth: number;
+        percentage: number;
+        chartData: { date: string; value: number }[];
+    },
+    income: {
+        totalIncome: number;
+        thisMonth: number;
+        percentage: number;
+        chartData: { date: string; value: number }[];
+    },
+    customers: {
+        totalCustomers: number;
+        thisMonth: number;
+        percentage: number;
+        chartData: { date: string; value: number }[];
+    }
+}
 //#endregion Admin Page Types

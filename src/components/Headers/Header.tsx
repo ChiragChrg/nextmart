@@ -40,7 +40,7 @@ const Header = () => {
                 <Search />
 
                 <div className="flex gap-3 items-center">
-                    <Link href="/orders">
+                    <Link href="/orders" className="flex_center bg-secondaryClr hover:bg-secondaryClr_Alt rounded-full w-12 h-12">
                         <PackageIcon />
                     </Link>
                     <Cart className='header_btn' />

@@ -2,7 +2,7 @@
 import { cookies } from 'next/headers';
 import { SignToken } from '@/lib/jwt';
 import { prisma } from '@/prisma';
-import { CarouselType, productType } from '@/types';
+import { AnalyticsType, CarouselType, productType } from '@/types';
 import { UserType } from '@/store/userSlice';
 
 type ResponseType = {
@@ -197,3 +197,118 @@ export const updateCarouselStatus = async (carouselId: string, status: "active" 
     }
 }
 // #endregion Carousel Actions
+
+// #region Analytics Actions
+export const getAnalytics = async () => {
+    const currentDate = new Date()
+
+    try {
+        const orders = await prisma.order.findMany()
+        const users = await prisma.user.findMany()
+
+        // Trend Percentage Calculator
+        const calculatePercentage = (chartData: { date: string; value: number }[] | undefined, totalValue: number) => {
+            if (!chartData || chartData.length < 2) return 0;
+            const [lastValue] = chartData.slice(-1).map(data => data.value);
+            const percentageChange = (lastValue / totalValue) * 100;
+            return Math.round(percentageChange);
+        }
+
+        // Orders Analytics
+        const orderChartData = Object.values(
+            orders.reduce((acc, order) => {
+                const date = order.createdAt.toISOString().split("T")[0];
+                acc[date] = { date, value: (acc[date]?.value ?? 0) + 1 };
+                return acc;
+            }, {} as Record<string, { date: string; value: number }>)
+        )
+
+        const orderAnalytics = {
+            totalOrders: orders.length,
+            thisMonth: orders.filter(order => order.createdAt.getMonth() === currentDate.getMonth()).length,
+            percentage: calculatePercentage(orderChartData, orders.length),
+            chartData: orderChartData
+        }
+
+        // Revenue Analytics
+        const revenueChartData = Object.values(
+            orders.reduce((acc, order) => {
+                const date = order.createdAt.toISOString().split("T")[0];
+                acc[date] = { date, value: (acc[date]?.value || 0) + order.totalAmount };
+                return acc;
+            }, {} as Record<string, { date: string; value: number }>)
+        )
+
+        const calculateRevenueAnalytics = (orders: any[]) => {
+            const totalRevenue = orders.reduce((acc, order) => acc + order.totalAmount, 0);
+
+            return {
+                totalRevenue,
+                thisMonth: orders.filter(order => order.createdAt.getMonth() === currentDate.getMonth())
+                    .reduce((acc, order) => acc + order.totalAmount, 0),
+                percentage: calculatePercentage(revenueChartData, totalRevenue),
+                chartData: revenueChartData
+            }
+        };
+
+        const revenueAnalytics = calculateRevenueAnalytics(orders);
+
+        // Income Analytics
+        const OPERATING_COST_PERCENTAGE = 0.2; // 20% of the revenue is operating cost
+        const incomeChartData = Object.values(
+            orders.reduce((acc, order) => {
+                const date = order.createdAt.toISOString().split("T")[0];
+                acc[date] = { date, value: (acc[date]?.value || 0) + order.totalAmount * (1 - OPERATING_COST_PERCENTAGE) };
+                return acc;
+            }, {} as Record<string, { date: string; value: number }>)
+        )
+
+        const calculateIncomeAnalytics = (orders: any[]) => {
+            const totalRevenue = orders.reduce((acc, order) => acc + order.totalAmount, 0);
+            const thisMonthRevenue = orders.filter(order => order.createdAt.getMonth() === currentDate.getMonth())
+                .reduce((acc, order) => acc + order.totalAmount, 0);
+
+            const totalIncome = totalRevenue * (1 - OPERATING_COST_PERCENTAGE);
+            const thisMonthIncome = thisMonthRevenue * (1 - OPERATING_COST_PERCENTAGE);
+
+
+            return {
+                totalIncome,
+                thisMonth: thisMonthIncome,
+                percentage: calculatePercentage(incomeChartData, totalIncome),
+                chartData: incomeChartData
+            };
+        };
+
+        const incomeAnalytics = calculateIncomeAnalytics(orders);
+
+        // Customer Analytics
+        const customerChartData = Object.values(
+            users.reduce((acc, user) => {
+                const date = user.createdAt.toISOString().split("T")[0];
+                acc[date] = { date, value: (acc[date]?.value || 0) + 1 };
+                return acc;
+            }, {} as Record<string, { date: string; value: number }>)
+        )
+
+        const customerAnalytics = {
+            totalCustomers: users.length,
+            thisMonth: users.filter(user => user.createdAt.getMonth() === currentDate.getMonth()).length,
+            percentage: calculatePercentage(customerChartData, users.length),
+            chartData: customerChartData
+        };
+
+        const analyticsData = {
+            orders: orderAnalytics,
+            revenue: revenueAnalytics,
+            income: incomeAnalytics,
+            customers: customerAnalytics
+        }
+
+        return { status: 200, message: "Carousel Updated Successfully!", response: analyticsData as AnalyticsType } as ResponseType
+    } catch (error: any) {
+        console.log("Update_Carousel_Error : ", error)
+        return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
+    }
+}
+// #endregion Analytics Actions
