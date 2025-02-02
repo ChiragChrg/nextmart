@@ -1,75 +1,40 @@
 import { Metadata } from "next";
-import { createClient } from "@/utils/supabase/server";
-import { cookies, headers } from 'next/headers';
-import { redirect } from "next/navigation";
 import React from 'react'
+import RegisterForm from "@/components/Forms/RegisterForm";
 import { DeliverySVG, ShoppingSVG, TextLogoSVG } from "@/assets/SVGs";
-import Input from "@/components/CustomUI/Input";
-import SubmitButton from "@/components/CustomUI/SubmitButton";
-import Link from "next/link";
+import OAuthButtons from "@/components/CustomUI/OAuthButtons";
 
 export const metadata: Metadata = {
     title: 'Register | NextMart',
     description: "Join the Next Mart family! Register now for an exceptional shopping experience. Access a vast array of products, from fashion to electronics. Enjoy personalized recommendations and exclusive deals. Sign up securely and embark on a journey of endless shopping possibilities!",
 }
 
-const page = () => {
-    const register = async (formData: FormData) => {
-        "use server";
-
-        const origin = headers().get("origin");
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-        const cookieStore = cookies();
-        const supabase = createClient(cookieStore);
-
-        const { error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                emailRedirectTo: `${origin}/auth/callback`,
-            },
-        });
-
-        if (error) {
-            return redirect("/login?message=Could not authenticate user");
-        }
-
-        return redirect("/login?message=Check email to continue sign in process");
-    };
+const Register = () => {
 
     return (
-        <section className='section_style flex justify-center items-end gap-8 px-4 sm:px-16 w-full h-full my-auto'>
-            <ShoppingSVG className='hidden sm:block px-8 max-w-[500px]' />
+        <section className='section_style grid grid-cols-1 sm:grid-cols-3 gap-8 px-4 sm:px-16 w-full h-full my-auto'>
+            <ShoppingSVG className='hidden sm:block px-8' />
 
-            <div className="flex justify-around items-center flex-col gap-2 w-full sm:w-1/2 py-4 my-auto">
-                <div className='text-[1.4em] font-medium flex_center sm:gap-4 flex-col'>
+            <div className="flex justify-around items-center flex-col gap-2 w-full py-4 my-auto">
+                <div className='text-[1.8em] font-medium flex_center sm:gap-4 flex-col sm:flex-row'>
                     <h1>Register to</h1>
                     <TextLogoSVG width="200px" />
                 </div>
 
-                <form action={register} className='bg-baseClr py-4 sm:p-4 pt-8 flex flex-col gap-8 sm:gap-4 w-full sm:max-w-md'>
-                    <Input type='text' label='Username' name='username' placeholder='Enter your name' />
-                    <Input type='email' label='Email' name='email' placeholder='example@email.com' />
-                    <Input type='password' label='Password' name='password' placeholder='Enter Password' isPassword />
-                    <Input type='password' label='Confirm Password' name='confirm_password' autoComplete='off' placeholder='Confirm Password' isPassword />
+                <RegisterForm />
 
-                    <SubmitButton />
+                <div className=" w-full sm:max-w-md sm:px-4 flex_center gap-2 text-primaryClr font-medium">
+                    <span className='flex w-[15em] h-[2px] bg-secondaryDarkClr'></span>
+                    <span>OR</span>
+                    <span className='flex w-[15em] h-[2px] bg-secondaryDarkClr'></span>
+                </div>
 
-                    <div className="w-full flex gap-2 justify-center">
-                        Already have an account?
-                        <Link
-                            href='/login'
-                            className='text-primaryClr font-bold capitalize tracking-wider'>
-                            Login
-                        </Link>
-                    </div>
-                </form>
+                <OAuthButtons />
             </div>
 
-            <DeliverySVG className='hidden sm:block px-8 max-w-[500px]' />
+            <DeliverySVG className='hidden sm:block px-8 max-w-[400px] pt-10' />
         </section>
     )
 }
 
-export default page
+export default Register

@@ -4,10 +4,12 @@ import * as React from "react"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { useDotButton, DotButton } from './carouselDotButton';
+
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -206,7 +208,7 @@ const CarouselPrevious = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute h-8 w-8 rounded-full md:opacity-70 hover:opacity-100 transition-opacity",
+        "absolute h-8 w-8 rounded-lg md:opacity-70 hover:opacity-100 transition-opacity",
         orientation === "horizontal"
           ? "left-12 top-1/2 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -216,7 +218,7 @@ const CarouselPrevious = React.forwardRef<
       onClick={scrollPrev}
       {...props}
     >
-      <ArrowLeft className="h-4 w-4" />
+      <ChevronLeft className="h-6 w-6" />
       <span className="sr-only">Previous slide</span>
     </Button>
   )
@@ -235,7 +237,7 @@ const CarouselNext = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute h-8 w-8 rounded-full md:opacity-70 hover:opacity-100 transition-opacity",
+        "absolute h-8 w-8 rounded-lg md:opacity-70 hover:opacity-100 transition-opacity",
         orientation === "horizontal"
           ? "right-12 top-1/2 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -245,12 +247,35 @@ const CarouselNext = React.forwardRef<
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight className="h-4 w-4" />
+      <ChevronRight className="h-6 w-6" />
       <span className="sr-only">Next slide</span>
     </Button>
   )
 })
 CarouselNext.displayName = "CarouselNext"
+
+const CarouselDots = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => {
+    const { api } = useCarousel();
+    const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(api);
+
+    return (
+      <div ref={ref} className={cn('flex justify-center gap-2', className)} {...props}>
+        {scrollSnaps.map((_, index) => (
+          <DotButton
+            key={index}
+            onClick={() => onDotButtonClick(index)}
+            className={cn(
+              'w-3 h-3 rounded-full',
+              selectedIndex === index ? 'bg-primary/80' : 'bg-muted/80'
+            )}
+          />
+        ))}
+      </div>
+    );
+  }
+);
+CarouselDots.displayName = 'CarouselDots';
 
 // Carousel Thumbnails
 // type ThumbnailType = {
@@ -286,5 +311,6 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  CarouselDots
   // Thumbnails
 }

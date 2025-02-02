@@ -1,100 +1,74 @@
-"use server"
+"use server";
 
-import { createClient } from "@/utils/supabase/server";
-import { cookies, headers } from "next/headers";
+import { prisma } from "@/prisma";
+import { saltAndHashPassword } from "@/lib/utils";
 
-type RegisterProps = {
-    username: string,
-    email: string,
-    password: string,
+type ResponseType = {
+    status: number;
+    message: string;
+    formFields?: any;
+    response?: any;
 }
 
-export const registerUser = async ({ username, email, password }: RegisterProps) => {
-    if (!username || !email || !password) {
-        throw new Error("Missing Fields")
-    }
+export const getUserByEmail = async (email: string) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email }
+        });
 
-    const origin = headers().get("origin");
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const authResponse = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-            data: {
-                username
-            },
-            emailRedirectTo: `${origin}/auth/callback`,
-        },
-    });
-
-    return authResponse
-};
-
-type LoginProps = {
-    email: string,
-    password: string,
-}
-
-export const loginUser = async ({ email, password }: LoginProps) => {
-    if (!email || !password) {
-        throw new Error("Missing Fields")
-    }
-
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const authResponse = await supabase.auth.signInWithPassword({
-        email,
-        password,
-    });
-
-    return authResponse
-};
-
-type Provider =
-    | 'apple'
-    | 'azure'
-    | 'bitbucket'
-    | 'discord'
-    | 'facebook'
-    | 'figma'
-    | 'github'
-    | 'gitlab'
-    | 'google'
-    | 'kakao'
-    | 'keycloak'
-    | 'linkedin'
-    | 'linkedin_oidc'
-    | 'notion'
-    | 'slack'
-    | 'spotify'
-    | 'twitch'
-    | 'twitter'
-    | 'workos'
-    | 'zoom'
-    | 'fly'
-
-export const OAuthLogin = async (provider: Provider) => {
-    if (!provider) {
-        throw new Error("Missing Provider")
-    }
-
-    const origin = headers().get("origin");
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const authResponse = await supabase.auth.signInWithOAuth({
-        provider: provider,
-        options: {
-            queryParams: {
-                access_type: 'offline',
-                prompt: 'consent',
-            },
-            redirectTo: `${origin}/auth/callback`,
+        if (user) {
+            const { password, ...restInfo } = user
+            return {
+                ...restInfo,
+                createdAt: user.createdAt.toISOString(),
+                updatedAt: user.updatedAt.toISOString(),
+            };
         }
-    })
 
-    return authResponse
+        return null;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
 };
+
+export const registerUser = async (previousState: unknown, formData: FormData) => {
+    const username = formData.get("username") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirm_password") as string;
+    // console.log("User_Reg_Init", { username, email, password, confirmPassword })
+
+    const formFields = { username, email, password, confirmPassword }
+
+    try {
+        if (!username || !email || !password || !confirmPassword) {
+            return { status: 422, message: "Invalid User Registration Fields!", formFields } as ResponseType
+        }
+
+        if (password !== confirmPassword) {
+            return { status: 422, message: 'Password and Confirm Password do not match', formFields } as ResponseType
+        }
+
+        const existingUser = await getUserByEmail(email);
+        if (existingUser) {
+            return { status: 409, message: "User Email already exists!", formFields } as ResponseType
+        }
+
+        const hashedPassword = saltAndHashPassword(password)
+        const newUser = await prisma.user.create({
+            data: {
+                name: username,
+                email: email,
+                password: hashedPassword
+            }
+        })
+
+        // console.log("New_User", newUser)
+
+        return { status: 201, message: "User Registered Successfully!" } as ResponseType
+    } catch (error: any) {
+        console.log("User_Register : ", error)
+        return { status: 500, message: error.message || "An unexpected error occurred.", formFields } as ResponseType;
+    }
+}

@@ -1,20 +1,34 @@
 "use client"
 
-import { OAuthLogin } from '@/app/actions/AuthActions'
-import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 const OAuthButtons = () => {
-    const router = useRouter()
+    const searchParams = useSearchParams()
+    const callbackUrl = searchParams.get('callbackUrl')
 
-    const handleOAuthLogin = async (provider: any) => {
-        const { error, data } = await OAuthLogin(provider)
+    const handleOAuthLogin = async (provider: "google" | "github") => {
+        const OAuthTostID = toast.loading(`Connecting to ${provider.charAt(0).toUpperCase() + provider.slice(1)}...`)
 
-        if (error) {
-            return toast.error(error.message)
+        try {
+            const res = await signIn(provider, {
+                callbackUrl: callbackUrl ? decodeURIComponent(callbackUrl) : '/'
+            })
+
+            if (res?.status === 200) {
+                toast.success("Logged in Successfully!", {
+                    id: OAuthTostID
+                })
+            }
+        } catch (err) {
+            toast.error(err || "Something went wrong!", {
+                id: OAuthTostID
+            })
+            console.log(err)
+        } finally {
+            toast.dismiss()
         }
-
-        router.push(data?.url)
     }
 
     return (
@@ -50,7 +64,7 @@ const OAuthButtons = () => {
             </button>
 
             {/* GitHUb Login Button */}
-            <button
+            {/* <button
                 className='bg-secondary text-textClr w-full flex_center gap-4 p-2 rounded disabled:cursor-default'
                 onClick={() => handleOAuthLogin("github")}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className='w-[30px] h-[30px]'>
@@ -61,7 +75,7 @@ const OAuthButtons = () => {
                     ></path>
                 </svg>
                 <span className='text-[1.2em] font-medium'>GitHub</span>
-            </button>
+            </button> */}
         </div>
     )
 }

@@ -1,7 +1,25 @@
-import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { Metadata } from "next";
 import Provider from "@/providers/Provider";
+import localFont from "next/font/local"
+
+const poppins = localFont({
+  src: [
+    {
+      path: "../assets/fonts/Poppins-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../assets/fonts/Poppins-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  preload: true,
+  display: "swap",
+  variable: "--Poppins",
+});
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -72,8 +90,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
-      <body className="bg-background text-foreground">
+    <html lang="en">
+      <body className={`bg-background text-foreground ${poppins.variable} font-poppins`} suppressHydrationWarning>
         <Provider>
           {children}
         </Provider>
