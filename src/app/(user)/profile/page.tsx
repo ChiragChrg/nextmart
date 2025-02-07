@@ -21,11 +21,7 @@ import {
 import { useLogout } from '@/hooks/useLogout'
 
 
-type pageProps = {
-
-}
-
-const Profile: React.FC<pageProps> = ({ }) => {
+const Profile: React.FC = () => {
     const { user } = useSelector((state: RootState) => state.user)
     const handleLogout = useLogout()
 
