@@ -58,11 +58,13 @@ const LoginForm = () => {
                 redirect: false,
             });
 
-            if (res?.status === 200) {
+            console.log({ res })
+
+            if (res?.status === 200 && res?.error === null) {
                 toast.success("Logged in Successfully!", { id: LoginToastID });
                 router.push(callbackUrl ? decodeURIComponent(callbackUrl) : "/");
             } else {
-                throw new Error();
+                toast.error("Invalid Email or Password", { id: LoginToastID });
             }
         } catch (err) {
             toast.error("Invalid Email or Password", { id: LoginToastID });
