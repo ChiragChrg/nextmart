@@ -12,16 +12,16 @@ const ProductCard = ({ data }: Props) => {
     return (
         <Link
             href={`product/${data?.category?.categorySlug}/${data?.productSlug}`}
-            className="relative flex_center flex-col rounded-md overflow-hidden cursor-pointer">
+            className="relative flex_center flex-col rounded-md overflow-hidden cursor-pointer border shadow-md">
             <Image
                 src={data?.images[0]?.imageUrl ?? "http://via.placeholder.com/400x400"}
                 alt={data?.images[0]?.altText ?? "Product_Image"}
                 fill={true}
                 sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "contain" }}
                 placeholder='blur'
                 blurDataURL={data?.images[0]?.blurData ?? "http://via.placeholder.com/400x400"}
-                className='!relative rounded-md' />
+                className='!relative rounded-md aspect-square' />
 
             {/* <HeartIcon width='25px' height='25px' className='absolute top-2 right-2' /> */}
 
