@@ -26,12 +26,12 @@ export default auth(async function middleware(req: NextRequest) {
             return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
 
-        if (isLoggedIn && !isAdmin && nextUrl.pathname !== ADMIN_BASE_REDIRECT) {
+        if (isLoggedIn && !isAdmin) {
             // console.warn("ADMIN_ERR: Admin Session Expired")
-            return NextResponse.redirect(new URL(ADMIN_BASE_REDIRECT, nextUrl));
+            return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
 
-        if (nextUrl.pathname === ADMIN_BASE_REDIRECT && isLoggedIn && isAdmin)
+        if (isLoggedIn && isAdmin && nextUrl.pathname === ADMIN_BASE_REDIRECT)
             return NextResponse.redirect(new URL(ADMIN_DASHBOARD_REDIRECT, nextUrl));
 
         return NextResponse.next();

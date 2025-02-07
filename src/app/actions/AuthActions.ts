@@ -32,7 +32,7 @@ export const getUserByEmail = async (email: string) => {
     }
 };
 
-export const registerUser = async (previousState: unknown, formData: FormData) => {
+export const registerUser = async (formData: FormData) => {
     const username = formData.get("username") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
