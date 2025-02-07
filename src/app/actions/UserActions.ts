@@ -2,7 +2,7 @@
 
 import { prisma } from "@/prisma";
 import { CartType } from "@/store/cartSlice";
-import { FlatProductType } from "@/types";
+import { FlatProductType, productType } from "@/types";
 
 type ResponseType = {
     status: number;
@@ -82,7 +82,8 @@ export const getProductsByAnalytics = async () => {
                 categorySlug: category.categorySlug,
                 description: category.description,
                 imageUrl: category.imageUrl,
-                parentCategoryID: category.parentCategoryId
+                parentCategoryID: category.parentCategoryId,
+                productId: prod.id
             } : null;
 
             const totalSales = OrderItem?.reduce((sum, item) => sum + item.quantity, 0) || 0;
@@ -92,15 +93,16 @@ export const getProductsByAnalytics = async () => {
                 productId: id,
                 category: formattedCategory,
                 totalSales,
+                ratings,
                 averageRating,
                 ...restProduct
             };
         });
 
         // Categorizing products based on sales and ratings
-        const bestSellers = formattedProducts.filter(prod => prod.totalSales > 50);
-        const latestProducts = formattedProducts.reverse().slice(0, 10);
-        const trendingProducts = formattedProducts.filter(prod => prod.averageRating > 4.5);
+        const bestSellers = formattedProducts.sort((a, b) => b.totalSales - a.totalSales).slice(0, 10);
+        const latestProducts = formattedProducts.toReversed().slice(0, 10);
+        const trendingProducts = formattedProducts.filter(prod => prod.averageRating > 4.5).slice(0, 10);
 
         return {
             status: 200,
@@ -109,7 +111,7 @@ export const getProductsByAnalytics = async () => {
                 bestSellers,
                 latestProducts,
                 trendingProducts
-            }
+            } as { bestSellers: productType[], latestProducts: productType[], trendingProducts: productType[] }
         } as ResponseType;
     } catch (error: any) {
         console.log("Products_Fetch_Error : ", error);

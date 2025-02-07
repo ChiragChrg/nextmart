@@ -19,7 +19,7 @@ const Analytics: React.FC = () => {
         queryFn: async () => {
             try {
                 const res = await getAnalytics();
-                console.log("AnalyticsFetch_Res", res)
+                // console.log("AnalyticsFetch_Res", res)
                 if (res.status === 200)
                     return res.response as AnalyticsType;
             } catch (error) {
