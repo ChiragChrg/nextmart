@@ -19,7 +19,8 @@ export default auth(async function middleware(req: NextRequest) {
     if (isAdminRoute) {
         const adminToken = req.cookies.get('nextmart_admin_token')?.value as string;
         const decodedAdminToken = await VerifyToken(adminToken)
-        const isAdmin = decodedAdminToken?.payload.email === process.env.ADMIN_EMAIL
+        const isAdmin = session?.user.email === process.env.ADMIN_EMAIL
+        const isAdminTokenValid = decodedAdminToken?.payload.email === process.env.ADMIN_EMAIL
 
         if (!isLoggedIn) {
             // console.warn("ADMIN_ERR: User Not Logged in")
@@ -31,7 +32,10 @@ export default auth(async function middleware(req: NextRequest) {
             return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
 
-        if (isLoggedIn && isAdmin && nextUrl.pathname === ADMIN_BASE_REDIRECT)
+        if (isLoggedIn && isAdmin && !isAdminTokenValid && nextUrl.pathname !== ADMIN_BASE_REDIRECT)
+            return NextResponse.redirect(new URL(ADMIN_BASE_REDIRECT, nextUrl));
+
+        if (isLoggedIn && isAdmin && isAdminTokenValid && nextUrl.pathname === ADMIN_BASE_REDIRECT)
             return NextResponse.redirect(new URL(ADMIN_DASHBOARD_REDIRECT, nextUrl));
 
         return NextResponse.next();
