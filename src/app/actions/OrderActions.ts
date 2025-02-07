@@ -110,6 +110,8 @@ export const getUserOrder = async (userId: string) => {
             updatedAt: order.updatedAt.toISOString(),
         }))
 
+        formattedOrderList.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+
         // console.log("order_Data", formattedOrderList)
         return { status: 200, message: "Order fetched successfully!", response: formattedOrderList as OrderType[] } as ResponseType
     } catch (error: any) {

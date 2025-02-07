@@ -19,7 +19,7 @@ const Analytics: React.FC = () => {
         queryFn: async () => {
             try {
                 const res = await getAnalytics();
-                console.log("AnalyticsFetch_Res", res)
+                // console.log("AnalyticsFetch_Res", res)
                 if (res.status === 200)
                     return res.response as AnalyticsType;
             } catch (error) {
@@ -56,7 +56,7 @@ const Analytics: React.FC = () => {
             </div>
 
             <div className="flex items-center flex-col gap-2 w-full h-full">
-                <GradientChart chartData={analytics?.orders.chartData ?? []} label='Orders' color='dodgerblue' />
+                <GradientChartPreview chartData={analytics?.orders.chartData ?? []} label='Orders' color='dodgerblue' />
                 <div className={cn("flex_center gap-2 bg-green-100 rounded-md p-1", (analytics?.orders.percentage ?? 0) > 0 ? 'text-green-500 bg-green-100' : 'text-red-500 bg-red-100')}>
                     {(analytics?.orders.percentage ?? 0) > 0
                         ? <TrendingUpIcon />
@@ -92,7 +92,7 @@ const Analytics: React.FC = () => {
             </div>
 
             <div className="flex items-center flex-col gap-2 w-full h-full">
-                <GradientChart chartData={analytics?.revenue.chartData ?? []} label='Revenue' color='limegreen' />
+                <GradientChartPreview chartData={analytics?.revenue.chartData ?? []} label='Revenue' color='limegreen' />
                 <div className={cn("flex_center gap-2 bg-green-100 rounded-md p-1", (analytics?.revenue.percentage ?? 0) > 0 ? 'text-green-500 bg-green-100' : 'text-red-500 bg-red-100')}>
                     {(analytics?.revenue.percentage ?? 0) > 0
                         ? <TrendingUpIcon />
@@ -128,7 +128,7 @@ const Analytics: React.FC = () => {
             </div>
 
             <div className="flex items-center flex-col gap-2 w-full h-full">
-                <GradientChart chartData={analytics?.income.chartData ?? []} label='Income' color='limegreen' />
+                <GradientChartPreview chartData={analytics?.income.chartData ?? []} label='Income' color='limegreen' />
                 <div className={cn("flex_center gap-2 bg-green-100 rounded-md p-1", (analytics?.income.percentage ?? 0) > 0 ? 'text-green-500 bg-green-100' : 'text-red-500 bg-red-100')}>
                     {(analytics?.income.percentage ?? 0) > 0
                         ? <TrendingUpIcon />
@@ -163,7 +163,7 @@ const Analytics: React.FC = () => {
             </div>
 
             <div className="flex items-center flex-col gap-2 w-full h-full">
-                <GradientChart chartData={analytics?.customers.chartData ?? []} label='Customers' color='dodgerblue' />
+                <GradientChartPreview chartData={analytics?.customers.chartData ?? []} label='Customers' color='dodgerblue' />
                 <div className={cn("flex_center gap-2 bg-green-100 rounded-md p-1", (analytics?.customers.percentage ?? 0) > 0 ? 'text-green-500 bg-green-100' : 'text-red-500 bg-red-100')}>
                     {(analytics?.customers.percentage ?? 0) > 0
                         ? <TrendingUpIcon />
@@ -183,7 +183,7 @@ type GradientChartProps = {
     color: string
 }
 
-export function GradientChart({ chartData, label, color }: GradientChartProps) {
+export function GradientChartPreview({ chartData, label, color }: GradientChartProps) {
     return (
         <div className="w-full h-full max-w-[200px] relative">
             <ChartContainer className="w-full h-full absolute" config={{

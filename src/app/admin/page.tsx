@@ -1,5 +1,5 @@
 "use client"
-import React, { useActionState, useEffect } from 'react'
+import React, { useActionState, useEffect, useRef } from 'react'
 import AdminHeader from './components/AdminHeader'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -14,6 +14,7 @@ const AdminLanding = () => {
     const { data: session } = useSession()
     const [state, action, isPending] = useActionState(adminLogin, undefined)
     const router = useRouter()
+    const passwordRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         if (state?.status === 200) {
@@ -21,6 +22,10 @@ const AdminLanding = () => {
             router.push("/admin/dashboard")
         } else if (state?.status) {
             toast.error(state?.message);
+        }
+
+        if (passwordRef.current) {
+            passwordRef.current.focus();
         }
     }, [state, router]);
 
@@ -56,6 +61,7 @@ const AdminLanding = () => {
                     />
 
                     <Input
+                        ref={passwordRef}
                         label='Enter Password'
                         type='password'
                         placeholder='Enter Admin Password'

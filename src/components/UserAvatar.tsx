@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import LoaderIcon from "./CustomUI/LoaderIcon"
-import { signOut, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { ChevronDownIcon, HelpCircleIcon, LogInIcon, LogOutIcon, User2Icon } from "lucide-react"
 
 import {
@@ -14,21 +14,17 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { userActions } from "@/store/userSlice"
-import { RootState } from "@/store"
-import { usePathname, useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { getUserByEmail } from "@/app/actions/AuthActions"
+import { useLogout } from "@/hooks/useLogout"
 
 const UserAvatar = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const { data: session, status } = useSession()
-    const router = useRouter()
-    const pathname = usePathname()
-
-    const { user } = useSelector((state: RootState) => state.user)
     const dispatch = useDispatch()
+    const handleLogout = useLogout()
 
     const { data: fetchData, status: userFetchStatus } = useQuery({
         queryKey: ["fetch-user"],
@@ -53,23 +49,13 @@ const UserAvatar = () => {
         setLoading(false)
     }, [fetchData, userFetchStatus, session, status, dispatch])
 
-    const HandleLogout = async () => {
-        try {
-            setLoading(true)
-            await signOut();
-
-            dispatch(userActions.clearUser())
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     if (session?.user) {
         return (
             <>
                 <div className="hidden lg:flex">
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="flex justify-between items-center w-[200px] bg-secondary px-2 py-1 rounded outline-border">
+                        <DropdownMenuTrigger className="flex justify-between items-center w-[200px] bg-secondaryClr px-2 py-1 rounded outline-border">
                             {session?.user?.image ?
                                 <div className="flex_center rounded-full relative overflow-hidden">
                                     <Image src={session?.user?.image} alt="ProfileImage" width={35} height={35} />
@@ -86,17 +72,13 @@ const UserAvatar = () => {
                             <ChevronDownIcon />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-[200px]">
-                            <DropdownMenuItem>
-                                <User2Icon className="mr-2 w-4 h-4" />
-                                <span>Profile</span>
+                            <DropdownMenuItem asChild>
+                                <Link href="/profile" className="flex_center gap-2 border border-secondaryClr mb-2">
+                                    <User2Icon size={22} />
+                                    <span>Profile</span>
+                                </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem>Billing</DropdownMenuItem>
-                            <DropdownMenuItem>Team</DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <HelpCircleIcon className="mr-2 w-4 h-4" />
-                                <span>Customer Service</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem role="button" onClick={HandleLogout} className="flex_center bg-red-600 focus:bg-red-600/90 text-white focus:text-white rounded cursor-pointer">
+                            <DropdownMenuItem role="button" onClick={handleLogout} className="flex_center bg-red-600 focus:bg-red-600/90 text-white focus:text-white rounded cursor-pointer">
                                 <LogOutIcon className="mr-2 w-4 h-4" />
                                 <span>Logout</span>
                             </DropdownMenuItem>

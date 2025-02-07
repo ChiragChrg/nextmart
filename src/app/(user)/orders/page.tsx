@@ -20,7 +20,7 @@ const Orders = () => {
             <h1 className='text-[2em] font-bold'>Your <span className='text-primaryClr'>Orders</span></h1>
 
             <div className="flex_center flex-col gap-8 mt-4">
-                {orderList?.toReversed().map((order, orderIndex) => {
+                {orderList?.map((order, orderIndex) => {
                     const statusColor = order.status === "Success" ? "text-green-600" : order.status === "Processing" ? "text-yellow-600" : "text-red-600";
 
                     return (

@@ -63,6 +63,15 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			keyframes: {
+				"border-spin": {
+					from: { rotate: "0deg" },
+					to: { rotate: "360deg" },
+				},
+			},
+			animation: {
+				"border-spin": "border-spin 25s linear infinite",
+			},
 			fontFamily: {
 				poppins: ["var(--Poppins)"],
 			},

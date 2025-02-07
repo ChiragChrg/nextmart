@@ -23,7 +23,7 @@ export const useFetchAllOrders = () => useQuery({
 });
 
 export const useFetchAllProducts = () => useQuery({
-    queryKey: ['fetch-all-orders'],
+    queryKey: ['fetch-all-products'],
     queryFn: async () => {
         try {
             const res = await getAllProducts();
@@ -38,7 +38,7 @@ export const useFetchAllProducts = () => useQuery({
 });
 
 export const useFetchAllCategories = () => useQuery({
-    queryKey: ['fetch-all-orders'],
+    queryKey: ['fetch-all-categories'],
     queryFn: async () => {
         try {
             const res = await getAllCategories();
