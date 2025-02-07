@@ -1,79 +1,133 @@
 "use client"
 
+import { TrendingUp } from "lucide-react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
 import {
     ChartConfig,
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-]
+import { useQuery } from "@tanstack/react-query"
+import { getAnalytics } from "@/app/actions/AdminActions"
+import { AnalyticsType } from "@/types"
 
 const chartConfig = {
-    desktop: {
-        label: "Desktop",
-        color: "hsl(var(--chart-1))",
+    revenue: {
+        label: "Revenue",
+        color: "hsl(var(--primaryClr))",
     },
-    mobile: {
-        label: "Mobile",
+    orders: {
+        label: "Orders",
         color: "hsl(var(--chart-2))",
+    },
+    customers: {
+        label: "Customers",
+        color: "hsl(var(--chart-3))",
     },
 } satisfies ChartConfig
 
 export function GradientChart() {
+    const { data: analytics, status } = useQuery({
+        queryKey: ['fetch-analytics'],
+        queryFn: async () => {
+            try {
+                const res = await getAnalytics();
+                if (res.status === 200)
+                    return res.response as AnalyticsType;
+            } catch (error) {
+                console.error('Error fetching Analytics:', error);
+            }
+            return null;
+        }
+    });
+
+    if (!analytics) {
+        return <div>Loading...</div>;
+    }
+
     return (
-        <ChartContainer className="w-full h-full max-w-[200px] max-h-[150px]" config={chartConfig}>
-            <AreaChart
-                accessibilityLayer
-                data={chartData}
-                margin={{
-                    left: 12,
-                    right: 12,
-                }}
-            >
-                <defs>
-                    <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                        <stop
-                            offset="5%"
-                            stopColor="var(--color-desktop)"
-                            stopOpacity={0.8}
+        <Card>
+            <CardHeader>
+                <CardTitle>Revenue Chart</CardTitle>
+                <CardDescription>
+                    Showing the revenue, orders, and customers in a single chart
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <ChartContainer config={chartConfig}>
+                    <AreaChart
+                        data={analytics.revenue.chartData.map((revenue, index) => ({
+                            month: revenue.date,
+                            revenue: revenue.value,
+                        }))}
+                        margin={{ left: 12, right: 12 }}
+                    >
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                            dataKey="month"
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={8}
+                            tickFormatter={(value) => value}
                         />
-                        <stop
-                            offset="95%"
-                            stopColor="var(--color-desktop)"
-                            stopOpacity={0.1}
+                        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                        <defs>
+                            <linearGradient id="fillRevenue" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="var(--color-revenue)" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="var(--color-revenue)" stopOpacity={0.1} />
+                            </linearGradient>
+                            <linearGradient id="fillOrders" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="var(--color-orders)" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="var(--color-orders)" stopOpacity={0.1} />
+                            </linearGradient>
+                            <linearGradient id="fillCustomers" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="var(--color-customers)" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="var(--color-customers)" stopOpacity={0.1} />
+                            </linearGradient>
+                        </defs>
+
+                        {/* Revenue */}
+                        <Area
+                            dataKey="revenue"
+                            type="natural"
+                            fill="url(#fillRevenue)"
+                            fillOpacity={0.4}
+                            stroke="var(--color-revenue)"
+                            stackId="a"
                         />
-                    </linearGradient>
-                    <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                        <stop
-                            offset="5%"
-                            stopColor="var(--color-mobile)"
-                            stopOpacity={0.8}
+
+                        {/* Orders */}
+                        <Area
+                            dataKey="orders"
+                            type="natural"
+                            fill="url(#fillOrders)"
+                            fillOpacity={0.4}
+                            stroke="var(--color-orders)"
+                            stackId="a"
                         />
-                        <stop
-                            offset="95%"
-                            stopColor="var(--color-mobile)"
-                            stopOpacity={0.1}
+
+                        {/* Customers */}
+                        <Area
+                            dataKey="customers"
+                            type="natural"
+                            fill="url(#fillCustomers)"
+                            fillOpacity={0.4}
+                            stroke="var(--color-customers)"
+                            stackId="a"
                         />
-                    </linearGradient>
-                </defs>
-                <Area
-                    dataKey="desktop"
-                    type="natural"
-                    fill="url(#fillDesktop)"
-                    fillOpacity={0.4}
-                    stroke="var(--color-desktop)"
-                    stackId="a"
-                />
-            </AreaChart>
-        </ChartContainer>
-    )
+                    </AreaChart>
+                </ChartContainer>
+            </CardContent>
+        </Card>
+    );
 }
