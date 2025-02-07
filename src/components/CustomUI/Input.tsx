@@ -16,10 +16,11 @@ interface InputProps {
     value?: string,
     setValue?: Dispatch<SetStateAction<any>>
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    ref?: React.RefObject<HTMLInputElement | null>
 }
 
 
-const Input = ({ label, type, name, placeholder, defaultValue, required = true, disabled = false, className, min, max, value, setValue, onChange }: InputProps) => {
+const Input = ({ label, type, name, placeholder, defaultValue, required = true, disabled = false, className, min, max, value, setValue, onChange, ref }: InputProps) => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const TogglePassword = () => {
         setShowPassword(prev => !prev)
@@ -42,6 +43,7 @@ const Input = ({ label, type, name, placeholder, defaultValue, required = true, 
                 }}
                 min={min}
                 max={max}
+                ref={ref}
                 className='text-[1em] bg-background text-textClr px-2 py-1 border-none outline-none disabled:text-muted-foreground' />
 
             {type === "password" &&

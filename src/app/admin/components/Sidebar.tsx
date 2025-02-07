@@ -1,4 +1,5 @@
 'use client'
+import { adminLogout } from '@/app/actions/AdminActions'
 import { TextLogoSVG } from '@/assets/SVGs'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -6,12 +7,24 @@ import { GalleryHorizontalIcon, LayoutGridIcon, LogOutIcon, PackageIcon, Shoppin
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
+import toast from 'react-hot-toast'
 
 const Sidebar = () => {
     const { data: session } = useSession()
     const pathname = usePathname()
+    const router = useRouter()
+
+    const handleAdminLogout = async () => {
+        const res = await adminLogout();
+        if (res.status === 200) {
+            toast.success(res.message);
+            router.push("/admin");
+        } else {
+            toast.error(res.message);
+        }
+    }
 
     const NavigationList = [
         {
@@ -19,11 +32,11 @@ const Sidebar = () => {
             path: "/admin/dashboard",
             icon: <LayoutGridIcon />,
         },
-        {
-            title: "Category",
-            path: "/admin/category",
-            icon: <SwatchBookIcon />,
-        },
+        // {
+        //     title: "Category",
+        //     path: "/admin/category",
+        //     icon: <SwatchBookIcon />,
+        // },
         {
             title: "Product",
             path: "/admin/products",
@@ -39,11 +52,11 @@ const Sidebar = () => {
             path: "/admin/customers",
             icon: <UsersRoundIcon />,
         },
-        {
-            title: "Carousel",
-            path: "/admin/carousel",
-            icon: <GalleryHorizontalIcon />,
-        },
+        // {
+        //     title: "Carousel",
+        //     path: "/admin/carousel",
+        //     icon: <GalleryHorizontalIcon />,
+        // },
     ]
 
     return (
@@ -77,7 +90,7 @@ const Sidebar = () => {
                     <span className="text-[1em]">{session?.user?.name}</span>
                 </div>
 
-                <Button variant={'destructive'} size={'icon'} title='Logout'>
+                <Button variant={'destructive'} size={'icon'} title='Logout' onClick={handleAdminLogout}>
                     <LogOutIcon />
                 </Button>
             </div>

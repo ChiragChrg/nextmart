@@ -46,6 +46,23 @@ export const adminLogin = async (previousState: unknown, formData: FormData) => 
         return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
     }
 }
+
+export const adminLogout = async () => {
+    try {
+        const cookieStore = await cookies();
+        cookieStore.set('nextmart_admin_token', '', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 0,
+            path: '/admin',
+        });
+
+        return { status: 200, message: "Admin Logout Successful!" } as ResponseType;
+    } catch (error: any) {
+        console.log("Admin_Logout_Error : ", error);
+        return { status: 500, message: error.message || "An unexpected error occurred." } as ResponseType;
+    }
+};
 //#endregion Admin Actions
 
 //#region Category Actions
