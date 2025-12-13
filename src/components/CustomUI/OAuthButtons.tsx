@@ -1,47 +1,54 @@
 "use client"
 
-import { signIn } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { signIn, SignInResponse } from 'next-auth/react'
+import { useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 const OAuthButtons = () => {
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get('callbackUrl')
 
-    const handleOAuthLogin = async (provider: "google" | "github") => {
-        const OAuthTostID = toast.loading(`Connecting to ${provider.charAt(0).toUpperCase() + provider.slice(1)}...`)
+    const handleOAuthLogin = async (provider: 'google' | 'github') => {
+        const OAuthTostID = toast.loading(
+            `Connecting to ${provider.charAt(0).toUpperCase() + provider.slice(1)}...`
+        )
 
         try {
-            const res = await signIn(provider, {
-                callbackUrl: callbackUrl ? decodeURIComponent(callbackUrl) : '/'
-            })
+            const res = (await signIn(provider, {
+                callbackUrl: callbackUrl ? decodeURIComponent(callbackUrl) : '/',
+                redirect: false,
+            })) as SignInResponse | undefined
 
-            if (res?.status === 200) {
-                toast.success("Logged in Successfully!", {
-                    id: OAuthTostID
+            if (res?.ok) {
+                toast.success('Logged in Successfully!', {
+                    id: OAuthTostID,
                 })
             }
         } catch (err) {
-            toast.error(err || "Something went wrong!", {
-                id: OAuthTostID
+            const message =
+                err instanceof Error ? err.message : 'Something went wrong!'
+            toast.error(message, {
+                id: OAuthTostID,
             })
+            // eslint-disable-next-line no-console
             console.log(err)
         } finally {
-            toast.dismiss()
+            toast.dismiss(OAuthTostID)
         }
     }
 
     return (
         <div className="flex_center gap-4 w-full sm:max-w-md sm:px-4">
-            {/* Google Login Button */}
             <button
-                className='bg-secondary text-textClr w-full flex_center gap-4 p-2 rounded disabled:cursor-default'
-                onClick={() => handleOAuthLogin("google")}>
+                type="button"
+                className="bg-secondary text-textClr w-full flex_center gap-4 p-2 rounded disabled:cursor-default"
+                onClick={() => void handleOAuthLogin('google')}
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     preserveAspectRatio="xMidYMid"
                     viewBox="-3 0 262 262"
-                    className='w-[30px] h-[30px]'
+                    className="w-[30px] h-[30px]"
                 >
                     <path
                         fill="#4285F4"
@@ -60,22 +67,8 @@ const OAuthButtons = () => {
                         d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
                     ></path>
                 </svg>
-                <span className='text-[1.2em] font-medium'>Google</span>
+                <span className="text-[1.2em] font-medium">Google</span>
             </button>
-
-            {/* GitHUb Login Button */}
-            {/* <button
-                className='bg-secondary text-textClr w-full flex_center gap-4 p-2 rounded disabled:cursor-default'
-                onClick={() => handleOAuthLogin("github")}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className='w-[30px] h-[30px]'>
-                    <path
-                        fill="currentColor"
-                        d="M94 7399c5.523 0 10 4.59 10 10.253 0 4.529-2.862 8.371-6.833 9.728-.507.101-.687-.219-.687-.492 0-.338.012-1.442.012-2.814 0-.956-.32-1.58-.679-1.898 2.227-.254 4.567-1.121 4.567-5.059 0-1.12-.388-2.034-1.03-2.752.104-.259.447-1.302-.098-2.714 0 0-.838-.275-2.747 1.051a9.396 9.396 0 00-2.505-.345 9.375 9.375 0 00-2.503.345c-1.911-1.326-2.751-1.051-2.751-1.051-.543 1.412-.2 2.455-.097 2.714-.639.718-1.03 1.632-1.03 2.752 0 3.928 2.335 4.808 4.556 5.067-.286.256-.545.708-.635 1.371-.57.262-2.018.715-2.91-.852 0 0-.529-.985-1.533-1.057 0 0-.975-.013-.068.623 0 0 .655.315 1.11 1.5 0 0 .587 1.83 3.369 1.21.005.857.014 1.665.014 1.909 0 .271-.184.588-.683.493-3.974-1.355-6.839-5.199-6.839-9.729 0-5.663 4.478-10.253 10-10.253"
-                        transform="translate(-140 -7559) translate(56 160)"
-                    ></path>
-                </svg>
-                <span className='text-[1.2em] font-medium'>GitHub</span>
-            </button> */}
         </div>
     )
 }

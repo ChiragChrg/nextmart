@@ -9,7 +9,6 @@ import Input from "../CustomUI/Input";
 import SubmitButton from "../CustomUI/SubmitButton";
 import { z } from "zod";
 
-// Zod validation schema
 const registerSchema = z
     .object({
         username: z.string().min(3, "Username must be at least 3 characters long"),
@@ -29,42 +28,68 @@ const registerSchema = z
         path: ["confirm_password"],
     });
 
+type RegisterFormData = z.infer<typeof registerSchema>;
+type RegisterFormErrors = Partial<Record<keyof RegisterFormData, string>>;
+
 const RegisterForm = () => {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<RegisterFormData>({
         username: "",
         email: "",
         password: "",
         confirm_password: "",
     });
 
-    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [errors, setErrors] = useState<RegisterFormErrors>({});
     const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
-        if (errors) {
-            Object.values(errors).forEach((error) => toast.error(error));
+        if (Object.keys(errors).length > 0) {
+            Object.values(errors).forEach((error) => {
+                if (error) {
+                    toast.error(error);
+                }
+            });
         }
     }, [errors]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        if (
+            name === "username" ||
+            name === "email" ||
+            name === "password" ||
+            name === "confirm_password"
+        ) {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validate using Zod
         const result = registerSchema.safeParse(formData);
+
         if (!result.success) {
-            const errorMessages: Record<string, string> = {};
+            const errorMessages: RegisterFormErrors = {};
+
             result.error.issues.forEach((issue) => {
-                errorMessages[issue.path[0]] = issue.message;
+                const key = issue.path[0];
+
+                if (
+                    key === "username" ||
+                    key === "email" ||
+                    key === "password" ||
+                    key === "confirm_password"
+                ) {
+                    errorMessages[key] = issue.message;
+                }
             });
+
             setErrors(errorMessages);
             return;
         }
 
-        // Clear errors before submission
         setErrors({});
 
         startTransition(async () => {
@@ -75,6 +100,7 @@ const RegisterForm = () => {
             formDataObj.append("confirm_password", formData.confirm_password);
 
             const response = await registerUser(formDataObj);
+
             if (response.status === 201) {
                 toast.success(response.message);
                 redirect("/login");
@@ -98,7 +124,9 @@ const RegisterForm = () => {
                     value={formData.username}
                     onChange={handleChange}
                 />
-                {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
+                {errors.username && (
+                    <p className="text-red-500 text-sm">{errors.username}</p>
+                )}
             </div>
 
             <div className="flex flex-col">
@@ -110,7 +138,9 @@ const RegisterForm = () => {
                     value={formData.email}
                     onChange={handleChange}
                 />
-                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                {errors.email && (
+                    <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
             </div>
 
             <div className="flex flex-col">
@@ -122,7 +152,9 @@ const RegisterForm = () => {
                     value={formData.password}
                     onChange={handleChange}
                 />
-                {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                {errors.password && (
+                    <p className="text-red-500 text-sm">{errors.password}</p>
+                )}
             </div>
 
             <div className="flex flex-col">
@@ -143,7 +175,10 @@ const RegisterForm = () => {
 
             <div className="w-full flex gap-2 justify-center">
                 Already have an account?
-                <Link href="/login" className="text-primaryClr font-bold capitalize tracking-wider">
+                <Link
+                    href="/login"
+                    className="text-primaryClr font-bold capitalize tracking-wider"
+                >
                     Login
                 </Link>
             </div>
