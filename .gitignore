@@ -41,3 +41,4 @@ next-env.d.ts
 
 # VS Code
 .vscode/settings.json
+/generated/prisma
