@@ -101,9 +101,7 @@ const LoginForm = () => {
                     onChange={handleChange}
                 />
                 {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-                <div className="text-primaryClr text-[0.9em] sm:text-[0.8em] w-full flex justify-end">
-                    Forgot Password?
-                </div>
+
             </div>
 
             <SubmitButton text="Login" pending={isLoading} />
