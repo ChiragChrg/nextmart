@@ -9,19 +9,21 @@ import { FormEvent, useState } from "react";
 import { signIn } from "next-auth/react";
 import { z } from "zod";
 
-// Zod validation schema
 const loginSchema = z.object({
     email: z.string().email("Invalid email format"),
     password: z.string().min(6, "Password must be at least 6 characters long"),
 });
 
+type LoginFormData = z.infer<typeof loginSchema>;
+type LoginFormErrors = Partial<Record<keyof LoginFormData, string>>;
+
 const LoginForm = () => {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<LoginFormData>({
         email: "",
         password: "",
     });
 
-    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [errors, setErrors] = useState<LoginFormErrors>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const router = useRouter();
@@ -29,24 +31,33 @@ const LoginForm = () => {
     const callbackUrl = searchParams.get("callbackUrl");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        if (name === "email" || name === "password") {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Validate form with Zod
         const result = loginSchema.safeParse(formData);
+
         if (!result.success) {
-            const errorMessages: Record<string, string> = {};
+            const errorMessages: LoginFormErrors = {};
+
             result.error.issues.forEach((issue) => {
-                errorMessages[issue.path[0]] = issue.message;
+                const key = issue.path[0];
+
+                if (key === "email" || key === "password") {
+                    errorMessages[key] = issue.message;
+                }
             });
+
             setErrors(errorMessages);
             return;
         }
 
-        // Clear previous errors before submitting
         setErrors({});
         const LoginToastID = toast.loading("Logging in...");
         setIsLoading(true);
@@ -58,7 +69,8 @@ const LoginForm = () => {
                 redirect: false,
             });
 
-            console.log({ res })
+            // eslint-disable-next-line no-console
+            console.log({ res });
 
             if (res?.status === 200 && res?.error === null) {
                 toast.success("Logged in Successfully!", { id: LoginToastID });
@@ -68,6 +80,7 @@ const LoginForm = () => {
             }
         } catch (err) {
             toast.error("Invalid Email or Password", { id: LoginToastID });
+            // eslint-disable-next-line no-console
             console.log(err);
         } finally {
             setIsLoading(false);
@@ -100,17 +113,19 @@ const LoginForm = () => {
                     value={formData.password}
                     onChange={handleChange}
                 />
-                {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-                <div className="text-primaryClr text-[0.9em] sm:text-[0.8em] w-full flex justify-end">
-                    Forgot Password?
-                </div>
+                {errors.password && (
+                    <p className="text-red-500 text-sm">{errors.password}</p>
+                )}
             </div>
 
             <SubmitButton text="Login" pending={isLoading} />
 
             <div className="w-full flex gap-2 justify-center">
                 New to NextMart?
-                <Link href="/register" className="text-primaryClr font-bold capitalize tracking-wider">
+                <Link
+                    href="/register"
+                    className="text-primaryClr font-bold capitalize tracking-wider"
+                >
                     Register
                 </Link>
             </div>
