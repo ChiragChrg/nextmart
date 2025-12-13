@@ -115,8 +115,7 @@
   }
 
   * {
-    /* use core border utility; border-border is derived from --color-border */
-    @apply m-0 p-0 border box-border;
+    @apply m-0 p-0 box-border;
   }
 
   body {
