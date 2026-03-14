@@ -20,42 +20,29 @@ export default {
                 email: { label: "Email", type: "email", placeholder: "example@email.com" },
                 password: { label: "Password", type: "password", placeholder: "Enter Password" },
             },
-            authorize: async (credentials) => {
-                let user = null
+            authorize: async (credentials, req): Promise<any> => {
+                if (!credentials?.email || !credentials?.password) return null
 
-                try {
-                    if (!credentials?.email || !credentials?.password) {
-                        return null
-                    }
+                const email = credentials.email as string
+                const password = credentials.password as string
 
-                    const email = credentials?.email as string
-                    const password = credentials?.password as string
+                const userExists = await prisma.user.findUnique({ where: { email } })
+                const matchPassword = await bcrypt.compare(password, userExists?.password ?? "")
 
-                    const userExists = await prisma.user.findUnique({ where: { email } })
-                    const matchPassword = await bcrypt.compare(password, userExists?.password as string)
+                if (!userExists?.email || !matchPassword) {
+                    throw new Error("Invalid Email or Password")
+                }
 
-                    if (!userExists?.email || !matchPassword) throw new Error("Invalid Email or Password")
-
-                    user = {
-                        id: userExists?.id,
-                        name: userExists?.name,
-                        email: userExists?.email,
-                        emailVerified: userExists?.emailVerified,
-                        picture: userExists?.image,
-                        role: userExists?.role,
-                        address: userExists?.address,
-                        createdAt: userExists?.createdAt
-                    }
-
-                    console.log("\nCredentials:", user)
-                    return user
-                } catch (err) {
-                    console.log("\nCredentialsErr: ", err)
-                    return null
+                // Minimal user compatible with DefaultUser
+                return {
+                    id: userExists.id,
+                    name: userExists.name ?? undefined,
+                    email: userExists.email,
+                    image: userExists.image ?? undefined,
                 }
             },
-
         }),
+
     ],
     // callbacks: {
     //     async signIn({ user, account, profile }) {
